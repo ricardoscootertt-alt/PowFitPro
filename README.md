@@ -41,7 +41,7 @@
         #print-area { display: none; }
         @media print {
             body { background: white !important; color: black !important; margin: 0; padding: 0; }
-            #app-container, .modal, .no-print { display: none !important; }
+            #app-container, .modal, .no-print, nav { display: none !important; }
             #print-area { display: block !important; padding: 10mm; font-family: 'Arial', sans-serif; font-size: 10px; }
             @page { size: A4; margin: 0; }
             
@@ -64,7 +64,7 @@
             th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; }
             
             .print-footer-section { margin-top: 10px; border: 1px solid #000; padding: 5px; font-size: 9px; page-break-inside: avoid; }
-            .legal-text { font-size: 8px; color: #333; text-align: justify; margin-top: 5px; font-style: italic; }
+            .legal-text { font-size: 8px; color: #333; text-align: justify; margin-top: 5px; font-style: italic; white-space: pre-wrap; }
         }
     </style>
 </head>
@@ -78,7 +78,7 @@
 
     <!-- TELA DE LOGIN -->
     <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
-        <div class="card p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
+        <div class="card p-8 rounded-2xl shadow-2xl max-w-md w-full text-center border-t-4 border-t-primary">
             <i class="fas fa-dumbbell text-5xl text-primary mb-4"></i>
             <h1 class="text-3xl font-bold mb-2">PowFit Pro</h1>
             <p class="opacity-70 mb-8 text-sm">Plataforma Profissional para Gestão de Treinos e Franquias</p>
@@ -124,20 +124,16 @@
                     </div>
                 </div>
                 
-                <div class="flex items-center gap-2 w-full sm:w-auto">
+                <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
                     <!-- Seletores Hierárquicos -->
-                    <select id="nav-select-unit" class="input-field rounded px-2 py-1.5 text-xs font-medium max-w-[150px]">
-                        <!-- Populated via JS -->
-                    </select>
-                    <select id="nav-select-member" class="input-field rounded px-2 py-1.5 text-xs font-medium max-w-[150px]">
-                        <!-- Populated via JS -->
-                    </select>
+                    <select id="nav-select-unit" class="input-field rounded px-2 py-1.5 text-xs font-medium max-w-[150px]"></select>
+                    <select id="nav-select-member" class="input-field rounded px-2 py-1.5 text-xs font-medium max-w-[150px]"></select>
                     
                     <div class="h-6 w-px bg-gray-500 bg-opacity-30 mx-1 hidden sm:block"></div>
                     
                     <!-- Ações Rápidas -->
                     <button onclick="openModal('modal-manage')" class="text-xs px-3 py-1.5 rounded hover:bg-black hover:bg-opacity-20 transition" title="Gerenciar Equipe/Unidades">
-                        <i class="fas fa-users-cog"></i> <span class="hidden md:inline">Gerenciar</span>
+                        <i class="fas fa-users-cog"></i> <span class="hidden md:inline">Equipe</span>
                     </button>
                     <button onclick="openReports()" class="text-xs px-3 py-1.5 rounded hover:bg-black hover:bg-opacity-20 transition" title="Relatórios">
                         <i class="fas fa-chart-bar"></i> <span class="hidden md:inline">Relatórios</span>
@@ -150,7 +146,7 @@
         </nav>
 
         <!-- Container Principal -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div id="app-container" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-bold"><i class="fas fa-clipboard-list text-primary"></i> Criador de Fichas</h2>
@@ -213,7 +209,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-xs font-medium mb-1">Objetivo (Gera recomendação)</label>
+                                <label class="block text-xs font-medium mb-1">Objetivo</label>
                                 <select id="stu-objective" class="input-field w-full rounded p-2 text-sm">
                                     <option value="Emagrecimento">Emagrecimento</option>
                                     <option value="Hipertrofia">Hipertrofia</option>
@@ -233,8 +229,8 @@
                         <h3 class="font-semibold mb-1 flex items-center gap-2 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
                             <i class="fas fa-notes-medical text-primary"></i> Estado de Saúde
                         </h3>
-                        <p class="text-[10px] opacity-70 mb-3">As diretrizes mudam com base no tipo do profissional selecionado (PEF ou TE).</p>
-                        <div class="grid grid-cols-2 gap-1 text-[11px]" id="health-container">
+                        <p class="text-[10px] opacity-70 mb-3">As diretrizes alternam automaticamente entre a atuação PEF ou TE.</p>
+                        <div class="grid grid-cols-1 gap-1 text-[11px] max-h-48 overflow-y-auto pr-2" id="health-container">
                             <!-- JS popula baseado no membro selecionado -->
                         </div>
                     </div>
@@ -256,8 +252,8 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-medium mb-1">Recomendações Livres</label>
-                            <textarea id="stu-recs" rows="3" class="input-field w-full rounded p-2 text-sm" placeholder="Hidratação, descanso..."></textarea>
+                            <label class="block text-xs font-medium mb-1">Recomendações Livres do Treinador</label>
+                            <textarea id="stu-recs" rows="3" class="input-field w-full rounded p-2 text-sm" placeholder="Hidratação, descanso, intensidade..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -265,9 +261,9 @@
                 <!-- COLUNA DIREITA: Treinos -->
                 <div class="xl:col-span-8 space-y-4">
                     <div class="flex justify-between items-center p-3 rounded-xl bg-primary bg-opacity-10 border border-primary border-opacity-20">
-                        <span class="text-sm font-medium"><i class="fas fa-info-circle"></i> O sistema não sugere treinos. A montagem é totalmente manual.</span>
+                        <span class="text-sm font-medium"><i class="fas fa-info-circle"></i> O sistema não gera treinos automáticos. Montagem 100% manual e livre.</span>
                         <button onclick="addWorkout()" class="btn-primary px-3 py-1.5 rounded text-xs font-bold">
-                            + Dia de Treino
+                            + Adicionar Treino
                         </button>
                     </div>
 
@@ -308,7 +304,7 @@
                     <input type="text" id="new-member-name" class="input-field w-full rounded p-2 text-sm" placeholder="Nome do Profissional">
                     <div id="new-member-cref-container" class="grid grid-cols-2 gap-2">
                         <input type="text" id="new-member-cref" class="input-field w-full rounded p-2 text-sm" placeholder="CREF">
-                        <input type="text" id="new-member-state" class="input-field w-full rounded p-2 text-sm" placeholder="UF">
+                        <input type="text" id="new-member-state" class="input-field w-full rounded p-2 text-sm" placeholder="Estado (UF)">
                     </div>
                     <button onclick="addNewMember()" class="btn-primary w-full py-2 rounded text-sm font-medium">Salvar Profissional</button>
                 </div>
@@ -321,7 +317,7 @@
     <div id="modal-exercises" class="modal fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-2 sm:p-4">
         <div class="card w-full max-w-5xl rounded-xl shadow-2xl flex flex-col h-[90vh]">
             <div class="p-3 border-b flex justify-between items-center" style="border-color: var(--border-color)">
-                <h3 class="text-md font-bold"><i class="fas fa-search text-primary mr-2"></i> Adicionar Exercício</h3>
+                <h3 class="text-md font-bold"><i class="fas fa-search text-primary mr-2"></i> Selecionar Exercício</h3>
                 <button onclick="closeModal('modal-exercises')" class="text-gray-400 hover:text-white text-2xl">&times;</button>
             </div>
             <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
@@ -335,9 +331,9 @@
     <div id="modal-history" class="modal fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-4">
         <div class="card w-full max-w-4xl rounded-xl shadow-2xl flex flex-col max-h-[90vh]">
             <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
-                <h3 class="text-lg font-bold" id="history-title"><i class="fas fa-cloud text-primary mr-2"></i> Fichas Salvas (Rede)</h3>
+                <h3 class="text-lg font-bold" id="history-title"><i class="fas fa-cloud text-primary mr-2"></i> Memória de Fichas</h3>
                 <div class="flex gap-2">
-                    <button onclick="loadReportMode()" id="btn-toggle-report" class="bg-gray-700 px-3 py-1 text-xs rounded">Modo Relatório</button>
+                    <button onclick="loadReportMode()" id="btn-toggle-report" class="bg-gray-700 hover:bg-gray-600 transition px-3 py-1 text-xs rounded font-medium">Modo Relatório</button>
                     <button onclick="closeModal('modal-history')" class="text-gray-400 hover:text-white text-2xl">&times;</button>
                 </div>
             </div>
@@ -347,7 +343,7 @@
         </div>
     </div>
 
-    <!-- ÁREA DE IMPRESSÃO (Oculta na tela) -->
+    <!-- ÁREA DE IMPRESSÃO -->
     <div id="print-area"></div>
 
     <!-- FIREBASE E LÓGICA DA APLICAÇÃO -->
@@ -372,22 +368,102 @@
 
         // --- 2. DADOS ESTÁTICOS (REGRAS E EXERCÍCIOS) ---
         const D = {
-            healthPEF: { "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio.", "⚪ Sedentário": "Iniciar treinos leves 2–3x. Priorizar adaptação.", "🟡 Sobrepeso": "Treinar 3–5x foco em gasto calórico.", "🔴 Obesidade": "Exercícios de baixo impacto. Evolução gradual.", "⚖️ Baixo peso": "Foco em musculação para ganho de massa.", "🍬 Diabetes": "Monitorar glicemia. Evitar jejum.", "❤️ Hipertensão": "Evitar prender respiração. Controle de intensidade.", "🔵 Hipotensão": "Evitar mudanças bruscas. Hidratação.", "💔 Problemas cardíacos": "Liberação médica essencial. Monitorar FC.", "🦴 Problemas articulares": "Evitar impacto.", "🫁 Problemas respiratórios": "Progressão gradual.", "⚠️ Lesões": "Adaptar exercícios. Foco recuperação.", "🤰 Gestante": "Liberação médica. Sem impacto.", "🤱 Lactante": "Treino normal com hidratação.", "👴 Idoso": "Força, equilíbrio e mobilidade." },
-            healthTE: { "🟢 Saudável": "Manter constância 3-5x para melhores resultados esportivos.", "⚪ Sedentário": "Início gradual. Foco na execução motora correta.", "🟡 Sobrepeso": "Treino progressivo respeitando nível de adaptação.", "🔴 Obesidade": "Segurança e mobilidade são prioridades.", "⚖️ Baixo peso": "Treino focado em evolução progressiva.", "🍬 Diabetes": "Acompanhamento médico. Interromper em mal-estar.", "❤️ Hipertensão": "Evitar Manobra de Valsalva. Respeitar limites.", "🔵 Hipotensão": "Cuidado nas trocas de posições.", "💔 Problemas cardíacos": "Apenas com liberação médica.", "🦴 Problemas articulares": "Movimentos controlados recomendados.", "🫁 Problemas respiratórios": "Respeitar capacidade aeróbica.", "⚠️ Lesões": "Seguir orientação profissional. Evitar dor.", "🤰 Gestante": "Foco em segurança e bem-estar (com aval médico).", "🤱 Lactante": "Respeitar recuperação.", "👴 Idoso": "Intensidade moderada. Segurança garantida." },
-            objectives: { "Emagrecimento": "Déficit calórico + Força e Cardio.", "Hipertrofia": "Progressão de carga e superávit calórico.", "Definição": "Manutenção muscular e redução de gordura.", "Condicionamento": "Treinos integrados e circuitos.", "Resistência": "Séries longas e cadência controlada.", "Força": "Cargas altas, reps baixas, descansos longos.", "Reabilitação": "Fortalecimento específico.", "Saúde geral": "Equilíbrio e constância." },
+            healthPEF: {
+                "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.",
+                "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.",
+                "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico. Combinar musculação e cardio moderado.",
+                "🔴 Obesidade": "Iniciar com exercícios de baixo impacto. Evolução gradual, priorizando saúde e segurança.",
+                "⚖️ Baixo peso": "Foco em musculação para ganho de massa. Treinos moderados com alimentação adequada.",
+                "🍬 Diabetes": "Treinos regulares moderados. Monitorar glicemia e evitar treinos em jejum.",
+                "❤️ Hipertensão": "Treinos moderados, evitar prender a respiração. Priorizar controle da intensidade.",
+                "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação e intensidade leve a moderada.",
+                "💔 Problemas cardíacos": "Treinos leves com liberação médica. Monitorar frequência cardíaca.",
+                "🦴 Problemas articulares": "Evitar impacto. Priorizar exercícios controlados e máquinas.",
+                "🫁 Problemas respiratórios": "Treinos leves a moderados com progressão gradual. Atenção à respiração.",
+                "⚠️ Lesões": "Adaptar exercícios. Evitar dor e focar na recuperação.",
+                "🤰 Gestante": "Treinos leves a moderados, sem impacto ou risco. Foco em mobilidade e bem-estar.",
+                "🤱 Lactante": "Treinar normalmente com atenção à hidratação e energia.",
+                "👴 Idoso": "Foco em força, equilíbrio e mobilidade. Intensidade moderada com segurança."
+            },
+            healthTE: {
+                "🟢 Saudável": "Manter treinos regulares de 3–5x por semana, combinando musculação e atividades cardiovasculares. A constância, descanso adequado e boa alimentação contribuem para melhores resultados.",
+                "⚪ Sedentário": "O início deve ser gradual, com treinos leves e foco na adaptação do corpo. A prioridade é desenvolver constância, aprender a execução correta e evitar excesso de carga.",
+                "🟡 Sobrepeso": "A prática regular de musculação associada ao cardio pode contribuir para melhora do condicionamento físico e composição corporal. A progressão deve respeitar a individualidade e o nível de adaptação.",
+                "🔴 Obesidade": "É recomendado iniciar com exercícios de menor impacto e progressão gradual. A segurança, mobilidade e constância são prioridades durante o processo.",
+                "⚖️ Baixo peso": "A musculação pode auxiliar no ganho de massa muscular quando associada a alimentação adequada e descanso. O treino deve priorizar evolução progressiva e recuperação muscular.",
+                "🍬 Diabetes": "Pessoas com diabetes devem manter acompanhamento médico regular antes e durante a prática de exercícios. A musculação pode auxiliar na rotina de atividade física quando liberada por profissional de saúde. Em casos de tontura, mal-estar ou alteração de glicemia, o treino deve ser interrompido e o aluno deve procurar orientação médica.",
+                "❤️ Hipertensão": "Pessoas com hipertensão devem manter acompanhamento médico regular e respeitar as orientações profissionais. Durante o treino, é importante evitar prender a respiração e controlar a intensidade dos exercícios.",
+                "🔵 Hipotensão": "Pessoas com hipotensão devem evitar mudanças bruscas de posição durante o treino. Manter boa hidratação e respeitar a intensidade adequada ajuda a reduzir episódios de mal-estar.",
+                "💔 Problemas cardíacos": "A prática de exercícios deve ocorrer apenas com liberação e acompanhamento médico. O treino deve respeitar limites individuais, com controle de intensidade e atenção aos sinais do corpo.",
+                "🦴 Problemas articulares": "Exercícios com menor impacto e maior controle de movimento costumam ser mais indicados. O acompanhamento profissional e a adaptação dos exercícios ajudam na segurança durante o treino.",
+                "🫁 Problemas respiratórios": "A progressão do treino deve ser gradual e respeitar a capacidade respiratória individual. Em caso de falta de ar excessiva ou desconforto, o exercício deve ser interrompido.",
+                "⚠️ Lesões": "A adaptação dos exercícios deve respeitar a limitação existente e evitar dor durante a execução. Em situações de lesão, é importante seguir orientação profissional adequada antes da prática.",
+                "🤰 Gestante": "A prática de exercícios deve ocorrer com liberação médica e acompanhamento adequado. O foco deve ser segurança, mobilidade e bem-estar, evitando impacto excessivo e situações de risco.",
+                "🤱 Lactante": "A atividade física pode ser mantida normalmente, respeitando a recuperação individual e mantendo boa hidratação e alimentação adequada.",
+                "👴 Idoso": "A musculação pode contribuir para força, equilíbrio, mobilidade e autonomia. O treino deve respeitar limitações individuais, com intensidade moderada e foco na segurança."
+            },
+            objectives: {
+                "Emagrecimento": "Foco em déficit calórico com treinos mistos de força (manter massa magra) e aeróbicos (maior gasto).",
+                "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.",
+                "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.",
+                "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.",
+                "Resistência": "Séries mais longas, cadência controlada e aprimoramento da capacidade muscular.",
+                "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.",
+                "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.",
+                "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar."
+            },
             categories: {
-                "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
-                "🦍 COSTAS": ["Puxada Alta", "Puxada Unilateral", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada na Polia", "Remada Unilateral", "Remada Cavalinho (T-Bar)", "Remada no Cross", "Serrote", "Facepull (puxada de cima para baixo)", "Encolhimento (Trapézio)"],
-                "🦵 PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento com Barra", "Agachamento no Smith", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Abdução no Cross (Glúteo Médio + Mínimo)", "Coice", "Cachorrinho", "Caranguejo", "Cadeira Extensora", "Adução", "Abdução", "Cadeira Abdutora Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha em Pé (Máquina)", "Panturrilha Livre", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
-                "💪 BRAÇOS": ["(Bíceps) Rosca Direta", "(Bíceps) Rosca Alternada", "(Bíceps) Rosca 21", "(Bíceps) Rosca Scott Barra W", "(Bíceps) Rosca Scott Unilateral", "(Bíceps) Rosca Scott com Halteres", "(Bíceps) Rosca Martelo", "(Bíceps) Rosca Cross", "(Bíceps) Rosca Concentrada", "(Bíceps) Rosca Inversa", "(Bíceps) Rosca 45°", "(Tríceps) Pulley Unilateral", "(Tríceps) Pulley Barra", "(Tríceps) Pulley Corda", "(Tríceps) Pulley Pegada Inversa", "(Tríceps) Francês na Corda", "(Tríceps) Francês com Halter", "(Tríceps) Francês Unilateral", "(Tríceps) Cruzado Polia Dupla", "(Tríceps) Coice Unilateral", "(Tríceps) Arremesso", "(Tríceps) Testa", "(Tríceps) Mergulho no Banco"],
-                "🪨 OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral na Polia", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta"],
-                "🧠 ABDÔMEN": ["Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", "Isometria na parede", "Abdominal isometrico"],
-                "🫀 CARDIO": ["Bicicleta - 10 Min", "Bicicleta - 15 Min", "Bicicleta - 20 Min", "Esteira - 10 Min", "Esteira - 15 Min", "Esteira - 20 Min", "Pular Corda - 10 Min", "Pular Corda - 15 Min", "Pular Corda - 20 Min"]
+                "🔥 PEITO": [
+                    "Supino Reto", "Supino Inclinado", "Supino com Halteres", "Supino Fechado com Halteres", 
+                    "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado", 
+                    "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", 
+                    "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"
+                ],
+                "🦍 COSTAS": [
+                    "Puxada Alta", "Puxada Unilateral", "Pulldown", "Remada Aberta", "Remada Baixa", 
+                    "Remada Curvada", "Remada Curvada na Polia", "Remada Unilateral", "Remada Cavalinho (T-Bar)", 
+                    "Remada no Cross", "Serrote", "Facepull (puxada de cima para baixo)", "Encolhimento (Trapézio)"
+                ],
+                "🦵 PERNAS": [
+                    "Agachamento Livre", "Agachamento Taça", "Agachamento com Barra", "Agachamento no Smith", 
+                    "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", 
+                    "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", 
+                    "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", 
+                    "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", 
+                    "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Abdução no Cross (Glúteo Médio + Mínimo)", 
+                    "Coice", "Cachorrinho", "Caranguejo", "Cadeira Extensora", "Adução", "Abdução", "Cadeira Abdutora Inclinada", 
+                    "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha em Pé (Máquina)", "Panturrilha Livre", 
+                    "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"
+                ],
+                "💪 BRAÇOS": [
+                    "(Bíceps) Rosca Direta", "(Bíceps) Rosca Alternada", "(Bíceps) Rosca 21", "(Bíceps) Rosca Scott Barra W", 
+                    "(Bíceps) Rosca Scott Unilateral", "(Bíceps) Rosca Scott com Halteres", "(Bíceps) Rosca Martelo", 
+                    "(Bíceps) Rosca Cross", "(Bíceps) Rosca Concentrada", "(Bíceps) Rosca Inversa", "(Bíceps) Rosca 45°",
+                    "(Tríceps) Triceps Pulley Unilateral", "(Tríceps) Pulley Barra", "(Tríceps) Pulley Corda", "(Tríceps) Pulley Pegada Inversa", 
+                    "(Tríceps) Francês na Corda", "(Tríceps) Francês com Halter", "(Tríceps) Francês Unilateral", 
+                    "(Tríceps) Cruzado Polia Dupla", "(Tríceps) Coice Unilateral", "(Tríceps) Arremesso", "(Tríceps) Testa", "(Tríceps) Mergulho no Banco"
+                ],
+                "🪨 OMBROS": [
+                    "Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral na Polia", 
+                    "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", 
+                    "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", 
+                    "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta"
+                ],
+                "🧠 ABDÔMEN": [
+                    "Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", 
+                    "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", 
+                    "Isometria na parede", "Abdominal isometrico"
+                ],
+                "🫀 CARDIO": [
+                    "Bicicleta - 10 Minutos", "Bicicleta - 15 Minutos", "Bicicleta - 20 Minutos",
+                    "Esteira - 10 Minutos", "Esteira - 15 Minutos", "Esteira - 20 Minutos",
+                    "Pular Corda"
+                ]
             },
             techniques: ["Nenhuma", "Drop set", "Bi-set", "Tri-set", "Série gigante", "Rest-pause", "FST-7", "Pré-exaustão", "Pós-exaustão", "Negativa", "Isometria", "Parciais", "Pirâmide"],
             days: ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"],
-            legalPEF: "⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA: Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º estabelece que compete ao profissional coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos.",
-            legalTE: "⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO: Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil. As recomendações desta ficha possuem caráter informativo e orientativo. Não substitui avaliação médica. Em casos de condições específicas de saúde, recomenda-se avaliação médica prévia. O treinamento prioriza segurança e execução correta."
+            legalPEF: "⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA\nConforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF.\nO Art. 3º da mesma lei estabelece que compete ao profissional de Educação Física coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados nas áreas de atividades físicas e do desporto.",
+            legalTE: "⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO\nConforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil, com atuação de caráter técnico e esportivo voltada à preparação, supervisão, orientação e acompanhamento de treinos físicos e esportivos.\nA atuação possui finalidade orientativa e não substitui avaliação médica, diagnóstico clínico, prescrição medicamentosa ou acompanhamento de profissionais da saúde.\nEm casos de doenças, lesões, gestação, limitações físicas, uso de medicações ou qualquer condição específica de saúde, recomenda-se avaliação prévia por profissional habilitado antes do início ou continuidade da prática de exercícios.\nO treinamento proposto respeita os limites individuais, priorizando segurança, execução correta e evolução progressiva, dentro da atuação técnica e esportiva permitida por lei."
         };
 
         // --- 3. ESTADO GLOBAL ---
@@ -414,7 +490,7 @@
             if(w>0 && h>0) {
                 const imc = (w/(h*h)).toFixed(1);
                 let cls = imc<18.5?"Abaixo":imc<24.9?"Normal":imc<29.9?"Sobrepeso":"Obesidade";
-                $('imc-display').innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-2 py-1 rounded text-xs">IMC: ${imc} (${cls})</span>`;
+                $('imc-display').innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-2 py-1 rounded text-xs font-bold">IMC: ${imc} (${cls})</span>`;
             } else $('imc-display').innerHTML = '';
         };
 
@@ -444,12 +520,9 @@
                 } else {
                     STATE.network = netDoc.data();
                     STATE.units = STATE.network.units || [];
-                    
-                    // Fetch Members
                     const memQ = query(collection(db, "members"), where("networkId", "==", STATE.user.uid));
                     const memSnap = await getDocs(memQ);
                     STATE.members = memSnap.docs.map(d => ({id: d.id, ...d.data()}));
-                    
                     initAppUI();
                 }
             } catch (e) { alert("Erro ao carregar rede: " + e.message); }
@@ -491,7 +564,7 @@
             const stateUf = type === 'PEF' ? $('new-member-state').value.trim() : '';
             
             if(!name || !unitId) return alert("Nome e Unidade obrigatórios.");
-            if(type === 'PEF' && (!cref || !stateUf)) return alert("CREF e Estado obrigatórios para PEF.");
+            if(type === 'PEF' && (!cref || !stateUf)) return alert("CREF e Estado obrigatórios para Profissional de Educação Física.");
 
             showLoader("Salvando profissional...");
             const memberData = { networkId: STATE.user.uid, unitId, name, type, cref, state: stateUf, active: true };
@@ -522,7 +595,7 @@
                 const uId = sUnit.value;
                 const unitMembers = STATE.members.filter(m => m.unitId === uId);
                 if(unitMembers.length === 0) {
-                    sMem.innerHTML = `<option value="">-- Sem profissionais --</option>`;
+                    sMem.innerHTML = `<option value="">-- Sem treinadores --</option>`;
                     $('alert-no-member').classList.remove('hidden');
                 } else {
                     sMem.innerHTML = unitMembers.map(m => `<option value="${m.id}">${m.name} (${m.type})</option>`).join('');
@@ -544,23 +617,24 @@
             
             cont.innerHTML = Object.keys(dataObj).map(opt => {
                 const checked = selected.includes(opt) ? 'checked' : '';
-                return `<label class="flex items-start space-x-1 cursor-pointer hover:bg-black hover:bg-opacity-10 p-1 rounded">
-                    <input type="checkbox" value="${opt}" ${checked} class="health-cb mt-0.5 rounded border-gray-400">
-                    <span class="truncate" title="${dataObj[opt]}">${opt}</span>
+                return `<label class="flex items-start space-x-1 cursor-pointer hover:bg-black hover:bg-opacity-10 p-1.5 rounded transition">
+                    <input type="checkbox" value="${opt}" ${checked} class="health-cb mt-0.5 rounded border-gray-400 text-primary">
+                    <span class="truncate block w-full" title="${dataObj[opt]}">${opt}</span>
                 </label>`;
             }).join('');
         }
 
         // --- 8. GERENCIADOR DE TREINOS (DIAS E EXERCÍCIOS) ---
         window.addWorkout = () => {
-            const title = STATE.workouts.length < 7 ? `TREINO ${D.days[STATE.workouts.length]}` : `NOVO TREINO ${STATE.workouts.length+1}`;
+            const count = STATE.workouts.length;
+            const title = count < 7 ? `TREINO ${D.days[count]}` : `NOVO TREINO ${count+1}`;
             STATE.workouts.push({ id: genId(), title, exercises: [] });
             renderWorkouts();
         };
 
         window.duplicateWorkout = (id) => {
             const w = STATE.workouts.find(x => x.id === id);
-            if(w) { STATE.workouts.push({ ...JSON.parse(JSON.stringify(w)), id: genId(), title: w.title+"(Cópia)" }); renderWorkouts(); }
+            if(w) { STATE.workouts.push({ ...JSON.parse(JSON.stringify(w)), id: genId(), title: w.title+" (Cópia)" }); renderWorkouts(); }
         };
 
         window.removeWorkout = (id) => {
@@ -582,28 +656,43 @@
         function renderWorkouts() {
             const container = $('workouts-container'); container.innerHTML = '';
             STATE.workouts.forEach(w => {
-                let exs = w.exercises.length === 0 ? `<div class="text-center p-3 text-xs opacity-50">Vazio</div>` : w.exercises.map((ex, i) => `
-                    <div class="flex gap-2 p-1 border-b border-opacity-10 items-center text-xs" style="border-color:var(--border-color)">
-                        <div class="flex flex-col"><button onclick="moveEx('${w.id}',${i},'up')"><i class="fas fa-caret-up"></i></button><button onclick="moveEx('${w.id}',${i},'down')"><i class="fas fa-caret-down"></i></button></div>
-                        <div class="w-1/3 truncate"><span class="opacity-50 text-[9px] uppercase block leading-none">${ex.category}</span><strong title="${ex.name}">${ex.name}</strong></div>
-                        <input type="text" value="${ex.sets}" onchange="updateEx('${w.id}',${i},'sets',this.value)" class="input-field w-8 text-center rounded p-1" title="Séries">x
-                        <input type="text" value="${ex.reps}" onchange="updateEx('${w.id}',${i},'reps',this.value)" class="input-field w-12 text-center rounded p-1" title="Reps">
-                        <select onchange="updateEx('${w.id}',${i},'technique',this.value)" class="input-field w-20 rounded p-1 text-[10px]">
-                            ${D.techniques.map(t=>`<option ${ex.technique===t?'selected':''}>${t}</option>`).join('')}
-                        </select>
-                        <input type="text" value="${ex.obs}" onchange="updateEx('${w.id}',${i},'obs',this.value)" class="input-field flex-1 rounded p-1" placeholder="Obs">
-                        <button onclick="removeEx('${w.id}',${i})" class="text-red-500 hover:text-red-400 p-1"><i class="fas fa-times"></i></button>
+                let exs = w.exercises.length === 0 ? `<div class="text-center p-3 text-xs opacity-50 italic">Sem exercícios adicionados.</div>` : w.exercises.map((ex, i) => `
+                    <div class="flex flex-col sm:flex-row gap-2 p-2 items-start sm:items-center border-b last:border-0 border-opacity-10 text-xs" style="border-color:var(--border-color)">
+                        <div class="flex sm:flex-col gap-1 hidden sm:flex">
+                            <button onclick="moveEx('${w.id}',${i},'up')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-up"></i></button>
+                            <button onclick="moveEx('${w.id}',${i},'down')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-down"></i></button>
+                        </div>
+                        <div class="flex-1 font-medium w-full sm:w-auto">
+                            <div class="opacity-50 text-[9px] uppercase block leading-none tracking-widest">${ex.category}</div>
+                            <strong title="${ex.name}">${ex.name}</strong>
+                        </div>
+                        <div class="flex flex-wrap gap-1 w-full sm:w-auto">
+                            <input type="text" value="${ex.sets}" onchange="updateEx('${w.id}',${i},'sets',this.value)" class="input-field w-12 text-center rounded p-1" title="Séries" placeholder="Séries">x
+                            <input type="text" value="${ex.reps}" onchange="updateEx('${w.id}',${i},'reps',this.value)" class="input-field w-16 text-center rounded p-1" title="Reps" placeholder="Reps">
+                            <select onchange="updateEx('${w.id}',${i},'technique',this.value)" class="input-field w-24 rounded p-1 text-[10px]">
+                                ${D.techniques.map(t=>`<option ${ex.technique===t?'selected':''}>${t}</option>`).join('')}
+                            </select>
+                            <input type="text" value="${ex.obs}" onchange="updateEx('${w.id}',${i},'obs',this.value)" class="input-field flex-1 sm:w-32 rounded p-1" placeholder="Observações livres">
+                        </div>
+                        <div class="flex items-center gap-1 w-full sm:w-auto justify-end mt-1 sm:mt-0">
+                            <button onclick="removeEx('${w.id}',${i})" class="text-red-500 hover:text-red-400 p-1 text-sm"><i class="fas fa-trash"></i></button>
+                        </div>
                     </div>
                 `).join('');
 
                 container.innerHTML += `
                     <div class="card rounded-lg overflow-hidden border border-gray-600 border-opacity-30">
                         <div class="p-2 bg-black bg-opacity-20 flex justify-between items-center">
-                            <input type="text" value="${w.title}" onchange="updateWorkoutTitle('${w.id}',this.value)" class="input-field font-bold text-sm bg-transparent px-1 w-1/2">
-                            <div><button onclick="duplicateWorkout('${w.id}')" class="px-2"><i class="fas fa-copy"></i></button><button onclick="removeWorkout('${w.id}')" class="px-2 text-red-500"><i class="fas fa-trash"></i></button></div>
+                            <input type="text" value="${w.title}" onchange="updateWorkoutTitle('${w.id}',this.value)" class="input-field font-bold text-sm bg-transparent px-2 w-1/2 uppercase">
+                            <div class="flex gap-1">
+                                <button onclick="duplicateWorkout('${w.id}')" class="px-2 text-xs opacity-70 hover:opacity-100 transition" title="Duplicar"><i class="fas fa-copy"></i> Duplicar</button>
+                                <button onclick="removeWorkout('${w.id}')" class="px-2 text-xs text-red-500 opacity-80 hover:opacity-100 transition" title="Excluir"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
                         <div class="p-1">${exs}</div>
-                        <button onclick="openExModal('${w.id}')" class="w-full text-center py-2 text-primary text-xs font-bold hover:bg-black hover:bg-opacity-10">+ ADD EXERCÍCIO</button>
+                        <button onclick="openExModal('${w.id}')" class="w-full text-center py-2 bg-primary bg-opacity-5 hover:bg-opacity-10 text-primary text-xs font-bold transition">
+                            + ADICIONAR EXERCÍCIO
+                        </button>
                     </div>`;
             });
         }
@@ -614,7 +703,7 @@
         window.setExCat = c => { STATE.activeCategory = c; renderExCats(); renderExList(); };
         const renderExList = () => {
             const isCardio = STATE.activeCategory === "🫀 CARDIO";
-            $('modal-ex-list').innerHTML = `<div class="grid grid-cols-2 gap-2">${D.categories[STATE.activeCategory].map(ex=>`<button onclick="addEx('${ex}',${isCardio})" class="card p-2 rounded text-xs text-left hover:border-primary transition">${ex}</button>`).join('')}</div>`;
+            $('modal-ex-list').innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">${D.categories[STATE.activeCategory].map(ex=>`<button onclick="addEx('${ex}',${isCardio})" class="card p-2 rounded text-xs text-left font-medium border hover:border-primary text-primary transition">${ex} <i class="fas fa-plus float-right opacity-50"></i></button>`).join('')}</div>`;
         };
         window.addEx = (name, isCardio) => {
             STATE.workouts.find(w=>w.id===STATE.activeWorkoutId).exercises.push({ category: STATE.activeCategory, name, sets: isCardio?'1':'3', reps: isCardio?'-':'10 a 12', technique: 'Nenhuma', obs: '' });
@@ -635,14 +724,14 @@
             const data = {
                 networkId: STATE.user.uid, unitId: unit.id, memberId: member.id,
                 profName: member.name, profType: member.type, profCref: member.cref || '', profState: member.state || '',
-                studentName: $('stu-name').value || 'Sem Nome', stuAge: $('stu-age').value, stuWeight: $('stu-weight').value, stuHeight: $('stu-height').value,
+                studentName: $('stu-name').value || 'Não informado', stuAge: $('stu-age').value, stuWeight: $('stu-weight').value, stuHeight: $('stu-height').value,
                 stuGender: $('stu-gender').value, stuLevel: $('stu-level').value, stuObjective: $('stu-objective').value,
                 stuFreq: $('stu-freq').value, stuValidity: $('stu-validity').value, stuRecs: $('stu-recs').value,
                 health, workouts: STATE.workouts,
                 createdAt: new Date(), updatedAt: new Date()
             };
 
-            showLoader("Salvando na Nuvem...");
+            showLoader("Salvando na Nuvem e Gerando Impressão...");
             try {
                 if(STATE.currentFichaId) { await setDoc(doc(db, "workouts", STATE.currentFichaId), data, {merge: true}); } 
                 else { const ref = await addDoc(collection(db, "workouts"), data); STATE.currentFichaId = ref.id; }
@@ -652,38 +741,45 @@
                 const isPEF = member.type === 'PEF';
                 const healthDict = isPEF ? D.healthPEF : D.healthTE;
                 const legalTxt = isPEF ? D.legalPEF : D.legalTE;
-                const profLabel = isPEF ? 'Profissional de Educação Física' : 'Treinador Esportivo';
-                const crefHtml = isPEF ? `<br>CREF: ${member.cref} - ${member.state}` : '';
+                const profLabel = isPEF ? 'Personal Trainer' : 'Treinador Esportivo';
+                const crefHtml = isPEF ? `<br>CREF: ${member.cref} - Estado: ${member.state}` : '';
 
                 let html = `
                     <div class="print-header">
                         <h1 class="print-title">PLANILHA DE TREINAMENTO</h1>
-                        <div class="prof-info">Prescrição: ${member.name} (${profLabel})${crefHtml} | Unidade: ${unit.name}</div>
+                        <div class="prof-info">Prescrição feita por ${profLabel}: ${member.name}${crefHtml}</div>
                     </div>
+                    
                     <div class="print-grid">
-                        <div><strong>Aluno:</strong> ${data.studentName}</div><div><strong>Idade:</strong> ${data.stuAge||'-'}</div><div><strong>Gênero:</strong> ${data.stuGender}</div>
-                        <div><strong>Peso:</strong> ${data.stuWeight||'-'}kg</div><div><strong>Altura:</strong> ${data.stuHeight||'-'}m</div><div><strong>IMC:</strong> ${imcStr}</div>
-                        <div><strong>Objetivo:</strong> ${data.stuObjective}</div><div><strong>Freq:</strong> ${data.stuFreq}</div><div><strong>Validade:</strong> ${data.stuValidity}</div>
+                        <div><strong>Nome:</strong> ${data.studentName}</div>
+                        <div><strong>Idade:</strong> ${data.stuAge||'-'} anos</div>
+                        <div><strong>Peso:</strong> ${data.stuWeight||'-'} kg</div>
+                        <div><strong>Altura:</strong> ${data.stuHeight||'-'} m</div>
+                        <div><strong>IMC:</strong> ${imcStr}</div>
+                        <div><strong>Gênero:</strong> ${data.stuGender}</div>
+                        <div><strong>Objetivo:</strong> ${data.stuObjective}</div>
+                        <div><strong>Nível:</strong> ${data.stuLevel}</div>
+                        <div><strong>Frequência:</strong> ${data.stuFreq}</div>
                     </div>`;
 
                 if(D.objectives[data.stuObjective] || health.length > 0) {
-                    html += `<div class="print-guidelines"><h4>Diretrizes de Perfil</h4><ul>`;
-                    if(D.objectives[data.stuObjective]) html += `<li><strong>${data.stuObjective}:</strong> ${D.objectives[data.stuObjective]}</li>`;
+                    html += `<div class="print-guidelines"><h4>Estado de Saúde e Diretrizes</h4><ul>`;
+                    if(D.objectives[data.stuObjective]) html += `<li><strong>Objetivo (${data.stuObjective}):</strong> ${D.objectives[data.stuObjective]}</li>`;
                     health.forEach(k => { if(healthDict[k]) html += `<li><strong>${k.replace(/[^\w\sÀ-ú]/g,'').trim()}:</strong> ${healthDict[k]}</li>`; });
                     html += `</ul></div>`;
                 }
 
                 data.workouts.forEach(wk => {
                     html += `<div class="print-workout"><h3>${wk.title}</h3><table>
-                        <thead><tr><th style="width:35%">Exercício</th><th style="width:8%">Séries</th><th style="width:12%">Reps</th><th style="width:15%">Técnica</th><th style="width:30%">Obs</th></tr></thead><tbody>`;
-                    if(wk.exercises.length===0) html += `<tr><td colspan="5" style="text-align:center;font-style:italic">Sem exercícios</td></tr>`;
-                    else wk.exercises.forEach(ex => html += `<tr><td><strong>${ex.name}</strong></td><td>${ex.sets}</td><td>${ex.reps}</td><td>${ex.technique!=='Nenhuma'?ex.technique:'-'}</td><td>${ex.obs||'-'}</td></tr>`);
+                        <thead><tr><th style="width:35%">Exercício</th><th style="width:10%; text-align:center;">Séries</th><th style="width:10%; text-align:center;">Reps</th><th style="width:15%">Técnica</th><th style="width:30%">Observações</th></tr></thead><tbody>`;
+                    if(wk.exercises.length===0) html += `<tr><td colspan="5" style="text-align:center;font-style:italic">Sem exercícios lançados neste dia.</td></tr>`;
+                    else wk.exercises.forEach(ex => html += `<tr><td><strong>${ex.name}</strong></td><td style="text-align:center;">${ex.sets}</td><td style="text-align:center;">${ex.reps}</td><td>${ex.technique!=='Nenhuma'?ex.technique:'-'}</td><td>${ex.obs||'-'}</td></tr>`);
                     html += `</tbody></table></div>`;
                 });
 
                 html += `<div class="print-footer-section">`;
-                if(data.stuRecs) html += `<strong>Recomendações Específicas:</strong><p style="white-space:pre-wrap; margin:2px 0 5px 0">${data.stuRecs}</p>`;
-                html += `<div class="legal-text">${legalTxt}</div><div style="text-align:center; margin-top:10px; font-size:7px;">Gerado por PowFit Pro - ${new Date().toLocaleDateString('pt-BR')}</div></div>`;
+                if(data.stuRecs) html += `<strong>Recomendações Específicas do Profissional:</strong><p style="white-space:pre-wrap; margin:3px 0 10px 0">${data.stuRecs}</p>`;
+                html += `<div class="legal-text">${legalTxt}</div><div style="text-align:center; margin-top:15px; font-size:7px;">Plataforma PowFit Pro - Ficha gerada em ${new Date().toLocaleDateString('pt-BR')}</div></div>`;
 
                 $('print-area').innerHTML = html;
                 setTimeout(() => window.print(), 300);
@@ -693,37 +789,37 @@
 
         // --- 10. HISTÓRICO E RELATÓRIOS ---
         window.openHistory = async () => {
-            showLoader("Buscando fichas...");
+            showLoader("Buscando fichas na nuvem...");
             openModal('modal-history');
             const q = query(collection(db, "workouts"), where("networkId", "==", STATE.user.uid), orderBy("createdAt", "desc"));
             try {
                 const snap = await getDocs(q);
                 window.HISTORY_DATA = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 renderHistoryList();
-            } catch(e) { alert("Erro ao carregar histórico. Verifique se os índices do Firestore estão configurados caso o erro persista (apenas um recarregamento pode resolver). Msg: "+e.message); }
+            } catch(e) { alert("Erro ao carregar histórico. Detalhes: "+e.message); }
             hideLoader();
         };
 
         function renderHistoryList() {
-            $('history-title').innerHTML = '<i class="fas fa-cloud text-primary mr-2"></i> Fichas Salvas (Rede)';
-            $('btn-toggle-report').innerText = "Ver Relatório";
+            $('history-title').innerHTML = '<i class="fas fa-cloud text-primary mr-2"></i> Memória de Fichas (Rede)';
+            $('btn-toggle-report').innerText = "Modo Relatório de Produtividade";
             const cont = $('history-content');
             if(window.HISTORY_DATA.length === 0) return cont.innerHTML = `<p class="opacity-50 text-center py-8">Nenhuma ficha salva na nuvem.</p>`;
             
             cont.innerHTML = window.HISTORY_DATA.map(h => {
                 const date = h.createdAt?.toDate ? h.createdAt.toDate().toLocaleDateString('pt-BR') : 'Recente';
                 const isExpired = checkValidade(h.createdAt?.toDate(), h.stuValidity);
-                const mem = STATE.members.find(m=>m.id===h.memberId)?.name || 'Desconhecido';
+                const mem = STATE.members.find(m=>m.id===h.memberId)?.name || 'Profissional Removido';
                 
-                return `<div class="p-3 mb-2 bg-black bg-opacity-20 rounded flex justify-between items-center border ${isExpired?'border-yellow-500':'border-transparent'}">
+                return `<div class="p-3 mb-3 card rounded-lg flex justify-between items-center border ${isExpired?'border-yellow-500':'border-gray-500 border-opacity-20'}">
                     <div>
-                        <strong class="block">${h.studentName}</strong>
-                        <span class="text-xs opacity-70">Data: ${date} | Por: ${mem}</span>
-                        ${isExpired ? `<span class="text-[10px] text-yellow-500 ml-2 border border-yellow-500 px-1 rounded">VENCIDA</span>` : ''}
+                        <strong class="block text-sm">${h.studentName}</strong>
+                        <span class="text-[10px] opacity-70">Salvo: ${date} | Criador: ${mem}</span>
+                        ${isExpired ? `<span class="text-[9px] text-yellow-500 ml-2 border border-yellow-500 px-1 rounded font-bold">NECESSÁRIO ATUALIZAR</span>` : ''}
                     </div>
                     <div class="flex gap-2">
-                        <button onclick="loadFicha('${h.id}')" class="btn-primary text-[10px] px-2 py-1 rounded">CARREGAR</button>
-                        <button onclick="deleteFicha('${h.id}')" class="text-red-500 text-xs px-2"><i class="fas fa-trash"></i></button>
+                        <button onclick="loadFicha('${h.id}')" class="btn-primary text-[10px] px-3 py-1.5 rounded font-bold">CARREGAR</button>
+                        <button onclick="deleteFicha('${h.id}')" class="text-red-500 hover:bg-red-500 hover:bg-opacity-10 text-xs px-2 py-1.5 rounded transition"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>`;
             }).join('');
@@ -760,7 +856,7 @@
         };
 
         window.deleteFicha = async id => {
-            if(confirm("Excluir definitivamente da nuvem?")) {
+            if(confirm("Excluir esta ficha definitivamente da nuvem? A ação não pode ser desfeita.")) {
                 showLoader("Excluindo...");
                 await deleteDoc(doc(db, "workouts", id));
                 window.HISTORY_DATA = window.HISTORY_DATA.filter(x => x.id !== id);
@@ -771,13 +867,13 @@
         };
 
         // Relatório de Produtividade
-        window.openReports = () => { window.openHistory(); setTimeout(window.loadReportMode, 500); };
+        window.openReports = () => { window.openHistory(); setTimeout(window.loadReportMode, 800); };
         window.loadReportMode = () => {
             const btn = $('btn-toggle-report');
             if(btn.innerText === "Voltar p/ Fichas") { renderHistoryList(); return; }
             
             btn.innerText = "Voltar p/ Fichas";
-            $('history-title').innerHTML = '<i class="fas fa-chart-bar text-primary mr-2"></i> Produtividade da Rede';
+            $('history-title').innerHTML = '<i class="fas fa-chart-bar text-primary mr-2"></i> Relatório de Produtividade (Rede)';
             
             // Agrupamento
             const counts = {};
@@ -788,14 +884,14 @@
 
             let html = `<div class="space-y-4">`;
             STATE.units.forEach(u => {
-                let unitHtml = `<div class="card p-3 rounded border border-gray-600"><h4 class="font-bold text-primary border-b border-gray-700 pb-1 mb-2">${u.name}</h4>`;
+                let unitHtml = `<div class="card p-4 rounded-lg border border-gray-600 border-opacity-30"><h4 class="font-bold text-primary border-b border-gray-700 pb-2 mb-3 text-lg">${u.name}</h4>`;
                 const mems = STATE.members.filter(m => m.unitId === u.id);
                 let hasData = false;
                 mems.forEach(m => {
                     const total = counts[`${u.id}_${m.id}`] || 0;
-                    if(total > 0) { unitHtml += `<div class="flex justify-between text-sm py-1"><span>${m.name} (${m.type})</span><span class="font-bold">${total} fichas</span></div>`; hasData = true; }
+                    if(total > 0) { unitHtml += `<div class="flex justify-between text-sm py-2 border-b border-gray-700 border-opacity-20 last:border-0"><span>${m.name} (${m.type})</span><span class="font-bold bg-primary bg-opacity-20 px-2 rounded text-primary">${total} fichas</span></div>`; hasData = true; }
                 });
-                if(!hasData) unitHtml += `<p class="text-xs opacity-50">Nenhuma ficha produzida.</p>`;
+                if(!hasData) unitHtml += `<p class="text-xs opacity-50">Nenhum dado de produtividade para esta unidade.</p>`;
                 unitHtml += `</div>`;
                 html += unitHtml;
             });
