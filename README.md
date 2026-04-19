@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -78,13 +77,11 @@
 </head>
 <body data-theme="Masculino">
 
-    <!-- OVERLAY DE CARREGAMENTO GLOBAL -->
     <div id="global-loader" class="fixed inset-0 bg-black bg-opacity-80 z-[100] flex flex-col items-center justify-center hidden">
         <div class="loader mb-4 w-12 h-12 border-4"></div>
         <p class="text-white font-bold tracking-wide" id="loader-text">Conectando à Nuvem...</p>
     </div>
 
-    <!-- TELA DE LOGIN -->
     <div id="login-screen" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 to-black">
         <div class="card p-8 rounded-2xl shadow-2xl max-w-md w-full text-center border-t-4 border-t-primary relative overflow-hidden">
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-primary opacity-10 rounded-full blur-2xl"></div>
@@ -98,7 +95,6 @@
         </div>
     </div>
 
-    <!-- TELA DE SETUP DA REDE -->
     <div id="setup-screen" class="min-h-screen flex items-center justify-center p-4 hidden">
         <div class="card p-8 rounded-2xl shadow-2xl max-w-lg w-full border-t-4 border-t-primary">
             <h2 class="text-2xl font-bold mb-2"><i class="fas fa-building text-primary"></i> Criar Franquia / Rede</h2>
@@ -120,10 +116,8 @@
         </div>
     </div>
 
-    <!-- APP PRINCIPAL -->
     <div id="app-screen" class="hidden min-h-screen pb-20">
         
-        <!-- Navbar -->
         <nav class="bg-black bg-opacity-20 border-b border-opacity-20 backdrop-blur-md sticky top-0 z-40" style="border-color: var(--border-color)">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap justify-between items-center gap-4">
                 <div class="flex items-center gap-3">
@@ -158,7 +152,6 @@
             </div>
         </nav>
 
-        <!-- Container Principal -->
         <div id="app-container" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
@@ -176,7 +169,6 @@
                 </div>
             </div>
 
-            <!-- Alerta Treinador Não Selecionado -->
             <div id="alert-no-member" class="bg-red-500/10 border border-red-500/50 text-red-400 p-4 rounded-xl text-sm mb-6 hidden flex items-center gap-3">
                 <i class="fas fa-exclamation-circle text-2xl"></i>
                 <div>
@@ -186,10 +178,8 @@
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                <!-- COLUNA ESQUERDA: Dados -->
                 <div class="xl:col-span-4 space-y-6">
                     
-                    <!-- Dados do Aluno -->
                     <div class="card rounded-2xl p-5 shadow-sm border-t-2 border-t-blue-500">
                         <div class="flex justify-between items-center mb-4 border-b border-opacity-10 pb-2" style="border-color: var(--border-color)">
                             <h3 class="font-bold flex items-center gap-2"><i class="fas fa-user-graduate text-primary"></i> Perfil do Aluno</h3>
@@ -259,22 +249,18 @@
                         </div>
                     </div>
 
-                    <!-- Estado de Saúde -->
                     <div class="card rounded-2xl p-5 shadow-sm">
                         <h3 class="font-bold mb-1 flex items-center gap-2 border-b border-opacity-10 pb-2" style="border-color: var(--border-color)">
                             <i class="fas fa-heartbeat text-primary"></i> Condições de Saúde
                         </h3>
                         <p class="text-[9px] uppercase tracking-wider opacity-60 mb-3 font-bold text-primary">Diretrizes automáticas baseadas na atuação (PEF ou TE).</p>
                         <div class="grid grid-cols-1 gap-1.5 text-xs max-h-56 overflow-y-auto pr-2" id="health-container">
-                            <!-- JS popula baseado no membro selecionado -->
-                        </div>
+                            </div>
                     </div>
                 </div>
 
-                <!-- COLUNA DIREITA: Treinos -->
                 <div class="xl:col-span-8 space-y-4">
                     
-                    <!-- Barra de Controles de Dias -->
                     <div class="card p-4 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm border-t-2 border-t-blue-500">
                         <div>
                             <h2 class="font-bold text-lg"><i class="fas fa-layer-group text-primary mr-2"></i>Montagem da Ficha</h2>
@@ -292,10 +278,8 @@
                     </div>
 
                     <div id="workouts-container" class="space-y-5">
-                        <!-- Treinos populados via JS -->
-                    </div>
+                        </div>
 
-                    <!-- Recomendações Livres -->
                     <div class="card rounded-2xl p-5 shadow-sm">
                         <h2 class="text-md font-bold mb-3 flex items-center gap-2"><i class="fas fa-comment-medical text-primary"></i> Recomendações do Treinador (Livre)</h2>
                         <textarea id="stu-recs" rows="4" class="input-field w-full rounded-xl p-3 text-sm" placeholder="Dicas sobre hidratação, intensidade, tempo de descanso..."></textarea>
@@ -306,7 +290,6 @@
         </div>
     </div>
 
-    <!-- MODAL: GERENCIAMENTO DE REDE E EQUIPE -->
     <div id="modal-manage" class="modal fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-4">
         <div class="card w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
             <div class="p-5 border-b flex justify-between items-center" style="border-color: var(--border-color)">
@@ -318,7 +301,6 @@
             </div>
             <div class="p-6 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-2 gap-8">
                 
-                <!-- Nova Unidade -->
                 <div class="space-y-4 p-5 bg-black bg-opacity-20 rounded-xl border border-gray-500/20">
                     <h4 class="font-bold text-md flex items-center gap-2"><i class="fas fa-store text-blue-400"></i> Adicionar Nova Unidade</h4>
                     <p class="text-xs opacity-60">Expanda sua rede criando locais físicos de atuação.</p>
@@ -328,7 +310,6 @@
                     <button onclick="addNewUnit()" class="btn-primary w-full py-2.5 rounded-lg text-sm font-bold shadow-md">Salvar Unidade</button>
                 </div>
 
-                <!-- Novo Membro (Treinador) -->
                 <div class="space-y-4 p-5 bg-black bg-opacity-20 rounded-xl border border-gray-500/20">
                     <h4 class="font-bold text-md flex items-center gap-2"><i class="fas fa-id-card-alt text-blue-400"></i> Cadastrar Profissional</h4>
                     <p class="text-xs opacity-60">Adicione treinadores às suas unidades.</p>
@@ -365,7 +346,6 @@
         </div>
     </div>
 
-    <!-- MODAL: EXERCÍCIOS -->
     <div id="modal-exercises" class="modal fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-[70] flex items-center justify-center p-2 sm:p-4">
         <div class="card w-full max-w-6xl rounded-2xl shadow-2xl flex flex-col h-[90vh] overflow-hidden border-t-4 border-t-primary">
             <div class="p-4 border-b flex justify-between items-center bg-black bg-opacity-20" style="border-color: var(--border-color)">
@@ -379,7 +359,6 @@
         </div>
     </div>
 
-    <!-- MODAL: HISTÓRICO E RELATÓRIOS -->
     <div id="modal-history" class="modal fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-4">
         <div class="card w-full max-w-5xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
             <div class="p-5 border-b flex justify-between items-center" style="border-color: var(--border-color)">
@@ -392,15 +371,12 @@
                 </div>
             </div>
             <div class="p-6 overflow-y-auto flex-1" id="history-content">
-                <!-- Populado JS -->
-            </div>
+                </div>
         </div>
     </div>
 
-    <!-- ÁREA DE IMPRESSÃO (Oculta na tela) -->
     <div id="print-area"></div>
 
-    <!-- SCRIPT PRINCIPAL E FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -572,14 +548,14 @@
 
         async function loadNetworkData() {
             try {
-                const netDoc = await getDoc(doc(db, "networks", STATE.user.uid));
-                if (!netDoc.exists()) {
+                // TUDO É SALVO DENTRO DA PASTA DO SEU USUÁRIO NO FIREBASE!
+                const netDoc = await getDoc(doc(db, "users", STATE.user.uid));
+                if (!netDoc.exists() || !netDoc.data().networkName) {
                     $('setup-screen').classList.remove('hidden');
                 } else {
                     STATE.network = netDoc.data();
                     STATE.units = STATE.network.units || [];
-                    const memQ = query(collection(db, "members"), where("networkId", "==", STATE.user.uid));
-                    const memSnap = await getDocs(memQ);
+                    const memSnap = await getDocs(collection(db, "users", STATE.user.uid, "members"));
                     STATE.members = memSnap.docs.map(d => ({id: d.id, ...d.data()}));
                     initAppUI();
                 }
@@ -593,9 +569,9 @@
             
             showLoader("Estruturando Franquia...");
             const initUnit = { id: genId(), name: unitName };
-            await setDoc(doc(db, "networks", STATE.user.uid), {
-                name: netName, ownerEmail: STATE.user.email, units: [initUnit], createdAt: new Date()
-            });
+            await setDoc(doc(db, "users", STATE.user.uid), {
+                networkName: netName, ownerEmail: STATE.user.email, units: [initUnit], createdAt: new Date()
+            }, {merge: true});
             $('setup-screen').classList.add('hidden');
             await loadNetworkData();
             hideLoader();
@@ -608,7 +584,7 @@
             showLoader("Salvando Unidade...");
             const newUnit = { id: genId(), name };
             STATE.units.push(newUnit);
-            await setDoc(doc(db, "networks", STATE.user.uid), { units: STATE.units }, {merge: true});
+            await setDoc(doc(db, "users", STATE.user.uid), { units: STATE.units }, {merge: true});
             $('new-unit-name').value = '';
             updateNavSelects();
             hideLoader();
@@ -625,8 +601,8 @@
             if(type === 'PEF' && (!cref || !stateUf)) return alert("CREF e Estado são obrigatórios para a Categoria PEF.");
 
             showLoader("Cadastrando Profissional...");
-            const memberData = { networkId: STATE.user.uid, unitId, name, type, cref, state: stateUf, active: true };
-            const docRef = await addDoc(collection(db, "members"), memberData);
+            const memberData = { unitId, name, type, cref, state: stateUf, active: true };
+            const docRef = await addDoc(collection(db, "users", STATE.user.uid, "members"), memberData);
             STATE.members.push({id: docRef.id, ...memberData});
             
             $('new-member-name').value = ''; $('new-member-cref').value = ''; $('new-member-state').value = '';
@@ -637,7 +613,7 @@
 
         function initAppUI() {
             $('app-screen').classList.remove('hidden');
-            $('nav-network-name').innerText = STATE.network.name;
+            $('nav-network-name').innerText = STATE.network.networkName;
             updateNavSelects();
             $('nav-select-member').addEventListener('change', updateHealthOptions);
         }
@@ -779,20 +755,17 @@
             const member = STATE.members.find(m => m.id === memberId);
             const unit = STATE.units.find(u => u.id === $('nav-select-unit').value);
 
-            // Validação simples
             if(STATE.workouts.length === 0) return alert("Adicione pelo menos um treino na ficha.");
 
-            // Coletar dados
             const w = parseFloat($('stu-weight').value), h = parseFloat($('stu-height').value);
             const imcStr = (w>0 && h>0) ? (w/(h*h)).toFixed(1) : "-";
             const health = Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value);
             
-            // Ano e Mês para relatório de produtividade
             const now = new Date();
-            const reportKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}`; // Ex: "2026-04"
+            const reportKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}`;
 
             const data = {
-                networkId: STATE.user.uid, unitId: unit.id, memberId: member.id, reportKey,
+                unitId: unit.id, memberId: member.id, reportKey,
                 profName: member.name, profType: member.type, profCref: member.cref || '', profState: member.state || '',
                 studentName: $('stu-name').value || 'Aluno Não Informado', stuAge: $('stu-age').value, stuWeight: $('stu-weight').value, stuHeight: $('stu-height').value,
                 stuGender: $('stu-gender').value, stuLevel: $('stu-level').value, stuObjective: $('stu-objective').value,
@@ -804,14 +777,14 @@
             showLoader("Salvando Ficha na Nuvem...");
             try {
                 if(STATE.currentFichaId) { 
-                    await setDoc(doc(db, "workouts", STATE.currentFichaId), data, {merge: true}); 
+                    await setDoc(doc(db, "users", STATE.user.uid, "workouts", STATE.currentFichaId), data, {merge: true}); 
                 } else { 
-                    const ref = await addDoc(collection(db, "workouts"), data); 
+                    const ref = await addDoc(collection(db, "users", STATE.user.uid, "workouts"), data); 
                     STATE.currentFichaId = ref.id; 
                 }
                 hideLoader();
                 
-                // Construção Dinâmica da Impressão (Estilo Planilha)
+                // Construção Dinâmica da Impressão
                 const isPEF = member.type === 'PEF';
                 const healthDict = isPEF ? D.healthPEF : D.healthTE;
                 const legalTxt = isPEF ? D.legalPEF : D.legalTE;
@@ -865,10 +838,10 @@
         window.openHistory = async () => {
             showLoader("Buscando Histórico Cloud...");
             openModal('modal-history');
-            const q = query(collection(db, "workouts"), where("networkId", "==", STATE.user.uid));
+            const q = collection(db, "users", STATE.user.uid, "workouts");
             try {
                 const snap = await getDocs(q);
-                // Ordenar no cliente para evitar necessidade de composite index no Firestore padrão
+                // Ordenar no cliente
                 window.HISTORY_DATA = snap.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b) => b.createdAt - a.createdAt);
                 renderHistoryList();
             } catch(e) { alert("Erro ao carregar histórico: "+e.message); }
@@ -898,10 +871,23 @@
                     </div>
                     <div class="flex gap-2">
                         <button onclick="loadFicha('${h.id}')" class="btn-primary text-xs px-4 py-2 rounded-lg font-bold shadow-md">EDITAR/IMPRIMIR</button>
+                        <button onclick="deleteFicha('${h.id}')" class="bg-red-900 text-white text-xs px-3 py-2 rounded-lg font-bold shadow-md hover:bg-red-700 transition" title="Excluir da Nuvem"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>`;
             }).join('');
         }
+
+        window.deleteFicha = async (id) => {
+            if(confirm("Excluir definitivamente esta ficha da nuvem? Esta ação não pode ser desfeita.")) {
+                showLoader("Excluindo...");
+                try {
+                    await deleteDoc(doc(db, "users", STATE.user.uid, "workouts", id));
+                    if(STATE.currentFichaId === id) STATE.currentFichaId = null;
+                    await window.openHistory(); // refresh a lista
+                } catch(e) { alert("Erro ao excluir: " + e.message); }
+                hideLoader();
+            }
+        };
 
         function checkValidade(dateObj, validadeStr) {
             if(!dateObj) return false;
@@ -942,13 +928,12 @@
             btn.onclick = renderHistoryList;
             $('history-title').innerHTML = '<i class="fas fa-chart-line text-primary mr-2"></i> Relatório de Produtividade Mensal';
             
-            // Lógica de agrupamento por Mês Atual
             const now = new Date();
             const currentReportKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}`;
             const monthName = now.toLocaleString('pt-BR', { month: 'long', year: 'numeric' }).toUpperCase();
             
-            const counts = {}; // "unitId_memberId": total
-            const unitTotals = {}; // "unitId": total
+            const counts = {}; 
+            const unitTotals = {}; 
 
             window.HISTORY_DATA.forEach(w => {
                 if(w.reportKey === currentReportKey) {
@@ -1002,9 +987,7 @@
                 html = `<div class="text-center py-10"><i class="fas fa-folder-open text-4xl opacity-20 mb-3"></i><p class="font-bold opacity-50 uppercase tracking-widest">Nenhuma ficha criada em ${monthName}.</p></div>`;
             }
 
-            // Guardar HTML do relatório puro para caso clique em imprimir
             window.CURRENT_REPORT_HTML = buildPrintReportHTML(monthName, counts, unitTotals, globTotal);
-            
             $('history-content').innerHTML = html;
         };
 
@@ -1012,7 +995,7 @@
             let p = `
                 <div class="print-header" style="margin-bottom:20px;">
                     <h1 class="print-title">RELATÓRIO DE PRODUTIVIDADE GERAL</h1>
-                    <div class="prof-info">Rede: ${STATE.network.name} | Período: ${monthName}</div>
+                    <div class="prof-info">Rede: ${STATE.network.networkName} | Período: ${monthName}</div>
                 </div>
                 <div style="font-size: 14px; margin-bottom: 20px;"><strong>Volume Total da Rede no Mês:</strong> ${globTotal} Fichas Geradas.</div>
             `;
