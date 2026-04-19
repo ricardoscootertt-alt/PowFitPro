@@ -2,13 +2,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PowFit Pro - Nuvem & Prescrição</title>
+    <title>PowFit Pro - Plataforma Profissional de Treinos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Tema Masculino (Escuro Fitness) */
+            /* Tema Padrão Masculino (Escuro Fitness) */
             --bg-body: #0f172a;
             --bg-card: #1e293b;
             --text-main: #f8fafc;
@@ -40,18 +40,34 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); }
-        .input-field { background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--text-main); }
-        .input-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .input-field {
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-main);
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px var(--primary);
+        }
+
         .btn-primary { background-color: var(--primary); color: white; transition: background-color 0.2s; }
         .btn-primary:hover { background-color: var(--primary-hover); }
 
         #print-area { display: none; }
+        #toast { transition: opacity 0.3s, transform 0.3s; }
 
-        /* Estilo de Impressão (Planilha A4 Profissional) */
+        /* Estilos de Impressão (Estilo Planilha) */
         @media print {
             body { background: white !important; color: black !important; margin: 0; padding: 0; }
-            #app-container, .modal-overlay, .no-print { display: none !important; }
+            #app-container, #history-modal, #exercise-modal, #login-container, .no-print { display: none !important; }
             #print-area {
                 display: block !important;
                 padding: 10mm 15mm;
@@ -60,38 +76,33 @@
             }
             @page { size: A4; margin: 0; }
             
-            /* Cabeçalho */
             .print-header { border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
-            .print-title { font-size: 16px; font-weight: bold; margin: 0; text-transform: uppercase; text-align: center; }
-            .prof-info { font-size: 11px; margin-top: 4px; text-align: center; font-weight: bold; }
+            .print-title { font-size: 18px; font-weight: bold; margin: 0; text-transform: uppercase; text-align: center;}
+            .prof-info { font-size: 11px; margin-top: 5px; text-align: center; font-weight: bold;}
             
-            /* Grid Aluno */
             .print-grid {
-                display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
-                margin-bottom: 12px; border: 1px solid #000; padding: 6px; background: #fff;
+                display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px;
+                margin-bottom: 15px; border: 1px solid #000; padding: 8px; background: #fff;
             }
-            .print-grid div { font-size: 10px; }
+            .print-grid div { font-size: 11px; }
             
-            /* Diretrizes Automáticas */
-            .print-guidelines { border: 1px solid #000; padding: 6px; margin-bottom: 12px; font-size: 9px; }
-            .print-guidelines h4 { margin: 0 0 4px 0; font-size: 10px; text-transform: uppercase; background: #eee; padding: 3px; border-bottom: 1px solid #ccc; }
+            .print-guidelines { border: 1px solid #000; padding: 8px; margin-bottom: 15px; font-size: 9.5px; }
+            .print-guidelines h4 { margin: 0 0 4px 0; font-size: 11px; text-transform: uppercase; background: #eee; padding: 3px;}
             .print-guidelines ul { margin: 0; padding-left: 15px; }
-            .print-guidelines li { margin-bottom: 2px; }
+            .print-guidelines li { margin-bottom: 3px; }
 
-            /* Tabelas Planilha */
-            .print-workout { margin-bottom: 10px; page-break-inside: avoid; }
+            .print-workout { margin-bottom: 15px; page-break-inside: avoid; }
             .print-workout h3 {
                 background: #e0e0e0; border: 1px solid #000; border-bottom: none;
-                padding: 3px 6px; margin: 0; font-size: 11px; text-transform: uppercase;
+                padding: 4px 8px; margin: 0; font-size: 12px; text-transform: uppercase;
                 -webkit-print-color-adjust: exact; color-adjust: exact;
             }
             table { width: 100%; border-collapse: collapse; margin-bottom: 0; border: 1px solid #000; }
-            th, td { border: 1px solid #000; padding: 3px 5px; text-align: left; font-size: 10px; }
+            th, td { border: 1px solid #000; padding: 4px 6px; text-align: left; font-size: 10px; }
             th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; }
             
-            /* Rodapé e Textos Legais */
-            .print-footer-section { margin-top: 15px; border: 1px solid #000; padding: 6px; font-size: 9px; page-break-inside: avoid; }
-            .legal-text { font-size: 7.5px; color: #333; text-align: justify; margin-top: 5px; font-style: italic; border-top: 1px dashed #ccc; padding-top: 4px; line-height: 1.2; }
+            .print-footer-section { margin-top: 15px; border: 1px solid #000; padding: 8px; font-size: 9px; page-break-inside: avoid;}
+            .legal-text { font-size: 8px; color: #333; text-align: justify; margin-top: 5px; font-style: italic;}
         }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -101,34 +112,49 @@
 </head>
 <body data-theme="Masculino" class="min-h-screen pb-20">
 
-    <!-- ÁREA PRINCIPAL DO SISTEMA -->
-    <div id="app-container" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[100] opacity-0 transform translate-y-[-20px] pointer-events-none">
+        Mensagem
+    </div>
+
+    <!-- TELA DE LOGIN (Mostrada se não estiver autenticado) -->
+    <div id="login-container" class="min-h-screen flex items-center justify-center p-4">
+        <div class="card p-8 rounded-2xl shadow-xl max-w-md w-full text-center border border-gray-600 border-opacity-20">
+            <i class="fas fa-dumbbell text-5xl text-primary mb-4"></i>
+            <h1 class="text-3xl font-bold mb-2">PowFit Pro</h1>
+            <p class="text-sm var(--text-muted) mb-8">Plataforma Profissional de Prescrição com Nuvem</p>
+            
+            <button onclick="loginWithGoogle()" class="w-full bg-white text-gray-800 hover:bg-gray-100 font-semibold py-3 px-4 border border-gray-400 rounded-lg shadow transition flex items-center justify-center gap-3">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+                Entrar com Conta Google
+            </button>
+            <p class="text-xs opacity-60 mt-6">Ao entrar, suas fichas serão salvas na nuvem associadas à sua conta.</p>
+        </div>
+    </div>
+
+    <!-- ÁREA PRINCIPAL DO SISTEMA (Mostrada após login) -->
+    <div id="app-container" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 hidden">
         
-        <!-- Header & Auth -->
-        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-black bg-opacity-20 p-4 rounded-xl border border-opacity-20" style="border-color: var(--border-color)">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
             <div class="flex items-center gap-3">
                 <i class="fas fa-dumbbell text-3xl text-primary"></i>
                 <div>
-                    <h1 class="text-2xl font-bold tracking-tight">PowFit Pro <span class="text-xs font-normal text-green-400 bg-green-400 bg-opacity-10 px-2 py-0.5 rounded ml-2">Cloud</span></h1>
-                    <p class="text-xs opacity-70">Plataforma Profissional de Prescrição</p>
+                    <h1 class="text-2xl font-bold tracking-tight">PowFit Pro</h1>
+                    <p class="text-xs var(--text-muted)">Plataforma Profissional de Prescrição</p>
                 </div>
             </div>
-            <div class="flex flex-wrap items-center justify-center gap-2">
-                <!-- Seção de Login Google -->
-                <div id="auth-section" class="flex items-center gap-2 mr-4 border-r border-opacity-20 pr-4" style="border-color: var(--border-color)">
-                    <img id="user-photo" src="" class="w-8 h-8 rounded-full hidden border border-primary">
-                    <span id="user-name" class="text-sm font-medium hidden"></span>
-                    <button id="btn-login" onclick="window.loginGoogle()" class="bg-white text-black px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 hover:bg-gray-200 transition">
-                        <i class="fab fa-google text-red-500"></i> Fazer Login
-                    </button>
-                    <button id="btn-logout" onclick="window.logoutGoogle()" class="text-xs text-red-400 hover:text-red-300 hidden underline ml-2">Sair</button>
+            <div class="flex flex-wrap items-center gap-3 justify-center">
+                <div class="flex items-center gap-2 mr-4 opacity-80 text-sm">
+                    <img id="user-avatar" src="" class="w-8 h-8 rounded-full bg-gray-600 hidden" alt="">
+                    <span id="user-email">...</span>
+                    <button onclick="logout()" class="text-red-400 hover:text-red-500 ml-2 text-xs font-bold">[Sair]</button>
                 </div>
-
-                <button onclick="window.openHistory()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium shadow flex items-center gap-2 text-sm transition">
-                    <i class="fas fa-cloud"></i> Memória da Nuvem
+                <button onclick="openHistory()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
+                    <i class="fas fa-cloud"></i> Fichas Salvas
                 </button>
-                <button onclick="window.generatePrint()" class="btn-primary px-5 py-2 rounded-lg font-medium shadow-lg flex items-center gap-2 text-sm">
-                    <i class="fas fa-print"></i> Salvar e Imprimir
+                <button onclick="generatePrintAndSave()" class="btn-primary px-5 py-2 rounded-lg font-medium shadow flex items-center gap-2 text-sm">
+                    <i class="fas fa-print"></i> Salvar & Imprimir
                 </button>
             </div>
         </div>
@@ -141,12 +167,12 @@
                 <!-- Card: Profissional -->
                 <div class="card rounded-xl p-5 shadow-sm">
                     <h2 class="text-lg font-semibold mb-4 flex items-center gap-2 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
-                        <i class="fas fa-id-badge text-primary"></i> Dados do Profissional
+                        <i class="fas fa-id-badge text-primary"></i> Cadastro do Profissional
                     </h2>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium mb-1">Opções de Atuação</label>
-                            <select id="prof-type" onchange="window.toggleProfType()" class="input-field w-full rounded-lg px-3 py-2 text-sm font-medium">
+                            <label class="block text-sm font-medium mb-1">Tipo de Profissional</label>
+                            <select id="prof-type" onchange="toggleProfType()" class="input-field w-full rounded-lg px-3 py-2 text-sm font-medium">
                                 <option value="PEF">Profissional de Educação Física</option>
                                 <option value="TE">Treinador Esportivo</option>
                             </select>
@@ -189,17 +215,17 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1">Peso (kg)</label>
-                                <input type="number" id="stu-weight" oninput="window.calculateIMC()" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="kg">
+                                <input type="number" id="stu-weight" oninput="calculateIMC()" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="kg">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1">Altura (m)</label>
-                                <input type="number" id="stu-height" step="0.01" oninput="window.calculateIMC()" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="m">
+                                <input type="number" id="stu-height" step="0.01" oninput="calculateIMC()" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="m">
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-sm font-medium mb-1">Gênero</label>
-                                <select id="stu-gender" onchange="window.changeTheme()" class="input-field w-full rounded-lg px-3 py-2 text-sm">
+                                <select id="stu-gender" onchange="changeTheme()" class="input-field w-full rounded-lg px-3 py-2 text-sm">
                                     <option value="Masculino">Masculino</option>
                                     <option value="Feminino">Feminino</option>
                                 </select>
@@ -243,7 +269,7 @@
                     <h2 class="text-lg font-semibold mb-2 flex items-center gap-2 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
                         <i class="fas fa-notes-medical text-primary"></i> Estado de Saúde
                     </h2>
-                    <p class="text-[11px] opacity-70 mb-3 leading-tight">Diretrizes automáticas baseadas no Perfil selecionado.</p>
+                    <p class="text-[11px] opacity-70 mb-3 leading-tight">Diretrizes automáticas baseadas no Perfil Profissional selecionado.</p>
                     <div class="grid grid-cols-2 gap-2 text-xs" id="health-container">
                         <!-- Gerado via JS -->
                     </div>
@@ -268,7 +294,7 @@
                             </select>
                         </div>
                     </div>
-                    <button onclick="window.addWorkout()" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 w-full sm:w-auto justify-center">
+                    <button onclick="addWorkout()" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 w-full sm:w-auto justify-center">
                         <i class="fas fa-plus"></i> Adicionar Dia de Treino
                     </button>
                 </div>
@@ -281,7 +307,7 @@
                 <!-- Recomendações Livres -->
                 <div class="card rounded-xl p-5 shadow-sm">
                     <h2 class="text-md font-semibold mb-2"><i class="fas fa-pen text-primary"></i> Recomendações Livres (Opcional)</h2>
-                    <textarea id="stu-recs" rows="3" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Hidratação, descanso, cuidados específicos..."></textarea>
+                    <textarea id="stu-recs" rows="3" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Hidratação, descanso, cuidados específicos, intensidade..."></textarea>
                 </div>
 
             </div>
@@ -289,11 +315,11 @@
     </div>
 
     <!-- MODAL DE EXERCÍCIOS -->
-    <div id="exercise-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-2 sm:p-4 modal-overlay">
+    <div id="exercise-modal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-2 sm:p-4">
         <div class="card w-full max-w-5xl rounded-xl shadow-2xl flex flex-col h-[90vh]">
             <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
-                <h3 class="text-lg font-bold"><i class="fas fa-search text-primary mr-2"></i> Banco de Exercícios</h3>
-                <button onclick="window.closeModal()" class="text-gray-400 hover:text-red-500 transition-colors text-2xl leading-none">&times;</button>
+                <h3 class="text-lg font-bold"><i class="fas fa-search text-primary mr-2"></i> Adicionar Exercício</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 transition-colors text-2xl leading-none">&times;</button>
             </div>
             <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
                 <div class="w-full md:w-1/4 border-r overflow-y-auto p-2 space-y-1" style="border-color: var(--border-color)" id="modal-categories"></div>
@@ -302,19 +328,18 @@
         </div>
     </div>
 
-    <!-- MODAL DE HISTÓRICO (NUVEM) -->
-    <div id="history-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-[70] flex items-center justify-center p-2 sm:p-4 modal-overlay">
+    <!-- MODAL DE HISTÓRICO (MEMÓRIA NUVEM) -->
+    <div id="history-modal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden z-[70] flex items-center justify-center p-2 sm:p-4">
         <div class="card w-full max-w-4xl rounded-xl shadow-2xl flex flex-col max-h-[90vh]">
             <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
-                <h3 class="text-lg font-bold"><i class="fas fa-cloud text-primary mr-2"></i> Fichas Salvas na Nuvem</h3>
-                <button onclick="window.closeHistory()" class="text-gray-400 hover:text-red-500 transition-colors text-2xl leading-none">&times;</button>
-            </div>
-            <div id="history-loading" class="p-10 text-center hidden">
-                <i class="fas fa-spinner fa-spin text-3xl text-primary mb-3"></i>
-                <p>Buscando suas fichas na nuvem...</p>
+                <div>
+                    <h3 class="text-lg font-bold"><i class="fas fa-cloud text-primary mr-2"></i> Fichas Salvas na Nuvem</h3>
+                    <p class="text-xs opacity-70">Armazenado em sua conta Google</p>
+                </div>
+                <button onclick="closeHistory()" class="text-gray-400 hover:text-red-500 transition-colors text-2xl leading-none">&times;</button>
             </div>
             <div class="p-4 overflow-y-auto flex-1 space-y-3" id="history-list">
-                <!-- Itens do histórico JS -->
+                <div class="text-center opacity-50 py-10"><i class="fas fa-spinner fa-spin text-2xl"></i><br>Carregando fichas...</div>
             </div>
         </div>
     </div>
@@ -324,14 +349,41 @@
     <!-- ========================================== -->
     <div id="print-area"></div>
 
-    <!-- SCRIPTS MÓDULO FIREBASE E LÓGICA -->
+    <!-- SCRIPTS (FIREBASE + LOGICA) -->
     <script type="module">
-        // Importações do Firebase 11.6.1 via CDN
+        // IMPORTAÇÕES FIREBASE (Módulos)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- BANCO DE DADOS LOCAL DO SISTEMA ---
+        // CONFIGURAÇÃO FIREBASE
+        // (Se rodando fora do ambiente dinâmico, forneça suas próprias credenciais abaixo)
+        let firebaseConfig = {
+            // INSIRA SUA CONFIGURAÇÃO DO FIREBASE AQUI CASO USE FORA DO AMBIENTE PREVIEW
+        };
+
+        // Resgate da configuração injetada (se houver)
+        if (typeof __firebase_config !== 'undefined') {
+            try { firebaseConfig = JSON.parse(__firebase_config); } catch(e) {}
+        }
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'powfit-pro-app';
+
+        // Inicializa Serviços
+        let app, auth, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+        } catch(e) {
+            console.error("Firebase Init Error:", e);
+        }
+
+        // Variáveis de Estado Global
+        let currentUser = null;
+        let unsubscribeHistory = null;
+        let cloudHistoryData = [];
+
+        // --- DADOS DO SISTEMA ---
         const healthDataPEF = {
             "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.",
             "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.",
@@ -356,16 +408,16 @@
             "🟡 Sobrepeso": "A prática regular de musculação associada ao cardio pode contribuir para melhora do condicionamento físico e composição corporal. A progressão deve respeitar a individualidade e o nível de adaptação.",
             "🔴 Obesidade": "É recomendado iniciar com exercícios de menor impacto e progressão gradual. A segurança, mobilidade e constância são prioridades durante o processo.",
             "⚖️ Baixo peso": "A musculação pode auxiliar no ganho de massa muscular quando associada a alimentação adequada e descanso. O treino deve priorizar evolução progressiva e recuperação muscular.",
-            "🍬 Diabetes": "Pessoas com diabetes devem manter acompanhamento médico regular antes e durante a prática de exercícios. A musculação pode auxiliar na rotina quando liberada por profissional de saúde. Em casos de tontura, mal-estar ou alteração de glicemia, interromper o treino e buscar orientação médica.",
-            "❤️ Hipertensão": "Pessoas com hipertensão devem manter acompanhamento médico regular e respeitar as orientações. Durante o treino, é importante evitar prender a respiração (Manobra de Valsalva) e controlar a intensidade.",
+            "🍬 Diabetes": "Pessoas com diabetes devem manter acompanhamento médico regular antes e durante a prática. A musculação pode auxiliar quando liberada por profissional de saúde. Em casos de tontura ou mal-estar, o treino deve ser interrompido e procurar orientação médica.",
+            "❤️ Hipertensão": "Pessoas com hipertensão devem manter acompanhamento médico regular. Durante o treino, evitar prender a respiração e controlar a intensidade dos exercícios.",
             "🔵 Hipotensão": "Evitar mudanças bruscas de posição durante o treino. Manter boa hidratação e respeitar a intensidade adequada ajuda a reduzir episódios de mal-estar.",
-            "💔 Problemas cardíacos": "A prática deve ocorrer apenas com liberação e acompanhamento médico. O treino deve respeitar limites individuais, com controle de intensidade e atenção aos sinais do corpo.",
-            "🦴 Problemas articulares": "Exercícios com menor impacto e maior controle de movimento costumam ser mais indicados. O acompanhamento profissional e a adaptação ajudam na segurança.",
-            "🫁 Problemas respiratórios": "A progressão do treino deve ser gradual e respeitar a capacidade respiratória individual. Em caso de falta de ar excessiva ou desconforto, o exercício deve ser interrompido.",
-            "⚠️ Lesões": "A adaptação dos exercícios deve respeitar a limitação existente e evitar dor durante a execução. Em situações de lesão, é importante seguir orientação profissional antes da prática.",
-            "🤰 Gestante": "A prática deve ocorrer com liberação médica e acompanhamento adequado. Foco na segurança, mobilidade e bem-estar, evitando impacto excessivo e situações de risco.",
-            "🤱 Lactante": "A atividade pode ser mantida normalmente, respeitando a recuperação individual e mantendo boa hidratação e alimentação adequada.",
-            "👴 Idoso": "A musculação pode contribuir para força, equilíbrio, mobilidade e autonomia. O treino deve respeitar limitações individuais, com intensidade moderada e foco na segurança."
+            "💔 Problemas cardíacos": "A prática deve ocorrer apenas com liberação e acompanhamento médico. O treino deve respeitar limites individuais, com controle de intensidade.",
+            "🦴 Problemas articulares": "Exercícios com menor impacto e maior controle de movimento costumam ser mais indicados. O acompanhamento profissional e adaptação ajudam na segurança.",
+            "🫁 Problemas respiratórios": "A progressão do treino deve ser gradual e respeitar a capacidade respiratória individual. Em caso de falta de ar excessiva, interromper o exercício.",
+            "⚠️ Lesões": "A adaptação dos exercícios deve respeitar a limitação existente e evitar dor durante a execução. Seguir orientação profissional adequada antes da prática.",
+            "🤰 Gestante": "A prática deve ocorrer com liberação médica e acompanhamento adequado. Foco deve ser segurança, mobilidade e bem-estar.",
+            "🤱 Lactante": "A atividade física pode ser mantida normalmente, respeitando a recuperação individual e mantendo boa hidratação e alimentação adequada.",
+            "👴 Idoso": "A musculação pode contribuir para força, equilíbrio, mobilidade e autonomia. Respeitar limitações individuais, com intensidade moderada e segurança."
         };
 
         const objectiveData = {
@@ -381,14 +433,14 @@
 
         const dbCategories = {
             "🔥 PEITO": [
-                "Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", 
+                "Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino com Halteres", "Supino Fechado com Halteres", 
                 "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", 
                 "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", 
                 "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"
             ],
             "🦍 COSTAS": [
-                "Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", 
-                "Remada Curvada", "Remada Curvada Supinada", "Remada Unilateral", "Remada Cavalinho (T-Bar)", 
+                "Puxada Alta", "Puxada de Frente Supinada", "Puxada Unilateral", "Pulldown", "Remada Aberta", "Remada Baixa", 
+                "Remada Curvada", "Remada Curvada Supinada", "Remada Curvada na Polia", "Remada Unilateral", "Remada Cavalinho (T-Bar)", 
                 "Remada no Cross", "Serrote", "Facepull (puxada de cima para baixo)", "Encolhimento (Trapézio)"
             ],
             "🦵 PERNAS": [
@@ -398,31 +450,33 @@
                 "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", 
                 "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", 
                 "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Abdução no Cross (Glúteo Médio + Mínimo)", 
-                "Coice", "Cachorrinho", "Caranguejo", "Cadeira Extensora", "Adução", "Abdução", "Abdução Inclinada", 
-                "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha Livre", "Panturrilha em Pé (Máquina)", 
+                "Coice", "Cachorrinho", "Caranguejo", "Cadeira Extensora", "Adução", "Abdução", "Abdução Inclinada", "Cadeira Abdutora Inclinada", 
+                "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha em Pé (Máquina)", "Panturrilha Livre", 
                 "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"
             ],
             "💪 BRAÇOS": [
                 "(Bíceps) Rosca Direta", "(Bíceps) Rosca Alternada", "(Bíceps) Rosca 21", "(Bíceps) Rosca Scott Barra W", 
                 "(Bíceps) Rosca Scott Unilateral", "(Bíceps) Rosca Scott com Halteres", "(Bíceps) Rosca Martelo", 
-                "(Bíceps) Rosca Cross", "(Bíceps) Rosca Inversa", "(Bíceps) Rosca 45°",
+                "(Bíceps) Rosca Cross", "(Bíceps) Rosca Concentrada", "(Bíceps) Rosca Inversa", "(Bíceps) Rosca 45°",
                 "(Tríceps) Pulley Unilateral", "(Tríceps) Pulley Barra", "(Tríceps) Pulley Corda", "(Tríceps) Pulley Pegada Inversa", 
                 "(Tríceps) Francês na Corda", "(Tríceps) Francês com Halter", "(Tríceps) Francês Unilateral", 
                 "(Tríceps) Cruzado Polia Dupla", "(Tríceps) Coice Unilateral", "(Tríceps) Arremesso", "(Tríceps) Testa", "(Tríceps) Mergulho no Banco"
             ],
             "🪨 OMBROS": [
-                "Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral Unilateral Cross", 
-                "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", 
-                "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", 
-                "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta", "Encolhimento (Trapézio)"
+                "Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral na Polia", 
+                "Elevação Lateral Unilateral Cross", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", 
+                "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", 
+                "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta"
             ],
             "🧠 ABDÔMEN": [
                 "Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", 
-                "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", "Isometria na parede"
+                "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", 
+                "Isometria na parede", "Abdominal isometrico"
             ],
             "🫀 CARDIO": [
                 "Bicicleta 10 Minutos", "Bicicleta 15 Minutos", "Bicicleta 20 Minutos",
-                "Esteira 10 Minutos", "Esteira 15 Minutos", "Esteira 20 Minutos", "Pular Corda"
+                "Esteira 10 Minutos", "Esteira 15 Minutos", "Esteira 20 Minutos",
+                "Pular Corda"
             ]
         };
 
@@ -434,120 +488,30 @@
 
         const daysOfWeek = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"];
 
-        // --- ESTADO DA APLICAÇÃO ---
+        // ESTADO INTERNO
         let state = {
-            currentId: null, // ID da ficha sendo editada
+            currentDocId: null,
             workouts: [],
             activeModalWorkoutId: null,
-            activeCategory: "🔥 PEITO",
-            currentUser: null // Usuário Firebase
+            activeCategory: "🔥 PEITO"
         };
 
-        // --- CONFIGURAÇÃO FIREBASE ---
-        let app, auth, db;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'powfit-pro';
-        
-        async function initFirebase() {
-            try {
-                // Tenta pegar a config injetada (se estiver no ambiente integrado)
-                let firebaseConfig = {};
-                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-                    firebaseConfig = JSON.parse(__firebase_config);
-                } else {
-                    console.warn("Firebase config não encontrada nativamente. Operando em modo offline para leitura/gravação sem nuvem a menos que você configure seu app.");
-                    // Não inicializamos se não houver config para evitar quebrar a página
-                    return false; 
-                }
-
-                app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-
-                // Configuração inicial de autenticação do ambiente
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                }
-
-                // Observador de Estado de Autenticação
-                onAuthStateChanged(auth, (user) => {
-                    state.currentUser = user;
-                    updateAuthUI(user);
-                });
-                return true;
-            } catch (error) {
-                console.error("Erro ao inicializar Firebase:", error);
-                return false;
-            }
-        }
-
-        // --- FUNÇÕES DE AUTH (GOOGLE) ---
-        window.loginGoogle = async () => {
-            if (!auth) {
-                alert("O sistema de nuvem não pôde ser iniciado. Verifique suas configurações de ambiente.");
-                return;
-            }
-            const provider = new GoogleAuthProvider();
-            try {
-                await signInWithPopup(auth, provider);
-            } catch (error) {
-                console.error("Erro no login:", error);
-                alert("Falha ao realizar login com o Google.");
-            }
-        };
-
-        window.logoutGoogle = async () => {
-            if (auth) await signOut(auth);
-            state.currentUser = null;
-            updateAuthUI(null);
-            alert("Você saiu da sua conta.");
-        };
-
-        function updateAuthUI(user) {
-            const btnLogin = document.getElementById('btn-login');
-            const btnLogout = document.getElementById('btn-logout');
-            const userPhoto = document.getElementById('user-photo');
-            const userName = document.getElementById('user-name');
-
-            if (user && user.displayName) {
-                btnLogin.classList.add('hidden');
-                btnLogout.classList.remove('hidden');
-                userPhoto.src = user.photoURL || '';
-                userPhoto.classList.remove('hidden');
-                userName.textContent = `Olá, ${user.displayName.split(' ')[0]}`;
-                userName.classList.remove('hidden');
-            } else {
-                btnLogin.classList.remove('hidden');
-                btnLogout.classList.add('hidden');
-                userPhoto.classList.add('hidden');
-                userName.classList.add('hidden');
-            }
-        }
-
-
-        // --- LÓGICA DE INTERFACE DA FICHA ---
-        window.toggleProfType = function() {
-            const type = document.getElementById('prof-type').value;
-            const crefContainer = document.getElementById('cref-container');
-            
-            if(type === 'TE') {
-                crefContainer.classList.add('hidden');
-                renderHealthOptions(healthDataTE);
-            } else {
-                crefContainer.classList.remove('hidden');
-                renderHealthOptions(healthDataPEF);
-            }
-        }
-
-        window.changeTheme = function() {
-            const gender = document.getElementById('stu-gender').value;
-            document.body.setAttribute('data-theme', gender);
+        // --- FUNÇÕES GERAIS ---
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.transform = 'translateY(0)';
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.transform = 'translateY(-20px)';
+                toast.style.opacity = '0';
+            }, 3000);
         }
 
         window.calculateIMC = function() {
             const w = parseFloat(document.getElementById('stu-weight').value);
             const h = parseFloat(document.getElementById('stu-height').value);
             const display = document.getElementById('imc-display');
-
             if (w > 0 && h > 0) {
                 const imc = (w / (h * h)).toFixed(1);
                 let classif = "";
@@ -556,14 +520,22 @@
                 else if (imc < 29.9) classif = "Sobrepeso";
                 else classif = "Obesidade";
                 display.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-3 py-1 rounded-full text-xs font-bold border border-primary border-opacity-30">IMC: ${imc} (${classif})</span>`;
-            } else {
-                display.innerHTML = '';
-            }
+            } else { display.innerHTML = ''; }
         }
 
-        function generateId() { return Math.random().toString(36).substr(2, 9); }
+        window.changeTheme = function() {
+            const gender = document.getElementById('stu-gender').value;
+            document.body.setAttribute('data-theme', gender);
+        }
 
-        function renderHealthOptions(dataObj) {
+        window.toggleProfType = function() {
+            const type = document.getElementById('prof-type').value;
+            const crefContainer = document.getElementById('cref-container');
+            const dataObj = type === 'TE' ? healthDataTE : healthDataPEF;
+            
+            if(type === 'TE') { crefContainer.classList.add('hidden'); } 
+            else { crefContainer.classList.remove('hidden'); }
+            
             const container = document.getElementById('health-container');
             const selected = Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value);
             
@@ -577,19 +549,13 @@
             }).join('');
         }
 
-        // --- LÓGICA DE TREINOS ---
-        function getNextDayName() {
-            const currentCount = state.workouts.length;
-            if(currentCount < 7) return `${daysOfWeek[currentCount]}`;
-            return `NOVO TREINO ${currentCount + 1}`;
-        }
+        function generateId() { return Math.random().toString(36).substr(2, 9); }
 
+        // --- LÓGICA DE TREINOS ---
         window.addWorkout = function() {
-            state.workouts.push({
-                id: generateId(),
-                title: getNextDayName(),
-                exercises: []
-            });
+            const currentCount = state.workouts.length;
+            const title = currentCount < 7 ? `TREINO ${daysOfWeek[currentCount]}` : `NOVO TREINO ${currentCount + 1}`;
+            state.workouts.push({ id: generateId(), title: title, exercises: [] });
             renderWorkouts();
         }
 
@@ -616,7 +582,6 @@
             if(workout) workout.title = newTitle;
         }
 
-        // --- LÓGICA DE EXERCÍCIOS ---
         window.removeExercise = function(workoutId, exIndex) {
             const workout = state.workouts.find(w => w.id === workoutId);
             workout.exercises.splice(exIndex, 1);
@@ -651,29 +616,29 @@
             state.workouts.forEach(workout => {
                 let exercisesHtml = '';
                 if (workout.exercises.length === 0) {
-                    exercisesHtml = `<div class="text-center p-4 text-xs opacity-50 italic">Sem exercícios. Clique abaixo para adicionar.</div>`;
+                    exercisesHtml = `<div class="text-center p-4 text-xs opacity-50 italic">Sem exercícios.</div>`;
                 } else {
                     exercisesHtml = workout.exercises.map((ex, idx) => `
                         <div class="flex flex-col sm:flex-row gap-2 p-2 items-start sm:items-center border-b last:border-0 border-opacity-10" style="border-color: var(--border-color)">
                             <div class="flex gap-1 hidden sm:flex">
-                                <button onclick="window.moveExercise('${workout.id}', ${idx}, 'up')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-up"></i></button>
-                                <button onclick="window.moveExercise('${workout.id}', ${idx}, 'down')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-down"></i></button>
+                                <button onclick="moveExercise('${workout.id}', ${idx}, 'up')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-up"></i></button>
+                                <button onclick="moveExercise('${workout.id}', ${idx}, 'down')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-down"></i></button>
                             </div>
                             <div class="flex-1 font-medium w-full sm:w-auto">
                                 <div class="text-[9px] opacity-60 uppercase tracking-wider">${ex.category}</div>
                                 <div class="text-xs">${ex.name}</div>
                             </div>
                             <div class="flex flex-wrap gap-1 w-full sm:w-auto">
-                                <input type="text" value="${ex.sets}" onchange="window.updateExercise('${workout.id}', ${idx}, 'sets', this.value)" class="input-field w-12 rounded px-1 py-1 text-xs text-center" placeholder="Séries">
+                                <input type="text" value="${ex.sets}" onchange="updateExercise('${workout.id}', ${idx}, 'sets', this.value)" class="input-field w-12 rounded px-1 py-1 text-xs text-center" placeholder="Séries">
                                 <span class="self-center opacity-50 text-xs">x</span>
-                                <input type="text" value="${ex.reps}" onchange="window.updateExercise('${workout.id}', ${idx}, 'reps', this.value)" class="input-field w-16 rounded px-1 py-1 text-xs text-center" placeholder="Reps">
-                                <select onchange="window.updateExercise('${workout.id}', ${idx}, 'technique', this.value)" class="input-field w-24 rounded px-1 py-1 text-[10px]">
+                                <input type="text" value="${ex.reps}" onchange="updateExercise('${workout.id}', ${idx}, 'reps', this.value)" class="input-field w-16 rounded px-1 py-1 text-xs text-center" placeholder="Reps">
+                                <select onchange="updateExercise('${workout.id}', ${idx}, 'technique', this.value)" class="input-field w-24 rounded px-1 py-1 text-[10px]">
                                     ${dbTechniques.map(t => `<option value="${t}" ${ex.technique === t ? 'selected' : ''}>${t}</option>`).join('')}
                                 </select>
-                                <input type="text" value="${ex.obs}" onchange="window.updateExercise('${workout.id}', ${idx}, 'obs', this.value)" class="input-field flex-1 sm:w-32 rounded px-1 py-1 text-xs" placeholder="Obs...">
+                                <input type="text" value="${ex.obs}" onchange="updateExercise('${workout.id}', ${idx}, 'obs', this.value)" class="input-field flex-1 sm:w-32 rounded px-1 py-1 text-xs" placeholder="Obs...">
                             </div>
                             <div class="flex items-center gap-1 w-full sm:w-auto justify-end mt-1 sm:mt-0">
-                                <button onclick="window.removeExercise('${workout.id}', ${idx})" class="text-red-500 hover:text-red-700 p-1 rounded transition text-sm">
+                                <button onclick="removeExercise('${workout.id}', ${idx})" class="text-red-500 hover:text-red-700 p-1 rounded transition text-sm">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -681,28 +646,23 @@
                     `).join('');
                 }
 
-                const workoutCard = `
+                container.insertAdjacentHTML('beforeend', `
                     <div class="card rounded-xl overflow-hidden shadow-sm">
                         <div class="p-3 border-b flex justify-between items-center bg-black bg-opacity-5" style="border-color: var(--border-color);">
-                            <input type="text" value="${workout.title}" onchange="window.updateWorkoutTitle('${workout.id}', this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 px-2 py-1 rounded uppercase border-transparent focus:border-primary">
+                            <input type="text" value="${workout.title}" onchange="updateWorkoutTitle('${workout.id}', this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 px-2 py-1 rounded uppercase border border-transparent hover:border-gray-500 hover:border-opacity-30">
                             <div class="flex gap-1">
-                                <button onclick="window.duplicateWorkout('${workout.id}')" class="text-xs p-1.5 rounded hover:bg-black hover:bg-opacity-10 transition tooltip" title="Duplicar">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                                <button onclick="window.removeWorkout('${workout.id}')" class="text-xs p-1.5 text-red-500 rounded hover:bg-red-500 hover:text-white transition tooltip" title="Excluir">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                <button onclick="duplicateWorkout('${workout.id}')" class="text-xs p-1.5 rounded hover:bg-black hover:bg-opacity-10 transition" title="Duplicar"><i class="fas fa-copy"></i></button>
+                                <button onclick="removeWorkout('${workout.id}')" class="text-xs p-1.5 text-red-500 rounded hover:bg-red-500 hover:text-white transition" title="Excluir"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
                         <div class="p-0">${exercisesHtml}</div>
                         <div class="p-2 border-t" style="border-color: var(--border-color)">
-                            <button onclick="window.openModal('${workout.id}')" class="w-full text-primary py-1.5 rounded-lg text-xs font-semibold hover:bg-primary hover:bg-opacity-10 transition">
+                            <button onclick="openModal('${workout.id}')" class="w-full text-primary py-1.5 rounded-lg text-xs font-semibold hover:bg-primary hover:bg-opacity-10 transition">
                                 + ADICIONAR EXERCÍCIO
                             </button>
                         </div>
                     </div>
-                `;
-                container.insertAdjacentHTML('beforeend', workoutCard);
+                `);
             });
         }
 
@@ -720,7 +680,7 @@
         function renderModalCategories() {
             const container = document.getElementById('modal-categories');
             container.innerHTML = Object.keys(dbCategories).map(cat => `
-                <button onclick="window.setModalCategory('${cat}')" class="w-full text-left px-2 py-2 rounded-lg text-xs font-medium transition ${state.activeCategory === cat ? 'bg-primary text-white' : 'hover:bg-black hover:bg-opacity-10'}">
+                <button onclick="setModalCategory('${cat}')" class="w-full text-left px-2 py-2 rounded-lg text-xs font-medium transition ${state.activeCategory === cat ? 'bg-primary text-white' : 'hover:bg-black hover:bg-opacity-10'}">
                     ${cat}
                 </button>
             `).join('');
@@ -733,17 +693,14 @@
         function renderModalExercises() {
             const container = document.getElementById('modal-exercises');
             const exercises = dbCategories[state.activeCategory];
-            container.innerHTML = `
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                    ${exercises.map(ex => {
-                        const isCardio = state.activeCategory === "🫀 CARDIO";
-                        return `<button onclick="window.addExerciseToWorkout('${ex}', ${isCardio})" class="card p-2 rounded-lg text-left text-xs font-medium border hover:border-primary transition flex justify-between items-center group">
-                            <span>${ex}</span>
-                            <i class="fas fa-plus opacity-0 group-hover:opacity-100 transition text-primary"></i>
-                        </button>`
-                    }).join('')}
-                </div>
-            `;
+            container.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">` + 
+                exercises.map(ex => {
+                    const isCardio = state.activeCategory === "🫀 CARDIO";
+                    return `<button onclick="addExerciseToWorkout('${ex}', ${isCardio})" class="card p-2 rounded-lg text-left text-xs font-medium border hover:border-primary transition flex justify-between items-center group">
+                        <span>${ex}</span>
+                        <i class="fas fa-plus opacity-0 group-hover:opacity-100 transition text-primary"></i>
+                    </button>`
+                }).join('') + `</div>`;
         }
         window.addExerciseToWorkout = function(exerciseName, isCardio) {
             const workout = state.workouts.find(w => w.id === state.activeModalWorkoutId);
@@ -763,12 +720,74 @@
             }
         }
 
-        // --- SISTEMA DE CLOUD & MEMÓRIA ---
-        function getSavedData() {
+
+        // --- FIREBASE: LOGIN & HISTÓRICO NA NUVEM ---
+        
+        window.loginWithGoogle = async function() {
+            if(!auth) return showToast("Erro: Banco de dados não configurado (Firebase)");
+            const provider = new GoogleAuthProvider();
+            try { await signInWithPopup(auth, provider); } 
+            catch (error) { console.error("Login failed", error); showToast("Falha no login Google."); }
+        }
+
+        window.logout = function() {
+            if(auth) signOut(auth);
+        }
+
+        // Listener de Autenticação
+        if(auth) {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    currentUser = user;
+                    document.getElementById('login-container').classList.add('hidden');
+                    document.getElementById('app-container').classList.remove('hidden');
+                    
+                    document.getElementById('user-email').innerText = user.email;
+                    if(user.photoURL) {
+                        const img = document.getElementById('user-avatar');
+                        img.src = user.photoURL;
+                        img.classList.remove('hidden');
+                    }
+                    
+                    setupFirestoreListener();
+                    
+                    // Inicialização padrão da UI
+                    if(state.workouts.length === 0) {
+                        window.toggleProfType(); 
+                        window.addWorkout();
+                    }
+                } else {
+                    currentUser = null;
+                    document.getElementById('login-container').classList.remove('hidden');
+                    document.getElementById('app-container').classList.add('hidden');
+                    if(unsubscribeHistory) unsubscribeHistory();
+                }
+            });
+        } else {
+            // Fallback se não houver config firebase (ambiente sem config)
+            document.getElementById('login-container').innerHTML = `<div class="bg-red-100 p-6 rounded text-red-800 text-center"><b>Aviso:</b> O Firebase não está configurado. O aplicativo precisa do banco de dados para salvar na nuvem do Google.</div>`;
+        }
+
+        function setupFirestoreListener() {
+            if(!currentUser || !db) return;
+            const fichasRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'fichas');
+            
+            unsubscribeHistory = onSnapshot(fichasRef, (snapshot) => {
+                cloudHistoryData = [];
+                snapshot.forEach(doc => {
+                    cloudHistoryData.push({ dbId: doc.id, ...doc.data() });
+                });
+                renderHistoryModal();
+            }, (error) => {
+                console.error("Erro ao escutar Firestore:", error);
+            });
+        }
+
+        function getFormData() {
             return {
-                id: state.currentId || generateId(),
-                date: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
-                studentName: document.getElementById('stu-name').value || 'Sem Nome',
+                timestamp: Date.now(),
+                dateStr: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
+                studentName: document.getElementById('stu-name').value || 'Aluno Sem Nome',
                 profType: document.getElementById('prof-type').value,
                 profName: document.getElementById('prof-name').value,
                 profCref: document.getElementById('prof-cref').value,
@@ -788,117 +807,66 @@
         }
 
         async function saveToCloud() {
-            if (!state.currentUser || !db) {
-                console.warn("Não conectado à nuvem Google. Utilizando Memória Local.");
-                saveToLocalStorage();
+            if(!currentUser || !db) {
+                showToast("Não foi possível salvar na nuvem (Usuário não logado).");
                 return;
             }
             
-            const fichaData = getSavedData();
-            state.currentId = fichaData.id;
+            const data = getFormData();
+            const docIdToSave = state.currentDocId || generateId();
+            const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'fichas', docIdToSave);
             
             try {
-                const path = `artifacts/${appId}/users/${state.currentUser.uid}/fichas`;
-                await setDoc(doc(db, path, fichaData.id), fichaData);
-                console.log("Salvo com sucesso no Google Cloud / Firestore!");
-            } catch (error) {
-                console.error("Erro ao salvar na nuvem:", error);
-                alert("Erro ao salvar na nuvem. A ficha será impressa, mas pode não ter sido salva online.");
+                await setDoc(docRef, data);
+                state.currentDocId = docIdToSave; // Mantém atrelado para as próximas edições
+                showToast("✅ Salvo na Conta Google com sucesso!");
+            } catch(e) {
+                console.error("Erro salvando no Firestore", e);
+                showToast("Erro ao salvar ficha na nuvem.");
             }
         }
 
-        function saveToLocalStorage() {
-            const currentData = getSavedData();
-            state.currentId = currentData.id;
-            let history = JSON.parse(localStorage.getItem('powfit_history') || '[]');
-            const existingIdx = history.findIndex(h => h.id === currentData.id);
-            if(existingIdx >= 0) history[existingIdx] = currentData;
-            else history.push(currentData);
-            localStorage.setItem('powfit_history', JSON.stringify(history));
-        }
-
-        window.openHistory = async function() {
+        // Modal de Histórico (Nuvem)
+        window.openHistory = function() {
             document.getElementById('history-modal').classList.remove('hidden');
-            const list = document.getElementById('history-list');
-            const loader = document.getElementById('history-loading');
-            
-            list.innerHTML = '';
-            
-            if (!state.currentUser || !db) {
-                // Modo Local
-                const history = JSON.parse(localStorage.getItem('powfit_history') || '[]');
-                renderHistoryList(history, false);
-                return;
-            }
-
-            // Modo Nuvem
-            loader.classList.remove('hidden');
-            try {
-                const path = `artifacts/${appId}/users/${state.currentUser.uid}/fichas`;
-                const querySnapshot = await getDocs(collection(db, path));
-                const history = [];
-                querySnapshot.forEach((doc) => {
-                    history.push(doc.data());
-                });
-                loader.classList.add('hidden');
-                renderHistoryList(history, true);
-            } catch (e) {
-                loader.classList.add('hidden');
-                list.innerHTML = `<div class="text-center opacity-50 py-10 text-red-400">Erro ao buscar da nuvem. Certifique-se de estar logado.</div>`;
-                console.error(e);
-            }
+            renderHistoryModal();
+        }
+        window.closeHistory = function() {
+            document.getElementById('history-modal').classList.add('hidden');
         }
 
-        function renderHistoryList(history, isCloud) {
+        function renderHistoryModal() {
             const list = document.getElementById('history-list');
-            if(history.length === 0) {
-                list.innerHTML = `<div class="text-center opacity-50 py-10">Nenhuma ficha salva ${isCloud ? 'na nuvem' : 'localmente'}.</div>`;
+            if(cloudHistoryData.length === 0) {
+                list.innerHTML = `<div class="text-center opacity-50 py-10">Nenhuma ficha salva na nuvem ainda.</div>`;
                 return;
             }
 
-            // Ordena do mais recente (supondo base na data textual para simplificar)
-            history.reverse();
+            // Ordena mais recentes primeiro
+            const sorted = [...cloudHistoryData].sort((a,b) => b.timestamp - a.timestamp);
             
-            list.innerHTML = history.map(h => `
-                <div class="card p-3 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center border border-gray-500 border-opacity-20 gap-3">
+            list.innerHTML = sorted.map(h => `
+                <div class="card p-4 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center border border-gray-500 border-opacity-20 gap-3">
                     <div>
-                        <div class="font-bold flex items-center gap-2">
-                            ${h.studentName} 
-                            ${isCloud ? '<i class="fas fa-cloud text-primary text-xs" title="Nuvem"></i>' : '<i class="fas fa-desktop text-gray-400 text-xs" title="Local"></i>'}
-                        </div>
-                        <div class="text-xs opacity-70">Salvo: ${h.date} | Obj: ${h.stuObjective}</div>
+                        <div class="font-bold">${h.studentName}</div>
+                        <div class="text-xs opacity-70">Salvo em: ${h.dateStr} | Objetivo: ${h.stuObjective}</div>
                     </div>
                     <div class="flex gap-2 w-full sm:w-auto">
-                        <button onclick="window.loadHistoryItem('${h.id}', ${isCloud})" class="flex-1 sm:flex-none btn-primary px-3 py-1.5 rounded text-xs font-semibold">CARREGAR</button>
-                        <button onclick="window.deleteHistoryItem('${h.id}', ${isCloud})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs font-semibold"><i class="fas fa-trash"></i></button>
+                        <button onclick="loadHistoryItem('${h.dbId}')" class="btn-primary w-full sm:w-auto px-4 py-2 rounded text-xs font-semibold">CARREGAR FICHA</button>
+                        <button onclick="deleteHistoryItem('${h.dbId}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-xs font-semibold"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
-        window.closeHistory = function() {
-            document.getElementById('history-modal').classList.add('hidden');
-        }
-
-        window.loadHistoryItem = async function(id, isCloud) {
-            let item = null;
-            if (isCloud && db && state.currentUser) {
-                const path = `artifacts/${appId}/users/${state.currentUser.uid}/fichas`;
-                const querySnapshot = await getDocs(collection(db, path));
-                querySnapshot.forEach((doc) => {
-                    if (doc.data().id === id) item = doc.data();
-                });
-            } else {
-                const history = JSON.parse(localStorage.getItem('powfit_history') || '[]');
-                item = history.find(h => h.id === id);
-            }
-
+        window.loadHistoryItem = function(dbId) {
+            const item = cloudHistoryData.find(h => h.dbId === dbId);
             if(!item) return;
 
-            state.currentId = item.id;
+            state.currentDocId = item.dbId;
             
             document.getElementById('prof-type').value = item.profType || 'PEF';
-            window.toggleProfType();
+            window.toggleProfType(); // Regenera checkouts de saude
             
             document.getElementById('prof-name').value = item.profName || '';
             document.getElementById('prof-cref').value = item.profCref || '';
@@ -925,35 +893,29 @@
             state.workouts = item.workouts || [];
             renderWorkouts();
             window.closeHistory();
+            showToast("Ficha carregada com sucesso.");
         }
 
-        window.deleteHistoryItem = async function(id, isCloud) {
-            if(!confirm("Tem certeza que deseja excluir esta ficha permanentemente?")) return;
-
-            if (isCloud && db && state.currentUser) {
+        window.deleteHistoryItem = async function(dbId) {
+            if(confirm("Excluir permanentemente esta ficha da nuvem?")) {
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'fichas', dbId);
                 try {
-                    const path = `artifacts/${appId}/users/${state.currentUser.uid}/fichas`;
-                    await deleteDoc(doc(db, path, id));
-                    window.openHistory(); // Recarrega
+                    await deleteDoc(docRef);
+                    if(state.currentDocId === dbId) state.currentDocId = null;
                 } catch(e) {
-                    console.error("Erro deletando da nuvem", e);
+                    showToast("Erro ao excluir.");
                 }
-            } else {
-                let history = JSON.parse(localStorage.getItem('powfit_history') || '[]');
-                history = history.filter(h => h.id !== id);
-                localStorage.setItem('powfit_history', JSON.stringify(history));
-                window.openHistory(); 
             }
-            if(state.currentId === id) state.currentId = null;
         }
 
 
-        // --- LÓGICA DE IMPRESSÃO (ESTILO PLANILHA) ---
-        window.generatePrint = async function() {
-            // Salva na nuvem ou localmente ANTES de imprimir
+        // --- LÓGICA DE IMPRESSÃO ---
+        window.generatePrintAndSave = async function() {
+            // 1. Salva automaticamente
             await saveToCloud();
 
-            const d = getSavedData();
+            // 2. Monta HTML da impressão
+            const d = getFormData();
             let imcStr = "-";
             const w = parseFloat(d.stuWeight);
             const h = parseFloat(d.stuHeight);
@@ -965,13 +927,12 @@
             
             const printArea = document.getElementById('print-area');
             
-            // Textos Legais
             const profLabel = isPEF ? 'Profissional de Educação Física' : 'Treinador Esportivo';
             const crefText = isPEF ? `CREF: ${d.profCref} - Estado: ${d.profState}` : '';
             
             let legalTextPEF = `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA: Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º estabelece que compete ao profissional coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados nas áreas de atividades físicas e do desporto.`;
             
-            let legalTextTE = `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO: Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil, com atuação de caráter técnico e esportivo voltada à preparação, supervisão, orientação e acompanhamento de treinos físicos e esportivos. A atuação possui finalidade orientativa e não substitui avaliação médica, diagnóstico clínico, prescrição medicamentosa ou acompanhamento de profissionais da saúde. Em casos de doenças, lesões, gestação, limitações físicas, uso de medicações ou qualquer condição específica de saúde, recomenda-se avaliação prévia por profissional habilitado antes do início ou continuidade da prática de exercícios. O treinamento proposto respeita os limites individuais, priorizando segurança, execução correta e evolução progressiva, dentro da atuação técnica e esportiva permitida por lei.`;
+            let legalTextTE = `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO: Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil, com atuação de caráter técnico e esportivo voltada à preparação, supervisão, orientação e acompanhamento de treinos. As recomendações desta ficha possuem caráter informativo e orientativo. Este material não substitui avaliação médica ou acompanhamento de profissionais da saúde. Em casos de dores, lesões, doenças, gestação ou qualquer condição específica, recomenda-se procurar um profissional habilitado antes de iniciar ou continuar os treinos. O treinamento respeita os limites individuais, priorizando segurança, execução correta e evolução progressiva, dentro da atuação técnica e esportiva permitida por lei.`;
 
             let html = `
                 <div class="print-header">
@@ -986,21 +947,20 @@
                     <div><strong>Aluno:</strong> ${d.studentName}</div>
                     <div><strong>Idade:</strong> ${d.stuAge || '-'} anos</div>
                     <div><strong>Gênero:</strong> ${d.stuGender}</div>
-                    <div><strong>Frequência:</strong> ${d.stuFreq}</div>
                     
                     <div><strong>Peso:</strong> ${d.stuWeight || '-'} kg</div>
                     <div><strong>Altura:</strong> ${d.stuHeight || '-'} m</div>
                     <div><strong>IMC:</strong> ${imcStr}</div>
-                    <div><strong>Nível:</strong> ${d.stuLevel}</div>
                     
-                    <div style="grid-column: span 4;"><strong>Objetivo:</strong> ${d.stuObjective} | <strong>Validade:</strong> ${d.stuValidity.replace('Validade: ', '')}</div>
+                    <div><strong>Nível:</strong> ${d.stuLevel}</div>
+                    <div><strong>Frequência:</strong> ${d.stuFreq}</div>
+                    <div><strong>Validade:</strong> ${d.stuValidity.replace('Validade: ', '')}</div>
                 </div>
             `;
 
-            // Diretrizes (Objetivo + Saúde)
             if (objRecommendation || d.health.length > 0) {
                 html += `<div class="print-guidelines">
-                            <h4>Diretrizes Automáticas do Perfil e Saúde</h4>
+                            <h4>Diretrizes Automáticas de Perfil</h4>
                             <ul>`;
                 if(objRecommendation) html += `<li><strong>Objetivo (${d.stuObjective}):</strong> ${objRecommendation}</li>`;
                 
@@ -1013,7 +973,6 @@
                 html += `</ul></div>`;
             }
 
-            // Planilhas de Treino
             d.workouts.forEach(w => {
                 html += `
                     <div class="print-workout">
@@ -1050,40 +1009,26 @@
                 html += `</tbody></table></div>`;
             });
 
-            // Recomendações Livres e Rodapé Legal
             html += `<div class="print-footer-section">`;
             
             if(d.stuRecs.trim()) {
-                html += `<strong>Recomendações Específicas do Profissional (Descanso, hidratação, etc.):</strong><br>
+                html += `<strong>Recomendações Específicas do Profissional:</strong><br>
                          <p style="white-space: pre-wrap; margin: 3px 0 10px 0;">${d.stuRecs}</p>`;
             }
 
             html += `<div class="legal-text">
                         ${isPEF ? legalTextPEF : legalTextTE}
                      </div>
-                     <div style="text-align:center; margin-top: 15px; font-size: 7px; color: #666;">
-                        Gerado em ${d.date} - PowFit Pro Cloud
+                     <div style="text-align:center; margin-top: 15px; font-size: 8px;">
+                        Ficha gerada em ${d.dateStr} - PowFit Pro (Usuário: ${currentUser.email})
                      </div>
                   </div>`;
 
             printArea.innerHTML = html;
             
+            // 3. Imprime
             setTimeout(() => { window.print(); }, 400);
         }
-
-        // --- INICIAR SISTEMA ---
-        initFirebase().then(() => {
-            window.toggleProfType(); 
-            window.addWorkout(); // Inicia com Segunda-feira
-            
-            // Auto-preenche dados do profissional se houver no localstorage (comodidade)
-            const sn = localStorage.getItem('powfit_prof_name');
-            if(sn) document.getElementById('prof-name').value = sn;
-            const sc = localStorage.getItem('powfit_prof_cref');
-            if(sc) document.getElementById('prof-cref').value = sc;
-            const st = localStorage.getItem('powfit_prof_state');
-            if(st) document.getElementById('prof-state').value = st;
-        });
 
     </script>
 </body>
