@@ -2,336 +2,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PowFit Pro - Plataforma Master</title>
+    <title>PowFit Pro - Master Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Tema Padrão Masculino (Escuro Fitness) */
-            --bg-body: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --input-bg: #0f172a;
-            --input-border: #475569;
+            --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc;
+            --text-muted: #94a3b8; --border-color: #334155; --primary: #3b82f6;
+            --primary-hover: #2563eb; --input-bg: #0f172a; --input-border: #475569;
         }
-
         [data-theme="Feminino"] {
-            /* Tema Feminino (Rosa Moderno Elegante) */
-            --bg-body: #fdf2f8;
-            --bg-card: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #fbcfe8;
-            --primary: #ec4899;
-            --primary-hover: #db2777;
-            --input-bg: #f8fafc;
-            --input-border: #f1f5f9;
+            --bg-body: #fdf2f8; --bg-card: #ffffff; --text-main: #1e293b;
+            --text-muted: #64748b; --border-color: #fbcfe8; --primary: #ec4899;
+            --primary-hover: #db2777; --input-bg: #f8fafc; --input-border: #f1f5f9;
         }
 
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); transition: all 0.3s ease; }
         .card { background-color: var(--bg-card); border: 1px solid var(--border-color); }
         .input-field { background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--text-main); }
         .input-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
-        .btn-primary { background-color: var(--primary); color: white; transition: background-color 0.2s; }
+        .btn-primary { background-color: var(--primary); color: white; transition: 0.2s; }
         .btn-primary:hover { background-color: var(--primary-hover); }
-        .text-primary { color: var(--primary); }
-        
-        /* Oculta área de impressão na tela */
-        #print-area { display: none; }
 
-        /* Estilos de Impressão Estilo Planilha */
+        #print-area { display: none; }
+        
+        /* Estilos de Impressão (Planilha A4) */
         @media print {
             body { background: white !important; color: black !important; margin: 0; padding: 0; }
-            #app-view, #login-view, .no-print, .modals { display: none !important; }
-            #print-area { display: block !important; padding: 10mm; font-family: 'Arial', sans-serif; font-size: 10px; }
+            #app-screens, .no-print { display: none !important; }
+            #print-area { display: block !important; padding: 10mm 15mm; font-family: 'Arial', sans-serif; font-size: 10px; }
             @page { size: A4; margin: 0; }
-            
-            .print-header { border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 10px; text-align: center; }
-            .print-title { font-size: 16px; font-weight: bold; margin: 0; text-transform: uppercase; }
-            .prof-info { font-size: 11px; margin-top: 3px; font-weight: bold; }
-            
-            .print-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; border: 1px solid #000; padding: 6px; }
-            .print-grid div { font-size: 10px; }
-            .print-grid .full-row { grid-column: 1 / -1; }
-            
-            .print-guidelines { border: 1px solid #000; padding: 6px; margin-bottom: 10px; font-size: 9px; }
-            .print-guidelines h4 { margin: 0 0 3px 0; font-size: 10px; text-transform: uppercase; background: #e5e5e5; padding: 2px; border-bottom: 1px solid #000;}
-            .print-guidelines ul { margin: 0; padding-left: 12px; }
-            .print-guidelines li { margin-bottom: 2px; }
-
-            .print-workout { margin-bottom: 10px; page-break-inside: avoid; }
-            .print-workout h3 { background: #d4d4d4; border: 1px solid #000; border-bottom: none; padding: 3px 6px; margin: 0; font-size: 11px; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; font-weight: bold;}
-            table { width: 100%; border-collapse: collapse; border: 1px solid #000; }
-            th, td { border: 1px solid #000; padding: 3px 4px; text-align: left; font-size: 9.5px; }
-            th { background-color: #e5e5e5; font-weight: bold; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; }
-            
-            .print-footer-section { margin-top: 10px; border: 1px solid #000; padding: 6px; font-size: 9px; page-break-inside: avoid;}
-            .legal-text { font-size: 8px; color: #222; text-align: justify; margin-top: 5px; font-style: italic;}
-            .expired-stamp { color: red; font-weight: bold; border: 2px solid red; padding: 5px; display: inline-block; margin-bottom: 10px; transform: rotate(-5deg); -webkit-print-color-adjust: exact;}
+            .print-header { border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
+            .print-title { font-size: 18px; font-weight: bold; margin: 0; text-transform: uppercase; text-align: center;}
+            .prof-info { font-size: 11px; margin-top: 5px; text-align: center; font-weight: bold;}
+            .print-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin-bottom: 15px; border: 1px solid #000; padding: 8px; background: #fff; }
+            .print-grid div { font-size: 11px; }
+            .print-guidelines { border: 1px solid #000; padding: 8px; margin-bottom: 15px; font-size: 9.5px; }
+            .print-guidelines h4 { margin: 0 0 4px 0; font-size: 11px; text-transform: uppercase; background: #eee; padding: 3px;}
+            .print-guidelines ul { margin: 0; padding-left: 15px; }
+            .print-workout { margin-bottom: 15px; page-break-inside: avoid; }
+            .print-workout h3 { background: #e0e0e0; border: 1px solid #000; border-bottom: none; padding: 4px 8px; margin: 0; font-size: 12px; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 0; border: 1px solid #000; }
+            th, td { border: 1px solid #000; padding: 4px 6px; text-align: left; font-size: 10px; }
+            th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; }
+            .print-footer-section { margin-top: 15px; border: 1px solid #000; padding: 8px; font-size: 9px; page-break-inside: avoid;}
+            .legal-text { font-size: 8.5px; color: #111; text-align: justify; margin-top: 5px; font-style: italic;}
         }
 
+        /* Loading Overlay */
+        #loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; display: none; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
     </style>
 </head>
-<body data-theme="Masculino" class="min-h-screen pb-10">
+<body data-theme="Masculino" class="min-h-screen pb-20">
 
-    <!-- LOGIN VIEW -->
-    <div id="login-view" class="min-h-screen flex items-center justify-center p-4">
-        <div class="card p-8 rounded-2xl shadow-2xl text-center max-w-md w-full">
-            <i class="fas fa-dumbbell text-5xl text-primary mb-4"></i>
-            <h1 class="text-3xl font-bold mb-2">PowFit Pro</h1>
-            <p class="text-sm var(--text-muted) mb-8">Plataforma Administrativa de Prescrição</p>
-            <button onclick="window.loginGoogle()" class="w-full bg-white text-gray-800 font-bold py-3 px-4 rounded-lg shadow hover:bg-gray-100 flex items-center justify-center gap-3 transition">
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
-                Entrar com Google
-            </button>
-            <p class="text-xs opacity-50 mt-4">Sincronização na nuvem ativada.</p>
-        </div>
+    <div id="loading-overlay">
+        <div class="loader mb-4"></div>
+        <p id="loading-text" class="text-sm font-medium">Carregando...</p>
     </div>
 
-    <!-- APP VIEW -->
-    <div id="app-view" class="hidden">
-        <!-- NAVBAR -->
-        <nav class="border-b border-opacity-20 mb-6 p-4 sticky top-0 z-40 backdrop-blur-md" style="border-color: var(--border-color); background-color: rgba(var(--bg-card), 0.9);">
-            <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-dumbbell text-2xl text-primary"></i>
-                    <span class="text-xl font-bold">PowFit Pro</span>
-                </div>
-                <div class="flex flex-wrap items-center gap-2 sm:gap-4">
-                    <button onclick="window.switchTab('dashboard')" id="btn-tab-dashboard" class="px-4 py-2 rounded-lg font-medium text-sm transition btn-primary">Dashboard & Gestão</button>
-                    <button onclick="window.switchTab('creator')" id="btn-tab-creator" class="px-4 py-2 rounded-lg font-medium text-sm transition hover:bg-black hover:bg-opacity-20 border border-transparent">Prancheta (Criar Ficha)</button>
-                    <div class="h-6 w-px bg-gray-500 opacity-30 hidden sm:block"></div>
-                    <div class="flex items-center gap-2 text-sm">
-                        <img id="user-avatar" class="w-8 h-8 rounded-full border border-primary" src="" alt="Avatar">
-                        <button onclick="window.logout()" class="text-red-400 hover:text-red-300" title="Sair"><i class="fas fa-sign-out-alt"></i></button>
-                    </div>
-                </div>
+    <!-- Container de Telas -->
+    <div id="app-screens" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 relative">
+        
+        <!-- TELA 1: LOGIN -->
+        <div id="screen-login" class="flex flex-col items-center justify-center min-h-[70vh] hidden">
+            <div class="card p-8 rounded-2xl shadow-xl text-center max-w-md w-full">
+                <i class="fas fa-dumbbell text-5xl text-primary mb-4"></i>
+                <h1 class="text-3xl font-bold mb-2">PowFit Pro</h1>
+                <p class="text-sm var(--text-muted) mb-8">Gestão de Treinos & Franquias</p>
+                <button onclick="window.loginWithGoogle()" class="w-full bg-white text-gray-800 hover:bg-gray-100 font-bold py-3 px-4 rounded-lg shadow flex items-center justify-center gap-3 transition border">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+                    Entrar com Google
+                </button>
             </div>
-        </nav>
+        </div>
 
-        <div class="max-w-7xl mx-auto p-4 sm:p-0">
-            
-            <!-- ================= DASHBOARD & GESTÃO ================= -->
-            <div id="dashboard-section" class="space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    
-                    <!-- UNIDADES -->
-                    <div class="card p-5 rounded-xl">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-lg font-bold"><i class="fas fa-building text-primary mr-2"></i> Unidades da Rede</h2>
-                            <button onclick="window.openModal('unit-modal')" class="text-xs bg-primary px-3 py-1.5 rounded text-white"><i class="fas fa-plus"></i> Nova</button>
-                        </div>
-                        <div id="units-list" class="space-y-2 max-h-64 overflow-y-auto pr-2">
-                            <!-- JS -->
-                        </div>
-                    </div>
-
-                    <!-- MEMBROS (EQUIPE) -->
-                    <div class="card p-5 rounded-xl">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-lg font-bold"><i class="fas fa-users text-primary mr-2"></i> Equipe (Membros)</h2>
-                            <button onclick="window.openModal('member-modal')" class="text-xs bg-primary px-3 py-1.5 rounded text-white"><i class="fas fa-plus"></i> Novo</button>
-                        </div>
-                        <div id="members-list" class="space-y-2 max-h-64 overflow-y-auto pr-2">
-                            <!-- JS -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RELATÓRIO E HISTÓRICO -->
-                <div class="card p-5 rounded-xl">
-                    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-                        <h2 class="text-lg font-bold"><i class="fas fa-chart-bar text-primary mr-2"></i> Produtividade & Histórico</h2>
-                        <div class="flex gap-2 w-full sm:w-auto">
-                            <input type="month" id="report-month" class="input-field rounded px-3 py-2 text-sm w-full sm:w-auto" onchange="window.loadWorkouts()">
-                            <button onclick="window.printReport()" class="btn-primary px-4 py-2 rounded text-sm whitespace-nowrap"><i class="fas fa-print"></i> Imprimir Relatório</button>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Resumo do Mês -->
-                        <div class="md:col-span-1 bg-black bg-opacity-20 p-4 rounded-lg border border-gray-500 border-opacity-20 h-fit">
-                            <h3 class="font-bold border-b border-gray-500 border-opacity-30 pb-2 mb-3">Resumo da Rede</h3>
-                            <div id="report-summary" class="text-sm space-y-2">
-                                <!-- JS -->
-                            </div>
-                        </div>
-                        
-                        <!-- Lista de Fichas -->
-                        <div class="md:col-span-2 space-y-3 max-h-96 overflow-y-auto pr-2" id="workouts-history-list">
-                            <!-- JS -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ================= PRANCHETA (CRIAR FICHA) ================= -->
-            <div id="creator-section" class="hidden space-y-6">
+        <!-- TELA 2: SETUP DE PERFIL -->
+        <div id="screen-setup" class="hidden max-w-2xl mx-auto mt-10">
+            <div class="card p-8 rounded-2xl shadow-xl">
+                <h2 class="text-2xl font-bold mb-2 border-b border-opacity-20 pb-4" style="border-color: var(--border-color)">Completar Perfil Profissional</h2>
+                <p class="text-sm opacity-70 mb-6">Você precisa configurar seu vínculo de rede e unidade antes de acessar a plataforma.</p>
                 
-                <!-- SELETOR DE CONTEXTO (Quem está criando) -->
-                <div class="card p-4 rounded-xl border-l-4 border-l-primary bg-primary bg-opacity-5">
-                    <div class="flex flex-col sm:flex-row gap-4 items-center">
-                        <div class="font-bold text-sm sm:w-1/4">Autor da Ficha:</div>
-                        <select id="ctx-unit" onchange="window.updateCtxMembers()" class="input-field rounded-lg px-3 py-2 text-sm w-full sm:w-1/3">
-                            <option value="">Selecione a Unidade...</option>
-                        </select>
-                        <select id="ctx-member" onchange="window.applyMemberContext()" class="input-field rounded-lg px-3 py-2 text-sm w-full sm:w-1/3">
-                            <option value="">Selecione o Profissional...</option>
-                        </select>
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Nome Completo</label>
+                        <input type="text" id="setup-name" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Seu nome">
                     </div>
-                    <p id="ctx-warning" class="text-xs text-red-400 mt-2 hidden">Selecione o profissional para liberar a montagem e regras legais.</p>
-                </div>
-
-                <!-- ÁREA DE MONTAGEM (Oculta até selecionar membro) -->
-                <div id="assembly-area" class="grid grid-cols-1 xl:grid-cols-12 gap-6 opacity-50 pointer-events-none transition-opacity">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">CPF</label>
+                            <input type="text" id="setup-cpf" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="000.000.000-00">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Estado (UF)</label>
+                            <input type="text" id="setup-state" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Ex: SP">
+                        </div>
+                    </div>
                     
-                    <!-- ESQUERDA: Dados do Aluno -->
-                    <div class="xl:col-span-4 space-y-4">
-                        <div class="card rounded-xl p-5">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Rede de Franquia</label>
+                        <select id="setup-network" class="input-field w-full rounded-lg px-3 py-2 text-sm mb-2"></select>
+                        <input type="text" id="setup-new-network" class="input-field w-full rounded-lg px-3 py-2 text-sm hidden" placeholder="Nome da Nova Rede">
+                        <button onclick="window.toggleNewNetwork()" class="text-xs text-primary hover:underline mt-1">Ou cadastrar nova Rede</button>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Unidade</label>
+                        <input type="text" id="setup-unit" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Nome da sua Unidade (Ex: Unidade Centro)">
+                    </div>
+
+                    <div class="p-4 bg-black bg-opacity-10 rounded-lg border" style="border-color: var(--border-color)">
+                        <label class="block text-sm font-medium mb-2">Categoria Profissional</label>
+                        <select id="setup-category" onchange="window.toggleSetupCategory()" class="input-field w-full rounded-lg px-3 py-2 text-sm font-bold text-primary mb-3">
+                            <option value="PEF">Profissional de Educação Física (PEF)</option>
+                            <option value="TE">Treinador Esportivo (TE)</option>
+                        </select>
+                        <div id="setup-cref-container">
+                            <label class="block text-sm font-medium mb-1">Número do CREF</label>
+                            <input type="text" id="setup-cref" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Ex: 000000-G/SP">
+                        </div>
+                    </div>
+
+                    <button onclick="window.saveProfile()" class="w-full btn-primary py-3 rounded-lg font-bold shadow-lg mt-4">Salvar e Acessar Plataforma</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA 3: APP PRINCIPAL -->
+        <div id="screen-app" class="hidden">
+            <!-- Header App -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 border-b border-opacity-20 pb-4" style="border-color: var(--border-color)">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-dumbbell text-3xl text-primary"></i>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight">PowFit Pro</h1>
+                        <p id="app-user-info" class="text-xs var(--text-muted)"></p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-2 justify-center">
+                    <button onclick="window.switchTab('ficha')" id="tab-ficha" class="px-4 py-2 rounded-lg text-sm font-medium bg-primary text-white transition shadow">Nova Ficha</button>
+                    <button onclick="window.switchTab('historico')" id="tab-historico" class="px-4 py-2 rounded-lg text-sm font-medium bg-opacity-20 hover:bg-black hover:bg-opacity-10 transition">Histórico</button>
+                    <button onclick="window.switchTab('relatorio')" id="tab-relatorio" class="px-4 py-2 rounded-lg text-sm font-medium bg-opacity-20 hover:bg-black hover:bg-opacity-10 transition">Relatórios</button>
+                    <button onclick="window.logout()" class="px-4 py-2 rounded-lg text-sm font-medium text-red-500 hover:bg-red-500 hover:text-white transition border border-red-500 border-opacity-30"><i class="fas fa-sign-out-alt"></i> Sair</button>
+                </div>
+            </div>
+
+            <!-- TAB: NOVA FICHA -->
+            <div id="tab-content-ficha">
+                <div class="flex justify-end mb-4">
+                    <button onclick="window.generatePrint()" class="btn-primary px-6 py-2 rounded-lg font-medium shadow-lg flex items-center gap-2">
+                        <i class="fas fa-save"></i> <i class="fas fa-print"></i> Salvar na Nuvem & Imprimir
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                    <!-- Esquerda: Dados do Aluno -->
+                    <div class="xl:col-span-4 space-y-6">
+                        <div class="card rounded-xl p-5 shadow-sm">
                             <div class="flex justify-between items-center mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
-                                <h2 class="font-bold"><i class="fas fa-user text-primary mr-2"></i> Dados do Aluno</h2>
+                                <h2 class="text-lg font-semibold flex items-center gap-2"><i class="fas fa-user text-primary"></i> Dados do Aluno</h2>
                                 <div id="imc-display"></div>
                             </div>
-                            <div class="space-y-3 text-sm">
-                                <input type="text" id="stu-name" class="input-field w-full rounded px-3 py-2" placeholder="Nome Completo">
-                                <div class="grid grid-cols-3 gap-2">
-                                    <input type="number" id="stu-age" class="input-field rounded px-2 py-2" placeholder="Idade">
-                                    <input type="number" id="stu-weight" oninput="window.calcIMC()" class="input-field rounded px-2 py-2" placeholder="Peso (kg)">
-                                    <input type="number" id="stu-height" step="0.01" oninput="window.calcIMC()" class="input-field rounded px-2 py-2" placeholder="Alt (m)">
+                            <div class="space-y-4">
+                                <div><label class="block text-sm font-medium mb-1">Nome do Aluno</label><input type="text" id="stu-name" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Nome do aluno"></div>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div><label class="block text-sm font-medium mb-1">Idade</label><input type="number" id="stu-age" class="input-field w-full rounded-lg px-3 py-2 text-sm"></div>
+                                    <div><label class="block text-sm font-medium mb-1">Peso (kg)</label><input type="number" id="stu-weight" oninput="window.calculateIMC()" class="input-field w-full rounded-lg px-3 py-2 text-sm"></div>
+                                    <div><label class="block text-sm font-medium mb-1">Altura (m)</label><input type="number" id="stu-height" step="0.01" oninput="window.calculateIMC()" class="input-field w-full rounded-lg px-3 py-2 text-sm"></div>
                                 </div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <select id="stu-gender" onchange="window.changeTheme()" class="input-field rounded px-3 py-2">
-                                        <option value="Masculino">Masculino</option>
-                                        <option value="Feminino">Feminino</option>
-                                    </select>
-                                    <select id="stu-level" class="input-field rounded px-3 py-2">
-                                        <option>Iniciante</option><option>Intermediário</option><option>Avançado</option>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div><label class="block text-sm font-medium mb-1">Gênero</label>
+                                        <select id="stu-gender" onchange="window.changeTheme()" class="input-field w-full rounded-lg px-3 py-2 text-sm">
+                                            <option value="Masculino">Masculino</option><option value="Feminino">Feminino</option>
+                                        </select>
+                                    </div>
+                                    <div><label class="block text-sm font-medium mb-1">Nível</label>
+                                        <select id="stu-level" class="input-field w-full rounded-lg px-3 py-2 text-sm">
+                                            <option>Iniciante</option><option>Intermediário</option><option>Avançado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div><label class="block text-sm font-medium mb-1">Objetivo</label>
+                                    <select id="stu-objective" class="input-field w-full rounded-lg px-3 py-2 text-sm">
+                                        <option value="Emagrecimento">Emagrecimento</option><option value="Hipertrofia">Hipertrofia</option>
+                                        <option value="Definição">Definição</option><option value="Condicionamento">Condicionamento</option>
+                                        <option value="Resistência">Resistência</option><option value="Força">Força</option>
+                                        <option value="Reabilitação">Reabilitação</option><option value="Saúde geral">Saúde geral</option>
                                     </select>
                                 </div>
-                                <select id="stu-freq" class="input-field w-full rounded px-3 py-2">
-                                    <option>Frequência: 3 dias</option><option>Frequência: 5 dias</option><option>Frequência: 6 dias</option><option>Personalizado</option>
-                                </select>
-                                <select id="stu-objective" onchange="window.updateObjText()" class="input-field w-full rounded px-3 py-2">
-                                    <option value="Emagrecimento">Obj: Emagrecimento</option>
-                                    <option value="Hipertrofia">Obj: Hipertrofia</option>
-                                    <option value="Definição">Obj: Definição</option>
-                                    <option value="Condicionamento">Obj: Condicionamento</option>
-                                    <option value="Resistência">Obj: Resistência</option>
-                                    <option value="Força">Obj: Força</option>
-                                    <option value="Reabilitação">Obj: Reabilitação</option>
-                                    <option value="Saúde geral">Obj: Saúde geral</option>
-                                </select>
-                                <p id="obj-hint" class="text-[10px] opacity-70 p-2 bg-black bg-opacity-20 rounded border border-gray-600 hidden"></p>
+                                <div><label class="block text-sm font-medium mb-1">Frequência</label>
+                                    <select id="stu-freq" class="input-field w-full rounded-lg px-3 py-2 text-sm">
+                                        <option>3 dias</option><option>5 dias</option><option>6 dias</option><option>Personalizado</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="card rounded-xl p-5">
-                            <h2 class="font-bold mb-2 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
-                                <i class="fas fa-heartbeat text-primary mr-2"></i> Saúde (Diretrizes)
-                            </h2>
-                            <div class="grid grid-cols-2 gap-2 text-xs" id="health-container">
-                                <!-- Preenchido baseado na categoria do membro -->
-                            </div>
+                        <!-- Estado de Saúde -->
+                        <div class="card rounded-xl p-5 shadow-sm">
+                            <h2 class="text-lg font-semibold mb-2 flex items-center gap-2 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)"><i class="fas fa-notes-medical text-primary"></i> Estado de Saúde</h2>
+                            <p class="text-[11px] opacity-70 mb-3 leading-tight">Diretrizes automáticas (Perfil <span id="lbl-perfil">PEF</span>).</p>
+                            <div class="grid grid-cols-2 gap-2 text-xs" id="health-container"></div>
                         </div>
                     </div>
 
-                    <!-- DIREITA: Treinos -->
-                    <div class="xl:col-span-8 space-y-4">
-                        <div class="flex justify-between items-center card p-3 rounded-xl border-dashed border-2 bg-opacity-10">
-                            <select id="stu-validity" class="input-field rounded px-3 py-1.5 text-sm">
-                                <option>Validade: 15 dias</option><option selected>Validade: 30 dias</option><option>Validade: 60 dias</option><option>Validade: 90 dias</option>
-                            </select>
-                            <div class="flex gap-2">
-                                <button onclick="window.addDay()" class="btn-primary px-3 py-1.5 rounded text-sm"><i class="fas fa-plus"></i> Dia</button>
-                                <button onclick="window.saveAndPrint()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-1.5 rounded text-sm font-bold shadow-lg flex items-center gap-2"><i class="fas fa-save"></i> Imprimir</button>
+                    <!-- Direita: Treinos -->
+                    <div class="xl:col-span-8 space-y-6">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-opacity-10 p-4 rounded-xl card border-dashed border-2 gap-4">
+                            <div>
+                                <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-clipboard-list text-primary"></i> Ficha de Treino</h2>
+                                <select id="stu-validity" class="input-field rounded px-2 py-1 text-xs mt-2">
+                                    <option>Validade: 15 dias</option><option selected>Validade: 30 dias</option><option>Validade: 60 dias</option><option>Validade: 90 dias</option>
+                                </select>
                             </div>
+                            <button onclick="window.addWorkout()" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2"><i class="fas fa-plus"></i> Adicionar Dia</button>
                         </div>
 
-                        <div id="days-container" class="space-y-4">
-                            <!-- Dias JS -->
-                        </div>
+                        <div id="workouts-container" class="space-y-6"></div>
 
-                        <div class="card rounded-xl p-4">
-                            <h2 class="font-bold mb-2 text-sm"><i class="fas fa-pen text-primary mr-2"></i> Recomendações Livres</h2>
-                            <textarea id="stu-recs" rows="2" class="input-field w-full rounded p-2 text-sm" placeholder="Hidratação, cuidados..."></textarea>
+                        <div class="card rounded-xl p-5 shadow-sm">
+                            <h2 class="text-md font-semibold mb-2"><i class="fas fa-pen text-primary"></i> Recomendações Livres (Opcional)</h2>
+                            <textarea id="stu-recs" rows="3" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Hidratação, descanso, cuidados específicos..."></textarea>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- MODAIS DE GESTÃO -->
-    <div id="unit-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 flex items-center justify-center modals p-4">
-        <div class="card w-full max-w-sm rounded-xl p-5">
-            <h3 class="font-bold text-lg mb-4">Nova Unidade</h3>
-            <input type="text" id="unit-name" class="input-field w-full rounded p-2 text-sm mb-4" placeholder="Nome da Unidade (Ex: Centro)">
-            <div class="flex justify-end gap-2">
-                <button onclick="window.closeModal('unit-modal')" class="px-4 py-2 rounded text-sm opacity-70">Cancelar</button>
-                <button onclick="window.saveUnit()" class="btn-primary px-4 py-2 rounded text-sm">Salvar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="member-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 flex items-center justify-center modals p-4">
-        <div class="card w-full max-w-md rounded-xl p-5">
-            <h3 class="font-bold text-lg mb-4">Novo Membro (Equipe)</h3>
-            <div class="space-y-3 text-sm">
-                <input type="text" id="mem-name" class="input-field w-full rounded p-2" placeholder="Nome Completo">
-                <input type="text" id="mem-cpf" class="input-field w-full rounded p-2" placeholder="CPF">
-                <select id="mem-unit" class="input-field w-full rounded p-2"><option value="">Selecione a Unidade...</option></select>
-                <select id="mem-cat" onchange="window.toggleMemCref()" class="input-field w-full rounded p-2">
-                    <option value="PEF">Profissional de Educação Física (PEF)</option>
-                    <option value="TE">Treinador Esportivo (TE)</option>
-                </select>
-                <div class="grid grid-cols-2 gap-2" id="mem-cref-group">
-                    <input type="text" id="mem-cref" class="input-field rounded p-2" placeholder="CREF">
-                    <input type="text" id="mem-state" class="input-field rounded p-2" placeholder="Estado (UF)">
+            <!-- TAB: HISTÓRICO -->
+            <div id="tab-content-historico" class="hidden space-y-4">
+                <div class="card p-6 rounded-xl shadow-sm">
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-history text-primary"></i> Minhas Fichas Salvas na Nuvem</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="history-list"></div>
                 </div>
             </div>
-            <div class="flex justify-end gap-2 mt-5">
-                <button onclick="window.closeModal('member-modal')" class="px-4 py-2 rounded text-sm opacity-70">Cancelar</button>
-                <button onclick="window.saveMember()" class="btn-primary px-4 py-2 rounded text-sm">Salvar</button>
+
+            <!-- TAB: RELATÓRIOS -->
+            <div id="tab-content-relatorio" class="hidden space-y-4">
+                <div class="card p-6 rounded-xl shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-chart-bar text-primary"></i> Relatório de Produtividade (Mês Atual)</h2>
+                        <button onclick="window.printReport()" class="btn-primary px-4 py-2 rounded-lg text-sm"><i class="fas fa-print"></i> Imprimir Relatório</button>
+                    </div>
+                    <p class="text-sm opacity-80 mb-4">Unidade: <strong id="report-unit-name" class="text-primary">Carregando...</strong></p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-black bg-opacity-10 font-bold uppercase" style="border-bottom: 1px solid var(--border-color)">
+                                <tr>
+                                    <th class="px-4 py-3">Membro (Treinador)</th>
+                                    <th class="px-4 py-3">Categoria</th>
+                                    <th class="px-4 py-3 text-center">Fichas Geradas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="report-tbody" class="divide-y" style="border-color: var(--border-color)">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- MODAL DE EXERCÍCIOS -->
-    <div id="exercise-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-2 sm:p-4 modals">
-        <div class="card w-full max-w-5xl rounded-xl shadow-2xl flex flex-col h-[90vh]">
-            <div class="p-4 border-b flex justify-between items-center bg-black bg-opacity-20" style="border-color: var(--border-color)">
-                <h3 class="font-bold"><i class="fas fa-search text-primary mr-2"></i> Banco de Exercícios</h3>
-                <button onclick="window.closeModal('exercise-modal')" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+    <div id="exercise-modal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-2 sm:p-4">
+        <div class="card w-full max-w-6xl rounded-xl shadow-2xl flex flex-col h-[95vh] sm:h-[85vh]">
+            <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
+                <h3 class="text-lg font-bold"><i class="fas fa-search text-primary mr-2"></i> Banco de Exercícios</h3>
+                <button onclick="window.closeModal()" class="text-gray-400 hover:text-red-500 transition-colors text-2xl leading-none">&times;</button>
             </div>
+            
             <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
-                <div class="w-full md:w-1/4 border-r overflow-y-auto p-2 space-y-1 bg-black bg-opacity-10" style="border-color: var(--border-color)" id="modal-categories"></div>
-                <div class="w-full md:w-3/4 flex flex-col">
-                    <div class="p-2 border-b border-gray-600 flex gap-2 bg-black bg-opacity-30">
-                        <input type="text" id="new-custom-ex" class="input-field flex-1 rounded px-2 py-1 text-xs" placeholder="Criar exercício customizado nesta categoria...">
-                        <button onclick="window.saveCustomExercise()" class="btn-primary px-3 py-1 rounded text-xs">Adicionar ao BD</button>
+                <!-- Categorias -->
+                <div class="w-full md:w-1/4 border-r overflow-y-auto p-2 space-y-1" style="border-color: var(--border-color)" id="modal-categories"></div>
+                
+                <!-- Lista de Exercícios -->
+                <div class="w-full md:w-3/4 flex flex-col bg-black bg-opacity-5">
+                    
+                    <!-- Adicionar Novo Exercício -->
+                    <div class="p-3 border-b flex gap-2 items-center" style="border-color: var(--border-color)">
+                        <input type="text" id="new-custom-ex" class="input-field flex-1 rounded px-3 py-1.5 text-sm" placeholder="Adicionar novo exercício nesta categoria...">
+                        <button onclick="window.addCustomExercise()" class="btn-primary px-4 py-1.5 rounded text-sm font-bold shadow">Salvar</button>
                     </div>
-                    <div class="flex-1 overflow-y-auto p-3" id="modal-exercises"></div>
+
+                    <div class="overflow-y-auto p-3 flex-1" id="modal-exercises"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ÁREA DE IMPRESSÃO -->
+    <!-- ÁREA DE IMPRESSÃO (Oculta) -->
     <div id="print-area"></div>
 
-    <!-- FIREBASE E LÓGICA (MODULAR) -->
+    <!-- FIREBASE & LÓGICA DA APLICAÇÃO -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, addDoc, query, where, getDocs, deleteDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, orderBy, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBIPqTYYkG5vHr57CndPCmxUeACncNAobM",
@@ -342,641 +313,620 @@
             appId: "1:1080284745812:web:56729b17fcdd3d44aaddc1",
             measurementId: "G-GVPV7SSBTB"
         };
-
+        
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- ESTADO GLOBAL ---
-        const state = {
+        // --- VARIÁVEIS GLOBAIS DE ESTADO ---
+        let appState = {
             user: null,
-            units: [],
-            members: [],
-            workoutsHistory: [],
-            customExercises: [], // {category, name}
-            
-            // Estado do Criador de Ficha
-            currentWorkoutId: null, // Se estiver editando
-            creatorUnitId: "",
-            creatorMemberId: "",
-            days: [], // { id, title, exercises: [] }
-            activeModalDayId: null,
+            profile: null,
+            networks: [],
+            customExercises: [],
+            workouts: [],
+            currentFichaId: null, // ID no firebase se editando
+            activeModalWorkoutId: null,
             activeCategory: "🔥 PEITO"
         };
 
-        // --- DADOS FIXOS ---
-        const healthPEF = {
-            "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.",
-            "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.",
-            "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico. Combinar musculação e cardio moderado.",
-            "🔴 Obesidade": "Iniciar com exercícios de baixo impacto. Evolução gradual, priorizando saúde e segurança.",
-            "⚖️ Baixo peso": "Foco em musculação para ganho de massa. Treinos moderados com alimentação adequada.",
-            "🍬 Diabetes": "Treinos regulares moderados. Monitorar glicemia e evitar treinos em jejum.",
-            "❤️ Hipertensão": "Treinos moderados, evitar prender a respiração. Priorizar controle da intensidade.",
-            "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação e intensidade leve a moderada.",
-            "💔 Problemas cardíacos": "Treinos leves com liberação médica. Monitorar frequência cardíaca.",
-            "🦴 Problemas articulares": "Evitar impacto. Priorizar exercícios controlados e máquinas.",
-            "🫁 Problemas respiratórios": "Treinos leves a moderados com progressão gradual. Atenção à respiração.",
-            "⚠️ Lesões": "Adaptar exercícios. Evitar dor e focar na recuperação.",
-            "🤰 Gestante": "Treinos leves a moderados, sem impacto ou risco. Foco em mobilidade e bem-estar.",
-            "🤱 Lactante": "Treinar normalmente com atenção à hidratação e energia.",
-            "👴 Idoso": "Foco em força, equilíbrio e mobilidade. Intensidade moderada com segurança."
-        };
-
-        const healthTE = {
-            "🟢 Saudável": "Manter treinos regulares de 3–5x por semana. Constância, descanso e alimentação contribuem para resultados.",
-            "⚪ Sedentário": "Início gradual, com treinos leves e foco na adaptação do corpo. Aprender a execução correta.",
-            "🟡 Sobrepeso": "Musculação + cardio para melhora do condicionamento. Progressão respeitando a individualidade.",
-            "🔴 Obesidade": "Iniciar com menor impacto. Segurança, mobilidade e constância são prioridades.",
-            "⚖️ Baixo peso": "Musculação auxilia no ganho de massa com alimentação e descanso. Evolução progressiva.",
-            "🍬 Diabetes": "Manter acompanhamento médico. Em casos de tontura, mal-estar ou alteração de glicemia, interromper o treino.",
-            "❤️ Hipertensão": "Acompanhamento médico. Evitar prender a respiração (Valsalva) e controlar a intensidade.",
-            "🔵 Hipotensão": "Evitar mudanças bruscas de posição. Manter hidratação e respeitar a intensidade.",
-            "💔 Problemas cardíacos": "Prática apenas com liberação médica. Respeitar limites e controle de intensidade.",
-            "🦴 Problemas articulares": "Menor impacto e maior controle de movimento são indicados. Adaptação ajuda na segurança.",
-            "🫁 Problemas respiratórios": "Progressão gradual. Interromper em caso de falta de ar excessiva.",
-            "⚠️ Lesões": "Adaptação deve respeitar a limitação e evitar dor. Seguir orientação profissional.",
-            "🤰 Gestante": "Prática com liberação médica. Foco na segurança, mobilidade e bem-estar.",
-            "🤱 Lactante": "Atividade normal, respeitando a recuperação, hidratação e alimentação.",
-            "👴 Idoso": "Contribui para força e autonomia. Respeitar limitações com intensidade moderada."
-        };
-
-        const objText = {
-            "Emagrecimento": "Foco em déficit calórico com treinos mistos de força (manter massa magra) e aeróbicos (maior gasto).",
-            "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.",
-            "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.",
-            "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.",
-            "Resistência": "Séries mais longas, cadência controlada e aprimoramento da capacidade muscular.",
-            "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.",
-            "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.",
-            "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar."
-        };
-
-        const baseDbCategories = {
+        const daysOfWeek = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"];
+        const dbTechniques = ["Nenhuma", "Drop set", "Bi-set", "Tri-set", "Série gigante", "Rest-pause", "FST-7", "Pré-exaustão", "Pós-exaustão", "Negativa", "Isometria", "Parciais", "Pirâmide"];
+        
+        const baseCategories = {
             "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
             "🦍 COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Cavalinho (T-Bar)", "Serrote", "Facepull (puxada de cima para baixo)"],
             "🦵 PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento no Smith", "Agachamento com passada lateral", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Coice", "Cachorrinho", "Cadeira Extensora", "Adução", "Abdução", "Abdução Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha Livre", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
-            "💪 BRAÇOS (Bíceps)": ["Rosca Direta", "Rosca Alternada", "Rosca 21", "Rosca Scott Barra W", "Rosca Scott Unilateral", "Rosca Scott com Halteres", "Rosca Martelo", "Rosca Cross", "Rosca Inversa", "Rosca 45°"],
-            "💪 BRAÇOS (Tríceps)": ["Triceps Pulley Unilateral", "Tríceps Pulley Barra", "Tríceps Pulley Corda", "Tríceps Pulley Pegada Inversa", "Tríceps Francês na Corda", "Tríceps Francês com Halter", "Tríceps Francês Unilateral", "Tríceps Cruzado Polia Dupla", "Tríceps Coice Unilateral", "Tríceps Arremesso", "Tríceps Testa", "Mergulho no Banco"],
+            "💪 BRAÇOS": ["(Bíceps) Rosca Direta", "(Bíceps) Rosca Alternada", "(Bíceps) Rosca 21", "(Bíceps) Rosca Scott Barra W", "(Bíceps) Rosca Scott Unilateral", "(Bíceps) Rosca Scott com Halteres", "(Bíceps) Rosca Martelo", "(Bíceps) Rosca Cross", "(Bíceps) Rosca Inversa", "(Bíceps) Rosca 45°", "(Tríceps) Pulley Unilateral", "(Tríceps) Pulley Barra", "(Tríceps) Pulley Corda", "(Tríceps) Pulley Pegada Inversa", "(Tríceps) Francês na Corda", "(Tríceps) Francês com Halter", "(Tríceps) Francês Unilateral", "(Tríceps) Cruzado Polia Dupla", "(Tríceps) Coice Unilateral", "(Tríceps) Arremesso", "(Tríceps) Testa", "(Tríceps) Mergulho no Banco"],
             "🪨 OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral Unilateral Cross", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta", "Encolhimento (Trapézio)"],
             "🧠 ABDÔMEN": ["Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", "Isometria na parede"],
             "🫀 CARDIO": ["Bicicleta 10 Minutos", "Bicicleta 15 Minutos", "Bicicleta 20 Minutos", "Esteira 10 Minutos", "Esteira 15 Minutos", "Esteira 20 Minutos", "Pular Corda"]
         };
-        const techniques = ["Nenhuma", "Drop set", "Bi-set", "Tri-set", "Série gigante", "Rest-pause", "FST-7", "Pré-exaustão", "Pós-exaustão", "Negativa", "Isometria", "Parciais", "Pirâmide"];
-        const dayNames = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"];
 
-        // --- AUTH ---
-        window.loginGoogle = async () => {
-            const provider = new GoogleAuthProvider();
-            try { await signInWithPopup(auth, provider); } 
-            catch (e) { alert("Erro ao fazer login: " + e.message); }
+        const healthDataPEF = { "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.", "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.", "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico. Combinar musculação e cardio moderado.", "🔴 Obesidade": "Iniciar com exercícios de baixo impacto. Evolução gradual, priorizando saúde e segurança.", "⚖️ Baixo peso": "Foco em musculação para ganho de massa. Treinos moderados com alimentação adequada.", "🍬 Diabetes": "Treinos regulares moderados. Monitorar glicemia e evitar treinos em jejum.", "❤️ Hipertensão": "Treinos moderados, evitar prender a respiração. Priorizar controle da intensidade.", "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação e intensidade leve a moderada.", "💔 Problemas cardíacos": "Treinos leves com liberação médica. Monitorar frequência cardíaca.", "🦴 Problemas articulares": "Evitar impacto. Priorizar exercícios controlados e máquinas.", "🫁 Problemas respiratórios": "Treinos leves a moderados com progressão gradual. Atenção à respiração.", "⚠️ Lesões": "Adaptar exercícios. Evitar dor e focar na recuperação.", "🤰 Gestante": "Treinos leves a moderados, sem impacto ou risco. Foco em mobilidade e bem-estar.", "🤱 Lactante": "Treinar normalmente com atenção à hidratação e energia.", "👴 Idoso": "Foco em força, equilíbrio e mobilidade. Intensidade moderada com segurança." };
+        const healthDataTE = { "🟢 Saudável": "Manter treinos regulares de 3–5x por semana, combinando musculação e atividades cardiovasculares. A constância, descanso adequado e boa alimentação contribuem para melhores resultados.", "⚪ Sedentário": "O início deve ser gradual, com treinos leves e foco na adaptação do corpo. A prioridade é desenvolver constância, aprender a execução correta e evitar excesso de carga.", "🟡 Sobrepeso": "A prática regular de musculação associada ao cardio pode contribuir para melhora do condicionamento físico e composição corporal. A progressão deve respeitar a individualidade e o nível de adaptação.", "🔴 Obesidade": "É recomendado iniciar com exercícios de menor impacto e progressão gradual. A segurança, mobilidade e constância são prioridades durante o processo.", "⚖️ Baixo peso": "A musculação pode auxiliar no ganho de massa muscular quando associada a alimentação adequada e descanso. O treino deve priorizar evolução progressiva e recuperação muscular.", "🍬 Diabetes": "Pessoas com diabetes devem manter acompanhamento médico regular. Em casos de tontura, mal-estar ou alteração de glicemia, o treino deve ser interrompido e o aluno deve procurar orientação médica.", "❤️ Hipertensão": "Pessoas com hipertensão devem manter acompanhamento médico regular. Durante o treino, é importante evitar prender a respiração e controlar a intensidade.", "🔵 Hipotensão": "Evitar mudanças bruscas de posição durante o treino. Manter boa hidratação e respeitar a intensidade adequada.", "💔 Problemas cardíacos": "A prática de exercícios deve ocorrer apenas com liberação e acompanhamento médico.", "🦴 Problemas articulares": "Exercícios com menor impacto e maior controle de movimento costumam ser mais indicados. A adaptação ajuda na segurança.", "🫁 Problemas respiratórios": "A progressão do treino deve ser gradual e respeitar a capacidade respiratória individual.", "⚠️ Lesões": "A adaptação dos exercícios deve respeitar a limitação existente e evitar dor durante a execução. Seguir orientação profissional antes da prática.", "🤰 Gestante": "Prática com liberação médica. Foco deve ser segurança, mobilidade e bem-estar, evitando impacto excessivo e risco.", "🤱 Lactante": "A atividade física pode ser mantida normalmente, respeitando hidratação e alimentação.", "👴 Idoso": "A musculação contribui para força, equilíbrio e mobilidade. Respeitar limitações com intensidade moderada e foco na segurança." };
+        const objectiveData = { "Emagrecimento": "Foco em déficit calórico com treinos mistos de força (manter massa magra) e aeróbicos (maior gasto).", "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.", "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.", "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.", "Resistência": "Séries mais longas, cadência controlada e aprimoramento da capacidade muscular.", "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.", "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.", "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar." };
+
+        // UTILS
+        function showLoading(msg) { document.getElementById('loading-text').innerText = msg; document.getElementById('loading-overlay').style.display = 'flex'; }
+        function hideLoading() { document.getElementById('loading-overlay').style.display = 'none'; }
+        function generateId() { return Math.random().toString(36).substr(2, 9); }
+        function getMonthYear() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`; }
+
+        // --- AUTH E SETUP ---
+        window.loginWithGoogle = async () => {
+            try {
+                showLoading('Autenticando...');
+                await signInWithPopup(auth, new GoogleAuthProvider());
+            } catch (e) {
+                hideLoading(); alert("Erro no login: " + e.message);
+            }
         };
-        window.logout = () => signOut(auth);
+
+        window.logout = async () => { await signOut(auth); location.reload(); };
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                state.user = user;
-                document.getElementById('login-view').classList.add('hidden');
-                document.getElementById('app-view').classList.remove('hidden');
-                document.getElementById('user-avatar').src = user.photoURL || 'https://via.placeholder.com/32';
-                
-                // Init Defaults
-                const today = new Date();
-                const monthStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
-                document.getElementById('report-month').value = monthStr;
-                
-                window.switchTab('dashboard');
-                await loadAllData();
+                appState.user = user;
+                document.getElementById('screen-login').classList.add('hidden');
+                await checkProfile(user.uid);
             } else {
-                state.user = null;
-                document.getElementById('login-view').classList.remove('hidden');
-                document.getElementById('app-view').classList.add('hidden');
+                hideLoading();
+                document.getElementById('screen-login').classList.remove('hidden');
+                document.getElementById('screen-app').classList.add('hidden');
+                document.getElementById('screen-setup').classList.add('hidden');
             }
         });
 
-        // --- TABS ---
-        window.switchTab = (tab) => {
-            if (tab === 'dashboard') {
-                document.getElementById('dashboard-section').classList.remove('hidden');
-                document.getElementById('creator-section').classList.add('hidden');
-                document.getElementById('btn-tab-dashboard').classList.add('btn-primary');
-                document.getElementById('btn-tab-dashboard').classList.remove('border', 'border-transparent', 'hover:bg-black', 'hover:bg-opacity-20');
-                document.getElementById('btn-tab-creator').classList.remove('btn-primary');
-                document.getElementById('btn-tab-creator').classList.add('border', 'border-transparent', 'hover:bg-black', 'hover:bg-opacity-20');
-            } else {
-                document.getElementById('dashboard-section').classList.add('hidden');
-                document.getElementById('creator-section').classList.remove('hidden');
-                document.getElementById('btn-tab-creator').classList.add('btn-primary');
-                document.getElementById('btn-tab-creator').classList.remove('border', 'border-transparent', 'hover:bg-black', 'hover:bg-opacity-20');
-                document.getElementById('btn-tab-dashboard').classList.remove('btn-primary');
-                document.getElementById('btn-tab-dashboard').classList.add('border', 'border-transparent', 'hover:bg-black', 'hover:bg-opacity-20');
-                if(state.days.length === 0) window.addDay();
-            }
-        };
-
-        // --- FIREBASE LOADERS ---
-        async function loadAllData() {
-            await Promise.all([loadUnits(), loadMembers(), loadCustomExercises(), loadWorkouts()]);
-        }
-
-        async function loadUnits() {
-            const q = query(collection(db, `networks/${state.user.uid}/units`), orderBy("name"));
-            const snap = await getDocs(q);
-            state.units = snap.docs.map(d => ({id: d.id, ...d.data()}));
-            
-            // Popula Lists e Selects
-            const list = document.getElementById('units-list');
-            list.innerHTML = state.units.map(u => `<div class="p-2 border-b border-gray-600 flex justify-between text-sm"><span>${u.name}</span> <button onclick="window.deleteUnit('${u.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div>`).join('');
-            
-            const selects = ['mem-unit', 'ctx-unit'];
-            selects.forEach(id => {
-                const el = document.getElementById(id);
-                el.innerHTML = '<option value="">Selecione...</option>' + state.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
-            });
-        }
-
-        async function loadMembers() {
-            const q = query(collection(db, `networks/${state.user.uid}/members`), orderBy("name"));
-            const snap = await getDocs(q);
-            state.members = snap.docs.map(d => ({id: d.id, ...d.data()}));
-            
-            const list = document.getElementById('members-list');
-            list.innerHTML = state.members.map(m => {
-                const u = state.units.find(x => x.id === m.unitId);
-                return `<div class="p-2 border-b border-gray-600 flex justify-between text-xs">
-                    <div><b>${m.name}</b> (${m.cat})<br><span class="opacity-60">${u ? u.name : 'Sem unidade'}</span></div>
-                    <button onclick="window.deleteMember('${m.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
-                </div>`
-            }).join('');
-        }
-
-        async function loadCustomExercises() {
-            const snap = await getDocs(collection(db, `networks/${state.user.uid}/customExercises`));
-            state.customExercises = snap.docs.map(d => d.data());
-        }
-
-        window.loadWorkouts = async () => {
-            const monthStr = document.getElementById('report-month').value; // YYYY-MM
-            if(!monthStr) return;
-            
-            // Simples filtro por prefixo da data ISO armazenada (YYYY-MM)
-            const snap = await getDocs(collection(db, `networks/${state.user.uid}/workouts`));
-            const allW = snap.docs.map(d => ({id: d.id, ...d.data()}));
-            state.workoutsHistory = allW.filter(w => w.createdAt && w.createdAt.startsWith(monthStr));
-            
-            renderReport();
-        };
-
-        // --- GESTÃO CRUD ---
-        window.openModal = id => document.getElementById(id).classList.remove('hidden');
-        window.closeModal = id => document.getElementById(id).classList.add('hidden');
-        
-        window.saveUnit = async () => {
-            const name = document.getElementById('unit-name').value.trim();
-            if(!name) return;
-            await addDoc(collection(db, `networks/${state.user.uid}/units`), { name });
-            document.getElementById('unit-name').value = '';
-            window.closeModal('unit-modal');
-            loadUnits();
-        };
-        window.deleteUnit = async (id) => {
-            if(confirm("Excluir unidade?")) { await deleteDoc(doc(db, `networks/${state.user.uid}/units/${id}`)); loadUnits(); }
-        }
-
-        window.toggleMemCref = () => {
-            const cat = document.getElementById('mem-cat').value;
-            document.getElementById('mem-cref-group').style.display = cat === 'PEF' ? 'grid' : 'none';
-        };
-
-        window.saveMember = async () => {
-            const name = document.getElementById('mem-name').value.trim();
-            const cpf = document.getElementById('mem-cpf').value.trim();
-            const unitId = document.getElementById('mem-unit').value;
-            const cat = document.getElementById('mem-cat').value;
-            const cref = document.getElementById('mem-cref').value;
-            const stateUf = document.getElementById('mem-state').value;
-            
-            if(!name || !unitId) { alert("Nome e Unidade são obrigatórios"); return; }
-            
-            await addDoc(collection(db, `networks/${state.user.uid}/members`), { name, cpf, unitId, cat, cref, stateUf });
-            window.closeModal('member-modal');
-            loadMembers();
-        };
-        window.deleteMember = async (id) => {
-            if(confirm("Excluir membro?")) { await deleteDoc(doc(db, `networks/${state.user.uid}/members/${id}`)); loadMembers(); }
-        }
-
-        // --- DASHBOARD REPORT ---
-        function renderReport() {
-            const summaryDiv = document.getElementById('report-summary');
-            const listDiv = document.getElementById('workouts-history-list');
-            
-            let htmlSummary = `<div class="flex justify-between py-1 font-bold border-b border-gray-600"><span>Total Geral:</span> <span>${state.workoutsHistory.length} fichas</span></div>`;
-            
-            // Agrupar por unidade -> membro
-            const counts = {};
-            state.workoutsHistory.forEach(w => {
-                if(!counts[w.unitId]) counts[w.unitId] = { total: 0, members: {} };
-                counts[w.unitId].total++;
-                if(!counts[w.unitId].members[w.memberId]) counts[w.unitId].members[w.memberId] = 0;
-                counts[w.unitId].members[w.memberId]++;
-            });
-
-            for(const uId in counts) {
-                const uName = state.units.find(u => u.id === uId)?.name || 'Desconhecida';
-                htmlSummary += `<div class="mt-2 font-bold text-primary">${uName} (Total: ${counts[uId].total})</div>`;
-                for(const mId in counts[uId].members) {
-                    const mName = state.members.find(m => m.id === mId)?.name || 'Desconhecido';
-                    htmlSummary += `<div class="flex justify-between pl-2 text-xs"><span>- ${mName}</span> <span>${counts[uId].members[mId]}</span></div>`;
-                }
-            }
-            summaryDiv.innerHTML = htmlSummary || '<p class="opacity-50">Sem dados no mês.</p>';
-
-            // Lista Histórico
-            // Ordenar decrescente
-            const sortedHistory = [...state.workoutsHistory].sort((a,b) => b.createdAt.localeCompare(a.createdAt));
-            
-            listDiv.innerHTML = sortedHistory.map(w => {
-                const mName = state.members.find(m => m.id === w.memberId)?.name || '?';
+        async function checkProfile(uid) {
+            showLoading('Carregando Perfil...');
+            try {
+                const docRef = doc(db, "powfit_members", uid);
+                const docSnap = await getDoc(docRef);
                 
-                // Verificar Validade
-                let isExpired = false;
-                if(w.createdAt) {
-                    const createdDate = new Date(w.createdAt);
-                    const daysValid = parseInt(w.student.validity.replace(/\D/g, '')) || 30;
-                    const expireDate = new Date(createdDate.getTime() + (daysValid * 24 * 60 * 60 * 1000));
-                    isExpired = new Date() > expireDate;
+                if (docSnap.exists()) {
+                    appState.profile = docSnap.data();
+                    await loadCustomExercises();
+                    await initApp();
+                } else {
+                    await loadNetworksForSetup();
+                    document.getElementById('screen-setup').classList.remove('hidden');
+                    hideLoading();
+                }
+            } catch (e) {
+                console.error(e); hideLoading(); alert("Erro ao carregar perfil.");
+            }
+        }
+
+        async function loadNetworksForSetup() {
+            const q = query(collection(db, "powfit_networks"), orderBy("name"));
+            const snap = await getDocs(q);
+            const select = document.getElementById('setup-network');
+            select.innerHTML = '<option value="">-- Selecione uma Rede --</option>';
+            snap.forEach(d => {
+                select.innerHTML += `<option value="${d.id}">${d.data().name}</option>`;
+            });
+        }
+
+        window.toggleNewNetwork = () => {
+            const select = document.getElementById('setup-network');
+            const input = document.getElementById('setup-new-network');
+            if (select.classList.contains('hidden')) {
+                select.classList.remove('hidden'); input.classList.add('hidden'); input.value = '';
+            } else {
+                select.classList.add('hidden'); input.classList.remove('hidden'); select.value = '';
+            }
+        };
+
+        window.toggleSetupCategory = () => {
+            const cat = document.getElementById('setup-category').value;
+            const cref = document.getElementById('setup-cref-container');
+            if (cat === 'PEF') cref.classList.remove('hidden');
+            else cref.classList.add('hidden');
+        };
+
+        window.saveProfile = async () => {
+            const name = document.getElementById('setup-name').value.trim();
+            const cpf = document.getElementById('setup-cpf').value.trim();
+            const state = document.getElementById('setup-state').value.trim();
+            const unit = document.getElementById('setup-unit').value.trim();
+            const cat = document.getElementById('setup-category').value;
+            const cref = document.getElementById('setup-cref').value.trim();
+            
+            let networkId = document.getElementById('setup-network').value;
+            const newNetworkName = document.getElementById('setup-new-network').value.trim();
+
+            if (!name || !cpf || !state || !unit) return alert("Preencha todos os campos básicos.");
+            if (cat === 'PEF' && !cref) return alert("Profissionais PEF devem informar o CREF.");
+            if (!networkId && !newNetworkName) return alert("Selecione ou crie uma Rede.");
+
+            showLoading('Salvando Perfil...');
+            try {
+                // Cria rede se necessario
+                if (newNetworkName) {
+                    const netRef = await addDoc(collection(db, "powfit_networks"), { name: newNetworkName });
+                    networkId = netRef.id;
                 }
 
-                return `
-                <div class="p-3 bg-black bg-opacity-20 rounded border ${isExpired ? 'border-red-500 border-opacity-50' : 'border-gray-600'}">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="font-bold text-sm">${w.student.name || 'Sem nome'}</span>
-                            ${isExpired ? '<span class="ml-2 text-[10px] bg-red-600 px-1.5 py-0.5 rounded text-white">VENCIDA</span>' : ''}
-                            <div class="text-[10px] opacity-70">Criado em: ${w.createdAt ? w.createdAt.substring(0,10).split('-').reverse().join('/') : '-'} | Por: ${mName}</div>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="window.loadWorkoutToCreator('${w.id}')" class="text-xs bg-primary px-2 py-1 rounded">Carregar</button>
-                            <button onclick="window.deleteWorkout('${w.id}')" class="text-xs text-red-500"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                </div>`;
+                // Cria unidade associada à rede
+                const unitRef = await addDoc(collection(db, "powfit_units"), { name: unit, networkId: networkId });
+
+                const profileData = {
+                    uid: appState.user.uid,
+                    name, cpf, state, category: cat, cref: cat === 'PEF' ? cref : '',
+                    unitId: unitRef.id, networkId: networkId, unitName: unit
+                };
+
+                await setDoc(doc(db, "powfit_members", appState.user.uid), profileData);
+                appState.profile = profileData;
+                
+                document.getElementById('screen-setup').classList.add('hidden');
+                await loadCustomExercises();
+                await initApp();
+            } catch (e) {
+                console.error(e); hideLoading(); alert("Erro ao salvar perfil.");
+            }
+        };
+
+        // --- APP PRINCIPAL ---
+        async function initApp() {
+            document.getElementById('app-user-info').innerText = `${appState.profile.name} - ${appState.profile.unitName} (${appState.profile.category})`;
+            document.getElementById('lbl-perfil').innerText = appState.profile.category;
+            
+            renderHealthOptions();
+            if (appState.workouts.length === 0) window.addWorkout(); // Cria Segunda Feira
+            
+            document.getElementById('screen-app').classList.remove('hidden');
+            window.switchTab('ficha');
+            hideLoading();
+        }
+
+        window.switchTab = (tab) => {
+            ['ficha', 'historico', 'relatorio'].forEach(t => {
+                document.getElementById(`tab-content-${t}`).classList.add('hidden');
+                document.getElementById(`tab-${t}`).classList.remove('bg-primary', 'text-white');
+                document.getElementById(`tab-${t}`).classList.add('bg-opacity-20');
+            });
+            document.getElementById(`tab-content-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.remove('bg-opacity-20');
+            document.getElementById(`tab-${tab}`).classList.add('bg-primary', 'text-white');
+
+            if(tab === 'historico') loadHistory();
+            if(tab === 'relatorio') loadReport();
+        };
+
+        function renderHealthOptions() {
+            const dataObj = appState.profile.category === 'PEF' ? healthDataPEF : healthDataTE;
+            const container = document.getElementById('health-container');
+            const selected = Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value);
+            
+            container.innerHTML = Object.keys(dataObj).map(opt => {
+                const isChecked = selected.includes(opt) ? 'checked' : '';
+                return `<label class="flex items-start space-x-2 cursor-pointer p-1.5 rounded hover:bg-black hover:bg-opacity-5 transition border border-transparent hover:border-gray-500 hover:border-opacity-20">
+                    <input type="checkbox" value="${opt}" ${isChecked} class="health-cb mt-0.5 rounded border-gray-400 text-primary focus:ring-primary w-3.5 h-3.5">
+                    <span class="font-medium">${opt}</span>
+                </label>`
             }).join('');
         }
 
-        window.deleteWorkout = async (id) => {
-            if(confirm("Apagar ficha do histórico?")) { await deleteDoc(doc(db, `networks/${state.user.uid}/workouts/${id}`)); loadWorkouts(); }
-        }
-
-        // --- PRANCHETA LÓGICA ---
-        window.updateCtxMembers = () => {
-            const uid = document.getElementById('ctx-unit').value;
-            const sel = document.getElementById('ctx-member');
-            sel.innerHTML = '<option value="">Selecione o Profissional...</option>';
-            if(!uid) return;
-            const filtered = state.members.filter(m => m.unitId === uid);
-            sel.innerHTML += filtered.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
-            window.applyMemberContext();
-        }
-
-        window.applyMemberContext = () => {
-            const mid = document.getElementById('ctx-member').value;
-            const area = document.getElementById('assembly-area');
-            const warn = document.getElementById('ctx-warning');
-            
-            if(!mid) {
-                area.classList.add('opacity-50', 'pointer-events-none');
-                warn.classList.remove('hidden');
-                state.creatorMemberId = null;
-                return;
-            }
-            
-            area.classList.remove('opacity-50', 'pointer-events-none');
-            warn.classList.add('hidden');
-            state.creatorMemberId = mid;
-            state.creatorUnitId = document.getElementById('ctx-unit').value;
-
-            // Renderizar Saúde baseada no tipo do profissional
-            const member = state.members.find(m => m.id === mid);
-            const healthDict = member && member.cat === 'TE' ? healthTE : healthPEF;
-            
-            // Manter checks se houver
-            const checked = Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value);
-            const container = document.getElementById('health-container');
-            container.innerHTML = Object.keys(healthDict).map(k => `
-                <label class="flex items-start space-x-1 cursor-pointer p-1 rounded hover:bg-white hover:bg-opacity-5 border border-transparent">
-                    <input type="checkbox" value="${k}" ${checked.includes(k)?'checked':''} class="health-cb mt-0.5 rounded text-primary focus:ring-primary w-3 h-3">
-                    <span class="leading-tight">${k}</span>
-                </label>
-            `).join('');
-        }
-
-        window.calcIMC = () => {
+        window.calculateIMC = () => {
             const w = parseFloat(document.getElementById('stu-weight').value);
             const h = parseFloat(document.getElementById('stu-height').value);
-            const disp = document.getElementById('imc-display');
-            if(w>0 && h>0) {
-                const imc = (w/(h*h)).toFixed(1);
-                let cls = imc<18.5?"Abaixo":imc<24.9?"Normal":imc<29.9?"Sobrepeso":"Obesidade";
-                disp.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-2 py-0.5 rounded text-xs border border-primary border-opacity-30">IMC: ${imc} (${cls})</span>`;
-            } else disp.innerHTML = '';
+            const display = document.getElementById('imc-display');
+            if (w > 0 && h > 0) {
+                const imc = (w / (h * h)).toFixed(1);
+                let classif = imc < 18.5 ? "Abaixo" : imc < 24.9 ? "Normal" : imc < 29.9 ? "Sobrepeso" : "Obesidade";
+                display.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-3 py-1 rounded-full text-xs font-bold border border-primary border-opacity-30">IMC: ${imc} (${classif})</span>`;
+            } else { display.innerHTML = ''; }
         };
 
-        window.changeTheme = () => document.body.setAttribute('data-theme', document.getElementById('stu-gender').value);
-        
-        window.updateObjText = () => {
-            const val = document.getElementById('stu-objective').value;
-            const hint = document.getElementById('obj-hint');
-            if(objText[val]) { hint.innerText = objText[val]; hint.classList.remove('hidden'); }
-            else hint.classList.add('hidden');
+        window.changeTheme = () => {
+            document.body.setAttribute('data-theme', document.getElementById('stu-gender').value);
         };
 
-        // --- DAYS E EXERCISES ---
-        window.addDay = () => {
-            const idx = state.days.length;
-            state.days.push({
-                id: Math.random().toString(36).substr(2,9),
-                title: idx < 7 ? `TREINO ${dayNames[idx]}` : `NOVO TREINO ${idx+1}`,
-                exercises: []
-            });
-            renderDays();
+        // --- LÓGICA DE FICHAS (UI) ---
+        window.addWorkout = () => {
+            const count = appState.workouts.length;
+            const title = count < 7 ? `TREINO ${daysOfWeek[count]}` : `NOVO TREINO ${count + 1}`;
+            appState.workouts.push({ id: generateId(), title: title, exercises: [] });
+            renderWorkouts();
         };
 
-        window.removeDay = (id) => {
-            if(confirm("Remover este dia?")) { state.days = state.days.filter(d => d.id !== id); renderDays(); }
-        }
+        window.duplicateWorkout = (id) => {
+            const w = appState.workouts.find(x => x.id === id);
+            if(w) {
+                const nw = JSON.parse(JSON.stringify(w));
+                nw.id = generateId(); nw.title += " (Cópia)";
+                appState.workouts.push(nw); renderWorkouts();
+            }
+        };
 
-        window.updateDayTitle = (id, val) => {
-            const d = state.days.find(x => x.id === id);
-            if(d) d.title = val;
-        }
+        window.removeWorkout = (id) => {
+            if(confirm("Remover dia inteiro?")) {
+                appState.workouts = appState.workouts.filter(w => w.id !== id); renderWorkouts();
+            }
+        };
 
-        window.moveEx = (dayId, exIdx, dir) => {
-            const d = state.days.find(x => x.id === dayId);
-            if(dir==='up' && exIdx>0) { const tmp = d.exercises[exIdx]; d.exercises[exIdx] = d.exercises[exIdx-1]; d.exercises[exIdx-1] = tmp; }
-            if(dir==='down' && exIdx<d.exercises.length-1) { const tmp = d.exercises[exIdx]; d.exercises[exIdx] = d.exercises[exIdx+1]; d.exercises[exIdx+1] = tmp; }
-            renderDays();
-        }
-        window.rmEx = (dayId, exIdx) => { const d = state.days.find(x => x.id === dayId); d.exercises.splice(exIdx,1); renderDays(); }
-        window.updEx = (dayId, exIdx, field, val) => { const d = state.days.find(x => x.id === dayId); d.exercises[exIdx][field] = val; }
+        window.updateWorkoutTitle = (id, val) => { const w = appState.workouts.find(x => x.id === id); if(w) w.title = val; };
+        window.updateExercise = (wId, eIdx, field, val) => { appState.workouts.find(x => x.id === wId).exercises[eIdx][field] = val; };
+        window.removeExercise = (wId, eIdx) => { appState.workouts.find(x => x.id === wId).exercises.splice(eIdx, 1); renderWorkouts(); };
+        window.moveExercise = (wId, eIdx, dir) => {
+            const arr = appState.workouts.find(x => x.id === wId).exercises;
+            if (dir === 'up' && eIdx > 0) [arr[eIdx], arr[eIdx-1]] = [arr[eIdx-1], arr[eIdx]];
+            else if (dir === 'down' && eIdx < arr.length - 1) [arr[eIdx], arr[eIdx+1]] = [arr[eIdx+1], arr[eIdx]];
+            renderWorkouts();
+        };
 
-        function renderDays() {
-            const c = document.getElementById('days-container');
-            c.innerHTML = state.days.map(d => {
-                let exs = d.exercises.length ? d.exercises.map((ex, i) => `
-                    <div class="flex gap-2 items-center border-b border-gray-600 p-1">
-                        <div class="flex flex-col gap-1 hidden sm:flex">
-                            <button onclick="window.moveEx('${d.id}',${i},'up')" class="text-[8px] opacity-50 hover:opacity-100"><i class="fas fa-chevron-up"></i></button>
-                            <button onclick="window.moveEx('${d.id}',${i},'down')" class="text-[8px] opacity-50 hover:opacity-100"><i class="fas fa-chevron-down"></i></button>
+        function renderWorkouts() {
+            const container = document.getElementById('workouts-container');
+            container.innerHTML = '';
+            appState.workouts.forEach(w => {
+                let exs = w.exercises.length === 0 ? `<div class="p-4 text-xs opacity-50 italic text-center">Sem exercícios.</div>` : 
+                w.exercises.map((ex, idx) => `
+                    <div class="flex flex-col sm:flex-row gap-2 p-2 items-start sm:items-center border-b last:border-0 border-opacity-10" style="border-color: var(--border-color)">
+                        <div class="flex gap-1 hidden sm:flex">
+                            <button onclick="window.moveExercise('${w.id}', ${idx}, 'up')" class="text-[10px] p-1 hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-up"></i></button>
+                            <button onclick="window.moveExercise('${w.id}', ${idx}, 'down')" class="text-[10px] p-1 hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-down"></i></button>
                         </div>
-                        <div class="w-1/3 min-w-[120px]"><div class="text-[8px] opacity-50 uppercase">${ex.category.split(' ')[1] || ex.category}</div><div class="text-xs font-bold leading-tight">${ex.name}</div></div>
-                        <input value="${ex.sets}" onchange="window.updEx('${d.id}',${i},'sets',this.value)" class="input-field w-10 text-center text-xs p-1 rounded" placeholder="S">
-                        <span class="text-xs opacity-50">x</span>
-                        <input value="${ex.reps}" onchange="window.updEx('${d.id}',${i},'reps',this.value)" class="input-field w-12 text-center text-xs p-1 rounded" placeholder="R">
-                        <select onchange="window.updEx('${d.id}',${i},'technique',this.value)" class="input-field w-20 text-[10px] p-1 rounded">${techniques.map(t=>`<option ${ex.technique===t?'selected':''}>${t}</option>`).join('')}</select>
-                        <input value="${ex.obs}" onchange="window.updEx('${d.id}',${i},'obs',this.value)" class="input-field flex-1 min-w-[80px] text-xs p-1 rounded" placeholder="Obs">
-                        <button onclick="window.rmEx('${d.id}',${i})" class="text-red-500 text-xs ml-1"><i class="fas fa-times"></i></button>
+                        <div class="flex-1 w-full sm:w-auto"><div class="text-[9px] opacity-60 uppercase">${ex.category}</div><div class="text-xs font-bold">${ex.name}</div></div>
+                        <div class="flex flex-wrap gap-1 w-full sm:w-auto">
+                            <input value="${ex.sets}" onchange="window.updateExercise('${w.id}', ${idx}, 'sets', this.value)" class="input-field w-12 rounded px-1 py-1 text-xs text-center" placeholder="Séries"> <span class="opacity-50 text-xs self-center">x</span>
+                            <input value="${ex.reps}" onchange="window.updateExercise('${w.id}', ${idx}, 'reps', this.value)" class="input-field w-16 rounded px-1 py-1 text-xs text-center" placeholder="Reps">
+                            <select onchange="window.updateExercise('${w.id}', ${idx}, 'technique', this.value)" class="input-field w-24 rounded px-1 py-1 text-[10px]">
+                                ${dbTechniques.map(t => `<option value="${t}" ${ex.technique===t?'selected':''}>${t}</option>`).join('')}
+                            </select>
+                            <input value="${ex.obs}" onchange="window.updateExercise('${w.id}', ${idx}, 'obs', this.value)" class="input-field flex-1 sm:w-32 rounded px-1 py-1 text-xs" placeholder="Obs...">
+                        </div>
+                        <button onclick="window.removeExercise('${w.id}', ${idx})" class="text-red-500 hover:text-red-700 p-1"><i class="fas fa-trash"></i></button>
                     </div>
-                `).join('') : '<div class="text-xs opacity-50 p-2 text-center">Nenhum exercício</div>';
+                `).join('');
 
-                return `
-                <div class="card rounded-lg overflow-hidden border border-gray-600">
-                    <div class="bg-black bg-opacity-20 p-2 flex justify-between items-center border-b border-gray-600">
-                        <input value="${d.title}" onchange="window.updateDayTitle('${d.id}',this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 uppercase px-1">
-                        <button onclick="window.removeDay('${d.id}')" class="text-red-500 text-xs px-2"><i class="fas fa-trash"></i></button>
+                container.insertAdjacentHTML('beforeend', `
+                    <div class="card rounded-xl overflow-hidden shadow-sm">
+                        <div class="p-3 border-b flex justify-between bg-black bg-opacity-5" style="border-color: var(--border-color);">
+                            <input value="${w.title}" onchange="window.updateWorkoutTitle('${w.id}', this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 px-2 py-1 uppercase">
+                            <div class="flex gap-1">
+                                <button onclick="window.duplicateWorkout('${w.id}')" class="p-1.5 hover:bg-black hover:bg-opacity-10"><i class="fas fa-copy"></i></button>
+                                <button onclick="window.removeWorkout('${w.id}')" class="p-1.5 text-red-500 hover:bg-red-500 hover:text-white"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div>${exs}</div>
+                        <div class="p-2 border-t" style="border-color: var(--border-color)">
+                            <button onclick="window.openModal('${w.id}')" class="w-full text-primary py-1.5 text-xs font-bold hover:bg-primary hover:bg-opacity-10">+ ADICIONAR EXERCÍCIO</button>
+                        </div>
                     </div>
-                    <div>${exs}</div>
-                    <button onclick="window.openExModal('${d.id}')" class="w-full text-primary text-xs py-2 bg-black bg-opacity-10 hover:bg-opacity-20 font-bold">+ ADICIONAR EXERCÍCIO</button>
-                </div>
-                `;
-            }).join('');
-        }
-
-        // --- MODAL DE EXERCÍCIOS ---
-        function getFullExercisesDict() {
-            const dict = JSON.parse(JSON.stringify(baseDbCategories));
-            state.customExercises.forEach(cx => {
-                if(!dict[cx.category]) dict[cx.category] = [];
-                if(!dict[cx.category].includes(cx.name)) dict[cx.category].push(cx.name);
+                `);
             });
-            // Sort arrays
-            for(let k in dict) dict[k].sort();
-            return dict;
         }
 
-        window.openExModal = (dayId) => {
-            state.activeModalDayId = dayId;
-            window.openModal('exercise-modal');
-            window.renderExCats();
-            window.renderExList();
+        // --- BANCO DE EXERCÍCIOS ---
+        async function loadCustomExercises() {
+            try {
+                const q = query(collection(db, "powfit_custom_exercises"), where("uid", "==", appState.user.uid));
+                const snap = await getDocs(q);
+                appState.customExercises = snap.docs.map(d => d.data());
+            } catch (e) { console.error("Erro custom exercises:", e); }
         }
 
-        window.renderExCats = () => {
-            const dict = getFullExercisesDict();
-            const c = document.getElementById('modal-categories');
-            c.innerHTML = Object.keys(dict).map(cat => `
-                <button onclick="state.activeCategory='${cat}'; window.renderExCats(); window.renderExList()" class="w-full text-left px-2 py-1.5 rounded text-xs font-bold ${state.activeCategory===cat?'bg-primary text-white':'hover:bg-white hover:bg-opacity-5'}">${cat}</button>
+        window.openModal = (id) => { appState.activeModalWorkoutId = id; document.getElementById('exercise-modal').classList.remove('hidden'); renderModalCategories(); renderModalExercises(); };
+        window.closeModal = () => { document.getElementById('exercise-modal').classList.add('hidden'); appState.activeModalWorkoutId = null; };
+        
+        window.setModalCategory = (cat) => { appState.activeCategory = cat; renderModalCategories(); renderModalExercises(); };
+        
+        function renderModalCategories() {
+            document.getElementById('modal-categories').innerHTML = Object.keys(baseCategories).map(cat => `
+                <button onclick="window.setModalCategory('${cat}')" class="w-full text-left px-2 py-2 rounded-lg text-xs font-medium transition ${appState.activeCategory === cat ? 'bg-primary text-white' : 'hover:bg-black hover:bg-opacity-10'}">${cat}</button>
             `).join('');
         }
 
-        window.renderExList = () => {
-            const dict = getFullExercisesDict();
-            const c = document.getElementById('modal-exercises');
-            const exs = dict[state.activeCategory] || [];
-            c.innerHTML = `<div class="grid grid-cols-2 md:grid-cols-3 gap-2">` + exs.map(ex => `
-                <button onclick="window.addExToDay('${ex}')" class="card p-2 text-left text-xs border hover:border-primary transition flex justify-between group">
-                    <span>${ex}</span><i class="fas fa-plus opacity-0 group-hover:opacity-100 text-primary"></i>
-                </button>
-            `).join('') + `</div>`;
+        function renderModalExercises() {
+            let exs = [...baseCategories[appState.activeCategory]];
+            // Adiciona customizados da categoria
+            const custom = appState.customExercises.filter(c => c.category === appState.activeCategory).map(c => c.name);
+            exs = [...new Set([...exs, ...custom])]; // junta sem duplicar
+
+            const isCardio = appState.activeCategory === "🫀 CARDIO";
+            document.getElementById('modal-exercises').innerHTML = `
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                    ${exs.map(ex => `<button onclick="window.addExerciseToWorkout('${ex}', ${isCardio})" class="card p-2 rounded-lg text-left text-xs font-medium border hover:border-primary transition flex justify-between items-center group">
+                        <span>${ex}</span><i class="fas fa-plus opacity-0 group-hover:opacity-100 text-primary"></i>
+                    </button>`).join('')}
+                </div>
+            `;
         }
 
-        window.addExToDay = (exName) => {
-            const d = state.days.find(x => x.id === state.activeModalDayId);
-            if(d) {
-                const isCardio = state.activeCategory.includes("CARDIO");
-                d.exercises.push({ category: state.activeCategory, name: exName, sets: isCardio?'1':'3', reps: isCardio?'-':'10-12', technique:'Nenhuma', obs:''});
-                renderDays();
-                const container = document.getElementById('modal-exercises');
-                container.style.opacity = '0.5'; setTimeout(()=>container.style.opacity='1', 100);
+        window.addExerciseToWorkout = (name, isCardio) => {
+            const w = appState.workouts.find(x => x.id === appState.activeModalWorkoutId);
+            if(w) {
+                w.exercises.push({ category: appState.activeCategory, name, sets: isCardio?'1':'3', reps: isCardio?'-':'10 a 12', technique: 'Nenhuma', obs: '' });
+                renderWorkouts();
+                const container = document.getElementById('modal-exercises'); container.style.opacity = '0.5'; setTimeout(()=>container.style.opacity='1', 100);
             }
-        }
+        };
 
-        window.saveCustomExercise = async () => {
+        window.addCustomExercise = async () => {
             const input = document.getElementById('new-custom-ex');
-            const name = input.value.trim();
-            if(!name) return;
+            const val = input.value.trim();
+            if(!val) return;
             
-            const newEx = { category: state.activeCategory, name: name };
-            await addDoc(collection(db, `networks/${state.user.uid}/customExercises`), newEx);
-            state.customExercises.push(newEx);
-            input.value = '';
-            window.renderExCats();
-            window.renderExList();
-        }
+            try {
+                input.value = "Salvando..."; input.disabled = true;
+                const newEx = { uid: appState.user.uid, category: appState.activeCategory, name: val };
+                await addDoc(collection(db, "powfit_custom_exercises"), newEx);
+                appState.customExercises.push(newEx);
+                input.value = ""; input.disabled = false;
+                renderModalExercises(); // Atualiza a lista visual
+            } catch (e) {
+                alert("Erro ao salvar exercício."); input.disabled = false; input.value = val;
+            }
+        };
 
-        // --- SALVAR E IMPRIMIR ---
-        function getWorkoutData() {
+        // --- SALVAR NA NUVEM & HISTÓRICO ---
+        function getFichaData() {
             return {
-                memberId: state.creatorMemberId,
-                unitId: state.creatorUnitId,
-                createdAt: new Date().toISOString(),
-                student: {
-                    name: document.getElementById('stu-name').value,
-                    age: document.getElementById('stu-age').value,
-                    weight: document.getElementById('stu-weight').value,
-                    height: document.getElementById('stu-height').value,
-                    gender: document.getElementById('stu-gender').value,
-                    level: document.getElementById('stu-level').value,
-                    freq: document.getElementById('stu-freq').value,
-                    objective: document.getElementById('stu-objective').value,
-                    validity: document.getElementById('stu-validity').value,
-                    recs: document.getElementById('stu-recs').value,
-                    health: Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value)
-                },
-                days: state.days
+                uid: appState.user.uid,
+                memberId: appState.profile.uid, // mesmissima coisa
+                memberName: appState.profile.name,
+                unitId: appState.profile.unitId,
+                networkId: appState.profile.networkId,
+                studentName: document.getElementById('stu-name').value || 'Sem Nome',
+                stuAge: document.getElementById('stu-age').value,
+                stuWeight: document.getElementById('stu-weight').value,
+                stuHeight: document.getElementById('stu-height').value,
+                stuGender: document.getElementById('stu-gender').value,
+                stuLevel: document.getElementById('stu-level').value,
+                stuObjective: document.getElementById('stu-objective').value,
+                stuFreq: document.getElementById('stu-freq').value,
+                stuValidity: document.getElementById('stu-validity').value,
+                stuRecs: document.getElementById('stu-recs').value,
+                health: Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value),
+                workouts: appState.workouts,
+                monthYear: getMonthYear(),
+                dateStr: new Date().toLocaleDateString('pt-BR')
             };
         }
 
-        window.saveAndPrint = async () => {
-            if(!state.creatorMemberId) { alert("Selecione o Autor da Ficha antes de salvar/imprimir."); return; }
-            
-            const data = getWorkoutData();
-            
-            // Save to Firebase
-            if(state.currentWorkoutId) {
-                await setDoc(doc(db, `networks/${state.user.uid}/workouts/${state.currentWorkoutId}`), data);
-            } else {
-                const res = await addDoc(collection(db, `networks/${state.user.uid}/workouts`), data);
-                state.currentWorkoutId = res.id;
+        window.saveFichaToCloud = async () => {
+            showLoading("Salvando Ficha...");
+            try {
+                const data = getFichaData();
+                data.timestamp = serverTimestamp();
+                
+                if (appState.currentFichaId) {
+                    await setDoc(doc(db, "powfit_workouts", appState.currentFichaId), data, { merge: true });
+                } else {
+                    const ref = await addDoc(collection(db, "powfit_workouts"), data);
+                    appState.currentFichaId = ref.id;
+                }
+                hideLoading();
+                return true;
+            } catch (e) {
+                console.error(e); hideLoading(); alert("Erro ao salvar na nuvem."); return false;
             }
-            
-            // Generate HTML for Print
-            const m = state.members.find(x => x.id === state.creatorMemberId);
-            const u = state.units.find(x => x.id === state.creatorUnitId);
-            
-            const isPEF = m.cat === 'PEF';
-            const profLabel = isPEF ? 'Profissional de Educação Física' : 'Treinador Esportivo';
-            const crefText = isPEF ? `CREF: ${m.cref || '-'} - Estado: ${m.stateUf || '-'}` : '';
-            
-            let legalTextPEF = `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA: Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º estabelece que compete ao profissional coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados.`;
-            let legalTextTE = `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO: Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida no Brasil. As recomendações desta ficha possuem caráter orientativo. Este material não substitui avaliação médica. Em casos de doenças ou limitações, recomenda-se procurar profissional habilitado. O treinamento respeita os limites individuais, priorizando segurança dentro da atuação técnica e esportiva permitida por lei.`;
+        };
 
+        async function loadHistory() {
+            document.getElementById('history-list').innerHTML = '<div class="col-span-full text-center py-10 opacity-50"><i class="fas fa-spinner fa-spin text-2xl"></i></div>';
+            try {
+                const q = query(collection(db, "powfit_workouts"), where("uid", "==", appState.user.uid), orderBy("timestamp", "desc"));
+                const snap = await getDocs(q);
+                
+                if(snap.empty) {
+                    document.getElementById('history-list').innerHTML = '<div class="col-span-full text-center py-10 opacity-50">Nenhuma ficha salva.</div>';
+                    return;
+                }
+
+                document.getElementById('history-list').innerHTML = snap.docs.map(doc => {
+                    const d = doc.data();
+                    return `
+                    <div class="card p-4 rounded-lg flex flex-col justify-between border border-opacity-20">
+                        <div class="mb-3">
+                            <div class="font-bold text-lg">${d.studentName}</div>
+                            <div class="text-xs opacity-70">Salvo: ${d.dateStr} | ${d.stuObjective}</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="window.loadHistoryItem('${doc.id}')" class="btn-primary flex-1 py-1.5 rounded text-xs font-bold">CARREGAR</button>
+                            <button onclick="window.deleteHistoryItem('${doc.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>`;
+                }).join('');
+            } catch (e) {
+                console.error(e);
+                // Fallback in case orderBy fails due to missing index: query without orderBy and sort locally
+                try {
+                    const qFallback = query(collection(db, "powfit_workouts"), where("uid", "==", appState.user.uid));
+                    const snapFallback = await getDocs(qFallback);
+                    let docsArr = snapFallback.docs.map(d => ({id: d.id, data: d.data()}));
+                    docsArr.sort((a,b) => (b.data.timestamp?.seconds || 0) - (a.data.timestamp?.seconds || 0));
+                    
+                    document.getElementById('history-list').innerHTML = docsArr.map(doc => {
+                        const d = doc.data;
+                        return `
+                        <div class="card p-4 rounded-lg flex flex-col justify-between border border-opacity-20">
+                            <div class="mb-3">
+                                <div class="font-bold text-lg">${d.studentName}</div>
+                                <div class="text-xs opacity-70">Salvo: ${d.dateStr} | ${d.stuObjective}</div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="window.loadHistoryItem('${doc.id}')" class="btn-primary flex-1 py-1.5 rounded text-xs font-bold">CARREGAR</button>
+                                <button onclick="window.deleteHistoryItem('${doc.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>`;
+                    }).join('');
+                } catch(e2) {
+                     document.getElementById('history-list').innerHTML = '<div class="col-span-full text-center py-10 text-red-500">Erro ao buscar histórico.</div>';
+                }
+            }
+        }
+
+        window.loadHistoryItem = async (docId) => {
+            showLoading("Carregando Ficha...");
+            try {
+                const docSnap = await getDoc(doc(db, "powfit_workouts", docId));
+                if (docSnap.exists()) {
+                    const d = docSnap.data();
+                    appState.currentFichaId = docId;
+                    
+                    document.getElementById('stu-name').value = d.studentName || '';
+                    document.getElementById('stu-age').value = d.stuAge || '';
+                    document.getElementById('stu-weight').value = d.stuWeight || '';
+                    document.getElementById('stu-height').value = d.stuHeight || '';
+                    document.getElementById('stu-gender').value = d.stuGender || 'Masculino';
+                    document.getElementById('stu-level').value = d.stuLevel || 'Iniciante';
+                    document.getElementById('stu-objective').value = d.stuObjective || 'Emagrecimento';
+                    document.getElementById('stu-freq').value = d.stuFreq || '3 dias';
+                    document.getElementById('stu-validity').value = d.stuValidity || 'Validade: 30 dias';
+                    document.getElementById('stu-recs').value = d.stuRecs || '';
+                    
+                    window.changeTheme();
+                    window.calculateIMC();
+
+                    document.querySelectorAll('.health-cb').forEach(cb => { cb.checked = (d.health || []).includes(cb.value); });
+                    
+                    appState.workouts = d.workouts || [];
+                    renderWorkouts();
+                    window.switchTab('ficha');
+                }
+            } catch (e) { console.error(e); alert("Erro ao carregar ficha."); }
+            hideLoading();
+        };
+
+        window.deleteHistoryItem = async (docId) => {
+            if(confirm("Excluir definitivamente esta ficha da nuvem?")) {
+                try {
+                    await deleteDoc(doc(db, "powfit_workouts", docId));
+                    if(appState.currentFichaId === docId) appState.currentFichaId = null;
+                    loadHistory();
+                } catch (e) { alert("Erro ao excluir."); }
+            }
+        };
+
+        // --- RELATÓRIOS ---
+        async function loadReport() {
+            document.getElementById('report-unit-name').innerText = appState.profile.unitName;
+            document.getElementById('report-tbody').innerHTML = '<tr><td colspan="3" class="text-center py-4 opacity-50"><i class="fas fa-spinner fa-spin"></i> Processando dados...</td></tr>';
+            
+            try {
+                // Pega fichas do mes atual E da mesma Unidade do cara
+                const currentMonth = getMonthYear();
+                const q = query(collection(db, "powfit_workouts"), where("unitId", "==", appState.profile.unitId), where("monthYear", "==", currentMonth));
+                const snap = await getDocs(q);
+                
+                // Agrupar
+                let counts = {};
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    if(!counts[d.memberId]) counts[d.memberId] = { name: d.memberName, cat: 'Profissional', count: 0 };
+                    counts[d.memberId].count++;
+                });
+
+                // Se houver zero
+                if(Object.keys(counts).length === 0) {
+                    document.getElementById('report-tbody').innerHTML = '<tr><td colspan="3" class="text-center py-4 opacity-50">Nenhuma ficha gerada nesta unidade este mês.</td></tr>';
+                    return;
+                }
+
+                // Renderizar
+                document.getElementById('report-tbody').innerHTML = Object.values(counts).sort((a,b)=>b.count - a.count).map(m => `
+                    <tr>
+                        <td class="px-4 py-3 font-bold">${m.name}</td>
+                        <td class="px-4 py-3 opacity-80">Membro da Unidade</td>
+                        <td class="px-4 py-3 text-center text-primary font-bold text-lg">${m.count}</td>
+                    </tr>
+                `).join('');
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById('report-tbody').innerHTML = '<tr><td colspan="3" class="text-center py-4 text-red-500">Erro ao carregar relatório. Tente recarregar.</td></tr>';
+            }
+        }
+
+        window.printReport = () => {
+            const head = document.getElementById('report-unit-name').innerText;
+            const body = document.getElementById('report-tbody').innerHTML;
+            const pa = document.getElementById('print-area');
+            
+            pa.innerHTML = `
+                <div class="print-header">
+                    <h1 class="print-title">Relatório de Produtividade - ${new Date().toLocaleDateString('pt-BR', {month:'long', year:'numeric'})}</h1>
+                    <div class="prof-info">Unidade: ${head}</div>
+                </div>
+                <table>
+                    <thead><tr><th style="width:50%">Profissional</th><th style="width:20%">Unidade</th><th style="width:30%; text-align:center;">Fichas Produzidas</th></tr></thead>
+                    <tbody>${body.replace(/<td/g, '<td style="border:1px solid #000; padding:6px;"')}</tbody>
+                </table>
+            `;
+            setTimeout(() => window.print(), 300);
+        };
+
+        // --- IMPRESSÃO DA FICHA ---
+        window.generatePrint = async () => {
+            const success = await saveFichaToCloud();
+            if(!success) return; // Cancela impressão se falhar
+
+            const d = getFichaData();
             let imcStr = "-";
-            const weight = parseFloat(data.student.weight);
-            const height = parseFloat(data.student.height);
-            if(weight>0 && height>0) imcStr = (weight/(height*height)).toFixed(1);
+            const w = parseFloat(d.stuWeight); const h = parseFloat(d.stuHeight);
+            if(w>0 && h>0) imcStr = (w / (h * h)).toFixed(1);
+
+            const isPEF = appState.profile.category === 'PEF';
+            const healthSourceDict = isPEF ? healthDataPEF : healthDataTE;
+            const profLabel = isPEF ? 'Profissional de Educação Física' : 'Treinador Esportivo';
+            const crefText = isPEF ? `CREF: ${appState.profile.cref} - Estado: ${appState.profile.state}` : '';
+            
+            let legalTextPEF = `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA: Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º estabelece que compete ao profissional coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados nas áreas de atividades físicas e do desporto.`;
+            let legalTextTE = `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO: Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil, com atuação de caráter técnico e esportivo voltada à preparação, supervisão, orientação e acompanhamento de treinos. As recomendações desta ficha possuem caráter informativo e orientativo, voltadas ao treinamento esportivo e prática de musculação. Este material não substitui avaliação médica ou acompanhamento de profissionais da saúde. Em casos de dores, lesões, doenças, gestação ou qualquer condição específica, recomenda-se procurar um profissional habilitado antes de iniciar ou continuar os treinos. O treinamento respeita os limites individuais, priorizando segurança, execução correta e evolução progressiva, dentro da atuação técnica e esportiva permitida por lei.`;
 
             let html = `
                 <div class="print-header">
-                    <h1 class="print-title">Planilha de Treinamento - ${data.student.objective}</h1>
-                    <div class="prof-info">Prescrição feita por: ${m.name} (${profLabel})<br>${crefText}</div>
+                    <h1 class="print-title">Planilha de Treinamento - ${d.stuObjective}</h1>
+                    <div class="prof-info">Prescrição feita por: ${d.memberName} (${profLabel})<br>${crefText}</div>
                 </div>
 
                 <div class="print-grid">
-                    <div class="full-row"><strong>Aluno:</strong> ${data.student.name || '-'}</div>
-                    <div><strong>Idade:</strong> ${data.student.age || '-'}</div>
-                    <div><strong>Peso:</strong> ${data.student.weight || '-'}kg</div>
-                    <div><strong>Altura:</strong> ${data.student.height || '-'}m</div>
+                    <div><strong>Aluno:</strong> ${d.studentName}</div>
+                    <div><strong>Idade:</strong> ${d.stuAge || '-'} anos</div>
+                    <div><strong>Gênero:</strong> ${d.stuGender}</div>
+                    <div><strong>Peso:</strong> ${d.stuWeight || '-'} kg</div>
+                    <div><strong>Altura:</strong> ${d.stuHeight || '-'} m</div>
                     <div><strong>IMC:</strong> ${imcStr}</div>
-                    
-                    <div><strong>Gênero:</strong> ${data.student.gender}</div>
-                    <div><strong>Nível:</strong> ${data.student.level}</div>
-                    <div><strong>Freq:</strong> ${data.student.freq}</div>
-                    <div><strong>Validade:</strong> ${data.student.validity.replace('Validade: ','')}</div>
+                    <div><strong>Nível:</strong> ${d.stuLevel}</div>
+                    <div><strong>Frequência:</strong> ${d.stuFreq}</div>
+                    <div><strong>Validade:</strong> ${d.stuValidity.replace('Validade: ', '')}</div>
                 </div>
             `;
 
-            const healthDict = isPEF ? healthPEF : healthTE;
-            const objRec = objText[data.student.objective] || "";
-            if(objRec || data.student.health.length > 0) {
-                html += `<div class="print-guidelines"><h4>Diretrizes de Perfil</h4><ul>`;
-                if(objRec) html += `<li><strong>Objetivo:</strong> ${objRec}</li>`;
-                data.student.health.forEach(k => {
-                    if(healthDict[k]) html += `<li><strong>${k.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu, '').trim()}:</strong> ${healthDict[k]}</li>`;
+            if (objectiveData[d.stuObjective] || d.health.length > 0) {
+                html += `<div class="print-guidelines"><h4>Diretrizes de Perfil Automáticas</h4><ul>`;
+                if(objectiveData[d.stuObjective]) html += `<li><strong>Objetivo:</strong> ${objectiveData[d.stuObjective]}</li>`;
+                d.health.forEach(k => {
+                    if(healthSourceDict[k]) html += `<li><strong>Saúde (${k.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu, '').trim()}):</strong> ${healthSourceDict[k]}</li>`;
                 });
                 html += `</ul></div>`;
             }
 
-            data.days.forEach(d => {
-                html += `<div class="print-workout"><h3>${d.title}</h3><table><thead><tr>
-                    <th style="width:35%">Exercício</th><th style="width:8%;text-align:center">Séries</th><th style="width:10%;text-align:center">Reps</th><th style="width:15%">Técnica</th><th style="width:32%">Obs</th>
-                </tr></thead><tbody>`;
-                if(d.exercises.length === 0) html += `<tr><td colspan="5" style="text-align:center;font-style:italic">Sem exercícios</td></tr>`;
-                else d.exercises.forEach(ex => {
-                    html += `<tr><td><strong>${ex.name}</strong></td><td style="text-align:center">${ex.sets}</td><td style="text-align:center">${ex.reps}</td><td>${ex.technique==='Nenhuma'?'-':ex.technique}</td><td>${ex.obs||'-'}</td></tr>`;
-                });
+            d.workouts.forEach(w => {
+                html += `
+                    <div class="print-workout">
+                        <h3>${w.title}</h3>
+                        <table>
+                            <thead><tr><th style="width: 35%">Exercício</th><th style="width: 8%; text-align:center;">Séries</th><th style="width: 12%; text-align:center;">Reps</th><th style="width: 15%">Técnica</th><th style="width: 30%">Observações</th></tr></thead>
+                            <tbody>
+                `;
+                if (w.exercises.length === 0) html += `<tr><td colspan="5" style="text-align:center; font-style:italic; padding:10px;">Sem exercícios</td></tr>`;
+                else w.exercises.forEach(ex => html += `<tr><td><strong>${ex.name}</strong></td><td style="text-align:center;">${ex.sets}</td><td style="text-align:center;">${ex.reps}</td><td>${ex.technique !== 'Nenhuma' ? ex.technique : '-'}</td><td>${ex.obs || '-'}</td></tr>`);
                 html += `</tbody></table></div>`;
             });
 
             html += `<div class="print-footer-section">`;
-            if(data.student.recs) html += `<strong>Recomendações Manuais:</strong><br><p style="white-space:pre-wrap;margin:2px 0 6px 0">${data.student.recs}</p>`;
+            if(d.stuRecs.trim()) html += `<strong>Recomendações Manuais:</strong><br><p style="white-space: pre-wrap; margin: 3px 0 10px 0;">${d.stuRecs}</p>`;
             html += `<div class="legal-text">${isPEF ? legalTextPEF : legalTextTE}</div>
-                <div style="text-align:center; margin-top:8px; font-size:7px;">Ficha gerada em ${new Date().toLocaleDateString('pt-BR')} - PowFit Pro - Unidade: ${u?.name||'-'}</div>
-            </div>`;
+                     <div style="text-align:center; margin-top: 15px; font-size: 8px;">Ficha gerada em ${d.dateStr} - Unidade: ${appState.profile.unitName} - PowFit Pro</div></div>`;
 
             document.getElementById('print-area').innerHTML = html;
-            
-            // Reload history to reflect the saved item, then print
-            await window.loadWorkouts(); 
             setTimeout(() => window.print(), 300);
-        }
+        };
 
-        // --- LOAD TO CREATOR ---
-        window.loadWorkoutToCreator = (id) => {
-            const w = state.workoutsHistory.find(x => x.id === id);
-            if(!w) return;
-            
-            state.currentWorkoutId = w.id;
-            
-            // Seletores de Contexto
-            document.getElementById('ctx-unit').value = w.unitId || '';
-            window.updateCtxMembers();
-            document.getElementById('ctx-member').value = w.memberId || '';
-            window.applyMemberContext();
-
-            // Form Aluno
-            document.getElementById('stu-name').value = w.student.name || '';
-            document.getElementById('stu-age').value = w.student.age || '';
-            document.getElementById('stu-weight').value = w.student.weight || '';
-            document.getElementById('stu-height').value = w.student.height || '';
-            document.getElementById('stu-gender').value = w.student.gender || 'Masculino';
-            document.getElementById('stu-level').value = w.student.level || 'Iniciante';
-            document.getElementById('stu-objective').value = w.student.objective || 'Emagrecimento';
-            document.getElementById('stu-freq').value = w.student.freq || 'Frequência: 3 dias';
-            document.getElementById('stu-validity').value = w.student.validity || 'Validade: 30 dias';
-            document.getElementById('stu-recs').value = w.student.recs || '';
-
-            window.changeTheme();
-            window.calcIMC();
-            window.updateObjText();
-
-            // Checks Saúde
-            document.querySelectorAll('.health-cb').forEach(cb => {
-                cb.checked = (w.student.health || []).includes(cb.value);
-            });
-
-            state.days = w.days || [];
-            renderDays();
-            
-            window.switchTab('creator');
-        }
-
-        // Relatório solto
-        window.printReport = () => {
-            const html = `
-                <div style="font-family: Arial; padding: 20px;">
-                    <h1 style="text-align:center; font-size: 18px; border-bottom: 2px solid #000; padding-bottom: 10px;">Relatório de Produtividade - ${document.getElementById('report-month').value}</h1>
-                    ${document.getElementById('report-summary').innerHTML}
-                </div>
-            `;
-            const printWindow = window.open('', '', 'height=600,width=800');
-            printWindow.document.write('<html><head><title>Relatório</title></head><body>');
-            printWindow.document.write(html);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            setTimeout(()=>printWindow.print(), 300);
-        }
     </script>
 </body>
 </html>
