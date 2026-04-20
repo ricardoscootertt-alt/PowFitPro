@@ -2,293 +2,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PowFit Pro - Master Edition</title>
+    <title>PowFit Pro - Plataforma Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Tema Padrão (Masculino/Escuro) */
-            --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc; --text-muted: #94a3b8;
-            --border-color: #334155; --primary: #3b82f6; --primary-hover: #2563eb;
-            --input-bg: #0f172a; --input-border: #475569;
+            /* Tema Padrão Masculino (Escuro Fitness) */
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --input-bg: #0f172a;
+            --input-border: #475569;
         }
+
         [data-theme="Feminino"] {
-            /* Tema Feminino (Rosa) */
-            --bg-body: #fdf2f8; --bg-card: #ffffff; --text-main: #1e293b; --text-muted: #64748b;
-            --border-color: #fbcfe8; --primary: #ec4899; --primary-hover: #db2777;
-            --input-bg: #f8fafc; --input-border: #f1f5f9;
+            /* Tema Feminino (Rosa Moderno Elegante) */
+            --bg-body: #fdf2f8;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #fbcfe8;
+            --primary: #ec4899;
+            --primary-hover: #db2777;
+            --input-bg: #f8fafc;
+            --input-border: #f1f5f9;
         }
+
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); transition: all 0.3s ease; }
         .card { background-color: var(--bg-card); border: 1px solid var(--border-color); }
         .input-field { background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--text-main); }
         .input-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
         .btn-primary { background-color: var(--primary); color: white; transition: background-color 0.2s; }
         .btn-primary:hover { background-color: var(--primary-hover); }
+        .text-primary { color: var(--primary); }
         
-        /* Modais, Views e Scrollbar */
-        .view-section { display: none; }
-        .view-section.active { display: block; }
+        /* Oculta área de impressão na tela */
+        #print-area { display: none; }
+
+        /* Estilos de Impressão Estilo Planilha */
+        @media print {
+            body { background: white !important; color: black !important; margin: 0; padding: 0; }
+            #app-view, #login-view, .no-print, .modals { display: none !important; }
+            #print-area { display: block !important; padding: 10mm; font-family: 'Arial', sans-serif; font-size: 10px; }
+            @page { size: A4; margin: 0; }
+            
+            .print-header { border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 10px; text-align: center; }
+            .print-title { font-size: 16px; font-weight: bold; margin: 0; text-transform: uppercase; }
+            .prof-info { font-size: 11px; margin-top: 3px; font-weight: bold; }
+            
+            .print-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; border: 1px solid #000; padding: 6px; }
+            .print-grid div { font-size: 10px; }
+            .print-grid .full-row { grid-column: 1 / -1; }
+            
+            .print-guidelines { border: 1px solid #000; padding: 6px; margin-bottom: 10px; font-size: 9px; }
+            .print-guidelines h4 { margin: 0 0 3px 0; font-size: 10px; text-transform: uppercase; background: #e5e5e5; padding: 2px; border-bottom: 1px solid #000;}
+            .print-guidelines ul { margin: 0; padding-left: 12px; }
+            .print-guidelines li { margin-bottom: 2px; }
+
+            .print-workout { margin-bottom: 10px; page-break-inside: avoid; }
+            .print-workout h3 { background: #d4d4d4; border: 1px solid #000; border-bottom: none; padding: 3px 6px; margin: 0; font-size: 11px; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; font-weight: bold;}
+            table { width: 100%; border-collapse: collapse; border: 1px solid #000; }
+            th, td { border: 1px solid #000; padding: 3px 4px; text-align: left; font-size: 9.5px; }
+            th { background-color: #e5e5e5; font-weight: bold; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; }
+            
+            .print-footer-section { margin-top: 10px; border: 1px solid #000; padding: 6px; font-size: 9px; page-break-inside: avoid;}
+            .legal-text { font-size: 8px; color: #222; text-align: justify; margin-top: 5px; font-style: italic;}
+            .expired-stamp { color: red; font-weight: bold; border: 2px solid red; padding: 5px; display: inline-block; margin-bottom: 10px; transform: rotate(-5deg); -webkit-print-color-adjust: exact;}
+        }
+
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-        
-        /* Esconde área de impressão na tela */
-        #print-area { display: none; }
-
-        /* IMPRESSÃO (ESTILO PLANILHA A4) */
-        @media print {
-            body { background: white !important; color: black !important; margin: 0; padding: 0; }
-            #app-container, #login-view, #dashboard-view, .no-print, .modal { display: none !important; }
-            #print-area { display: block !important; padding: 10mm 15mm; font-family: 'Arial', sans-serif; font-size: 10px; }
-            @page { size: A4; margin: 0; }
-            .print-header { border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 10px; text-align: center; }
-            .print-title { font-size: 16px; font-weight: bold; margin: 0; text-transform: uppercase; }
-            .prof-info { font-size: 11px; margin-top: 5px; font-weight: bold; }
-            .print-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; border: 1px solid #000; padding: 6px; }
-            .print-grid div { font-size: 10px; border-bottom: 1px dotted #ccc; padding-bottom: 2px;}
-            .print-guidelines { border: 1px solid #000; padding: 6px; margin-bottom: 10px; font-size: 9px; }
-            .print-guidelines h4 { margin: 0 0 4px 0; font-size: 10px; text-transform: uppercase; background: #eee; padding: 3px; }
-            .print-guidelines ul { margin: 0; padding-left: 15px; }
-            .print-workout { margin-bottom: 10px; page-break-inside: avoid; }
-            .print-workout h3 { background: #e0e0e0; border: 1px solid #000; border-bottom: none; padding: 4px; margin: 0; font-size: 11px; text-transform: uppercase; -webkit-print-color-adjust: exact; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 0; border: 1px solid #000; }
-            th, td { border: 1px solid #000; padding: 4px; text-align: left; font-size: 10px; vertical-align: middle; }
-            th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; -webkit-print-color-adjust: exact; }
-            .ex-img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 5px; display: inline-block; vertical-align: middle;}
-            .print-footer-section { margin-top: 15px; border: 1px solid #000; padding: 6px; font-size: 9px; page-break-inside: avoid; }
-            .legal-text { font-size: 8px; color: #333; text-align: justify; margin-top: 5px; font-weight: bold; }
-            .ex-name-container { display: flex; align-items: center; }
-        }
     </style>
 </head>
-<body data-theme="Masculino">
+<body data-theme="Masculino" class="min-h-screen pb-10">
 
-    <!-- 1. TELA DE LOGIN -->
-    <div id="login-view" class="view-section active min-h-screen flex items-center justify-center p-4">
-        <div class="card p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
+    <!-- LOGIN VIEW -->
+    <div id="login-view" class="min-h-screen flex items-center justify-center p-4">
+        <div class="card p-8 rounded-2xl shadow-2xl text-center max-w-md w-full">
             <i class="fas fa-dumbbell text-5xl text-primary mb-4"></i>
             <h1 class="text-3xl font-bold mb-2">PowFit Pro</h1>
-            <p class="text-sm opacity-70 mb-8">Plataforma Master de Prescrição</p>
-            <button id="btn-login" class="w-full bg-white text-gray-800 hover:bg-gray-100 font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-3 shadow transition">
+            <p class="text-sm var(--text-muted) mb-8">Plataforma Administrativa de Prescrição</p>
+            <button onclick="window.loginGoogle()" class="w-full bg-white text-gray-800 font-bold py-3 px-4 rounded-lg shadow hover:bg-gray-100 flex items-center justify-center gap-3 transition">
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
                 Entrar com Google
             </button>
-            <div id="login-loader" class="hidden mt-4 text-primary"><i class="fas fa-circle-notch fa-spin text-2xl"></i></div>
+            <p class="text-xs opacity-50 mt-4">Sincronização na nuvem ativada.</p>
         </div>
     </div>
 
-    <!-- 2. DASHBOARD DE REDE E MEMBROS -->
-    <div id="dashboard-view" class="view-section min-h-screen p-4 sm:p-8 max-w-6xl mx-auto">
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h1 class="text-2xl font-bold"><i class="fas fa-network-wired text-primary"></i> Dashboard da Rede</h1>
-                <p class="text-sm opacity-70">Gerencie Unidades, Membros e Relatórios</p>
-            </div>
-            <button id="btn-logout" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium shadow text-sm">Sair</button>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Gerenciamento -->
-            <div class="space-y-6">
-                <!-- Add Unidade -->
-                <div class="card p-5 rounded-xl">
-                    <h2 class="text-lg font-bold mb-3">1. Cadastrar Unidade</h2>
-                    <div class="flex gap-2">
-                        <input type="text" id="dash-new-unit" class="input-field flex-1 rounded-lg px-3 text-sm" placeholder="Ex: PowerFit Centro">
-                        <button id="btn-add-unit" class="btn-primary px-4 py-2 rounded-lg text-sm font-bold">Adicionar</button>
-                    </div>
+    <!-- APP VIEW -->
+    <div id="app-view" class="hidden">
+        <!-- NAVBAR -->
+        <nav class="border-b border-opacity-20 mb-6 p-4 sticky top-0 z-40 backdrop-blur-md" style="border-color: var(--border-color); background-color: rgba(var(--bg-card), 0.9);">
+            <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-dumbbell text-2xl text-primary"></i>
+                    <span class="text-xl font-bold">PowFit Pro</span>
                 </div>
-                
-                <!-- Add Membro -->
-                <div class="card p-5 rounded-xl">
-                    <h2 class="text-lg font-bold mb-3">2. Cadastrar Membro (Profissional)</h2>
-                    <div class="space-y-3">
-                        <select id="dash-sel-unit" class="input-field w-full rounded-lg px-3 py-2 text-sm"><option value="">Selecione a Unidade...</option></select>
-                        <input type="text" id="dash-m-name" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Nome do Profissional">
-                        <input type="text" id="dash-m-cpf" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="CPF">
-                        <div class="grid grid-cols-2 gap-2">
-                            <select id="dash-m-cat" class="input-field rounded-lg px-3 py-2 text-sm" onchange="toggleDashCref()">
-                                <option value="PEF">Prof. de Ed. Física</option>
-                                <option value="TE">Treinador Esportivo</option>
-                            </select>
-                            <input type="text" id="dash-m-uf" class="input-field rounded-lg px-3 py-2 text-sm" placeholder="UF (Ex: SP)">
-                        </div>
-                        <input type="text" id="dash-m-cref" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="CREF (Apenas números)">
-                        <button id="btn-add-member" class="btn-primary w-full py-2 rounded-lg text-sm font-bold">Cadastrar Membro</button>
+                <div class="flex flex-wrap items-center gap-2 sm:gap-4">
+                    <button onclick="window.switchTab('dashboard')" id="btn-tab-dashboard" class="px-4 py-2 rounded-lg font-medium text-sm transition btn-primary">Dashboard & Gestão</button>
+                    <button onclick="window.switchTab('creator')" id="btn-tab-creator" class="px-4 py-2 rounded-lg font-medium text-sm transition hover:bg-black hover:bg-opacity-20 border border-transparent">Prancheta (Criar Ficha)</button>
+                    <div class="h-6 w-px bg-gray-500 opacity-30 hidden sm:block"></div>
+                    <div class="flex items-center gap-2 text-sm">
+                        <img id="user-avatar" class="w-8 h-8 rounded-full border border-primary" src="" alt="Avatar">
+                        <button onclick="window.logout()" class="text-red-400 hover:text-red-300" title="Sair"><i class="fas fa-sign-out-alt"></i></button>
                     </div>
                 </div>
             </div>
+        </nav>
 
-            <!-- Listagem e Acesso -->
-            <div class="card p-5 rounded-xl flex flex-col">
-                <h2 class="text-lg font-bold mb-3 flex justify-between items-center">
-                    <span>3. Acessar Sistema</span>
-                    <button id="btn-report" class="text-xs bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600"><i class="fas fa-chart-bar"></i> Relatório de Produtividade</button>
-                </h2>
-                <p class="text-xs opacity-70 mb-4">Selecione o seu perfil para gerar fichas no seu nome.</p>
-                <div id="network-tree" class="flex-1 overflow-y-auto space-y-2 max-h-[400px]">
-                    <!-- Renderizado via JS -->
-                    <div class="text-center opacity-50 text-sm py-4">Carregando unidades...</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. PLATAFORMA DE PRESCRIÇÃO (APP) -->
-    <div id="app-view" class="view-section min-h-screen pb-20">
-        <div id="app-container" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <!-- Header App -->
-            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-                <div>
-                    <h1 class="text-xl font-bold tracking-tight">PowFit Pro <span class="text-sm font-normal text-primary px-2 py-1 bg-primary bg-opacity-10 rounded ml-2" id="app-active-member">...</span></h1>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="openHistory()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 text-sm transition">
-                        <i class="fas fa-cloud-download-alt"></i> Histórico
-                    </button>
-                    <button onclick="generatePrintAndSave()" class="btn-primary px-4 py-2 rounded-lg font-bold shadow-lg flex items-center gap-2 text-sm">
-                        <i class="fas fa-save"></i> <i class="fas fa-print"></i> Salvar & Imprimir
-                    </button>
-                    <button onclick="backToDashboard()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm"><i class="fas fa-sign-out-alt"></i></button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                <!-- Coluna Esquerda: Aluno e Saúde -->
-                <div class="xl:col-span-4 space-y-5">
-                    <div class="card rounded-xl p-4 shadow-sm">
-                        <div class="flex justify-between items-center mb-3 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
-                            <h2 class="text-md font-semibold"><i class="fas fa-user text-primary"></i> Aluno</h2>
-                            <div id="imc-display"></div>
-                        </div>
-                        <div class="space-y-3">
-                            <input type="text" id="stu-name" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Nome Completo">
-                            <div class="grid grid-cols-3 gap-2">
-                                <input type="number" id="stu-age" class="input-field rounded-lg px-2 py-2 text-sm" placeholder="Idade">
-                                <input type="number" id="stu-weight" oninput="calculateIMC()" class="input-field rounded-lg px-2 py-2 text-sm" placeholder="Peso(kg)">
-                                <input type="number" id="stu-height" step="0.01" oninput="calculateIMC()" class="input-field rounded-lg px-2 py-2 text-sm" placeholder="Alt.(m)">
-                            </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <select id="stu-gender" onchange="changeTheme()" class="input-field rounded-lg px-2 py-2 text-sm">
-                                    <option value="Masculino">Masculino</option><option value="Feminino">Feminino</option>
-                                </select>
-                                <select id="stu-level" class="input-field rounded-lg px-2 py-2 text-sm">
-                                    <option>Iniciante</option><option>Intermediário</option><option>Avançado</option>
-                                </select>
-                            </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <select id="stu-freq" class="input-field rounded-lg px-2 py-2 text-sm">
-                                    <option>3 dias</option><option>5 dias</option><option>6 dias</option><option>Personalizado</option>
-                                </select>
-                                <select id="stu-validity" class="input-field rounded-lg px-2 py-2 text-sm">
-                                    <option>15 dias</option><option selected>30 dias</option><option>60 dias</option><option>90 dias</option>
-                                </select>
-                            </div>
-                            <select id="stu-objective" onchange="updateObjText()" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                                <option value="Emagrecimento">Emagrecimento</option><option value="Hipertrofia">Hipertrofia</option>
-                                <option value="Definição">Definição</option><option value="Condicionamento">Condicionamento</option>
-                                <option value="Resistência">Resistência</option><option value="Força">Força</option>
-                                <option value="Reabilitação">Reabilitação</option><option value="Saúde geral">Saúde geral</option>
-                            </select>
-                            <p id="obj-info" class="text-[10px] opacity-70 italic p-2 bg-black bg-opacity-10 rounded"></p>
-                        </div>
-                    </div>
-
-                    <div class="card rounded-xl p-4 shadow-sm">
-                        <h2 class="text-md font-semibold mb-2 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)"><i class="fas fa-heartbeat text-primary"></i> Estado de Saúde</h2>
-                        <div class="grid grid-cols-2 gap-2 text-[11px]" id="health-container"></div>
-                    </div>
-                </div>
-
-                <!-- Coluna Direita: Treinos -->
-                <div class="xl:col-span-8 space-y-5">
-                    <div class="flex justify-between items-center bg-opacity-10 p-3 rounded-xl card border-dashed border-2">
-                        <h2 class="text-lg font-bold"><i class="fas fa-list-alt text-primary"></i> Montagem</h2>
-                        <button onclick="addWorkout()" class="btn-primary px-3 py-1.5 rounded-lg text-sm font-medium"><i class="fas fa-plus"></i> Dia</button>
-                    </div>
-                    <div id="workouts-container" class="space-y-4"></div>
+        <div class="max-w-7xl mx-auto p-4 sm:p-0">
+            
+            <!-- ================= DASHBOARD & GESTÃO ================= -->
+            <div id="dashboard-section" class="space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     
-                    <div class="card rounded-xl p-4 shadow-sm">
-                        <h2 class="text-md font-semibold mb-2"><i class="fas fa-comment-medical text-primary"></i> Recomendações Profissionais</h2>
-                        <textarea id="stu-recs" rows="3" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Hidratação, descanso, cuidados..."></textarea>
+                    <!-- UNIDADES -->
+                    <div class="card p-5 rounded-xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-lg font-bold"><i class="fas fa-building text-primary mr-2"></i> Unidades da Rede</h2>
+                            <button onclick="window.openModal('unit-modal')" class="text-xs bg-primary px-3 py-1.5 rounded text-white"><i class="fas fa-plus"></i> Nova</button>
+                        </div>
+                        <div id="units-list" class="space-y-2 max-h-64 overflow-y-auto pr-2">
+                            <!-- JS -->
+                        </div>
+                    </div>
+
+                    <!-- MEMBROS (EQUIPE) -->
+                    <div class="card p-5 rounded-xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-lg font-bold"><i class="fas fa-users text-primary mr-2"></i> Equipe (Membros)</h2>
+                            <button onclick="window.openModal('member-modal')" class="text-xs bg-primary px-3 py-1.5 rounded text-white"><i class="fas fa-plus"></i> Novo</button>
+                        </div>
+                        <div id="members-list" class="space-y-2 max-h-64 overflow-y-auto pr-2">
+                            <!-- JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RELATÓRIO E HISTÓRICO -->
+                <div class="card p-5 rounded-xl">
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                        <h2 class="text-lg font-bold"><i class="fas fa-chart-bar text-primary mr-2"></i> Produtividade & Histórico</h2>
+                        <div class="flex gap-2 w-full sm:w-auto">
+                            <input type="month" id="report-month" class="input-field rounded px-3 py-2 text-sm w-full sm:w-auto" onchange="window.loadWorkouts()">
+                            <button onclick="window.printReport()" class="btn-primary px-4 py-2 rounded text-sm whitespace-nowrap"><i class="fas fa-print"></i> Imprimir Relatório</button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Resumo do Mês -->
+                        <div class="md:col-span-1 bg-black bg-opacity-20 p-4 rounded-lg border border-gray-500 border-opacity-20 h-fit">
+                            <h3 class="font-bold border-b border-gray-500 border-opacity-30 pb-2 mb-3">Resumo da Rede</h3>
+                            <div id="report-summary" class="text-sm space-y-2">
+                                <!-- JS -->
+                            </div>
+                        </div>
+                        
+                        <!-- Lista de Fichas -->
+                        <div class="md:col-span-2 space-y-3 max-h-96 overflow-y-auto pr-2" id="workouts-history-list">
+                            <!-- JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= PRANCHETA (CRIAR FICHA) ================= -->
+            <div id="creator-section" class="hidden space-y-6">
+                
+                <!-- SELETOR DE CONTEXTO (Quem está criando) -->
+                <div class="card p-4 rounded-xl border-l-4 border-l-primary bg-primary bg-opacity-5">
+                    <div class="flex flex-col sm:flex-row gap-4 items-center">
+                        <div class="font-bold text-sm sm:w-1/4">Autor da Ficha:</div>
+                        <select id="ctx-unit" onchange="window.updateCtxMembers()" class="input-field rounded-lg px-3 py-2 text-sm w-full sm:w-1/3">
+                            <option value="">Selecione a Unidade...</option>
+                        </select>
+                        <select id="ctx-member" onchange="window.applyMemberContext()" class="input-field rounded-lg px-3 py-2 text-sm w-full sm:w-1/3">
+                            <option value="">Selecione o Profissional...</option>
+                        </select>
+                    </div>
+                    <p id="ctx-warning" class="text-xs text-red-400 mt-2 hidden">Selecione o profissional para liberar a montagem e regras legais.</p>
+                </div>
+
+                <!-- ÁREA DE MONTAGEM (Oculta até selecionar membro) -->
+                <div id="assembly-area" class="grid grid-cols-1 xl:grid-cols-12 gap-6 opacity-50 pointer-events-none transition-opacity">
+                    
+                    <!-- ESQUERDA: Dados do Aluno -->
+                    <div class="xl:col-span-4 space-y-4">
+                        <div class="card rounded-xl p-5">
+                            <div class="flex justify-between items-center mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
+                                <h2 class="font-bold"><i class="fas fa-user text-primary mr-2"></i> Dados do Aluno</h2>
+                                <div id="imc-display"></div>
+                            </div>
+                            <div class="space-y-3 text-sm">
+                                <input type="text" id="stu-name" class="input-field w-full rounded px-3 py-2" placeholder="Nome Completo">
+                                <div class="grid grid-cols-3 gap-2">
+                                    <input type="number" id="stu-age" class="input-field rounded px-2 py-2" placeholder="Idade">
+                                    <input type="number" id="stu-weight" oninput="window.calcIMC()" class="input-field rounded px-2 py-2" placeholder="Peso (kg)">
+                                    <input type="number" id="stu-height" step="0.01" oninput="window.calcIMC()" class="input-field rounded px-2 py-2" placeholder="Alt (m)">
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <select id="stu-gender" onchange="window.changeTheme()" class="input-field rounded px-3 py-2">
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Feminino">Feminino</option>
+                                    </select>
+                                    <select id="stu-level" class="input-field rounded px-3 py-2">
+                                        <option>Iniciante</option><option>Intermediário</option><option>Avançado</option>
+                                    </select>
+                                </div>
+                                <select id="stu-freq" class="input-field w-full rounded px-3 py-2">
+                                    <option>Frequência: 3 dias</option><option>Frequência: 5 dias</option><option>Frequência: 6 dias</option><option>Personalizado</option>
+                                </select>
+                                <select id="stu-objective" onchange="window.updateObjText()" class="input-field w-full rounded px-3 py-2">
+                                    <option value="Emagrecimento">Obj: Emagrecimento</option>
+                                    <option value="Hipertrofia">Obj: Hipertrofia</option>
+                                    <option value="Definição">Obj: Definição</option>
+                                    <option value="Condicionamento">Obj: Condicionamento</option>
+                                    <option value="Resistência">Obj: Resistência</option>
+                                    <option value="Força">Obj: Força</option>
+                                    <option value="Reabilitação">Obj: Reabilitação</option>
+                                    <option value="Saúde geral">Obj: Saúde geral</option>
+                                </select>
+                                <p id="obj-hint" class="text-[10px] opacity-70 p-2 bg-black bg-opacity-20 rounded border border-gray-600 hidden"></p>
+                            </div>
+                        </div>
+
+                        <div class="card rounded-xl p-5">
+                            <h2 class="font-bold mb-2 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
+                                <i class="fas fa-heartbeat text-primary mr-2"></i> Saúde (Diretrizes)
+                            </h2>
+                            <div class="grid grid-cols-2 gap-2 text-xs" id="health-container">
+                                <!-- Preenchido baseado na categoria do membro -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DIREITA: Treinos -->
+                    <div class="xl:col-span-8 space-y-4">
+                        <div class="flex justify-between items-center card p-3 rounded-xl border-dashed border-2 bg-opacity-10">
+                            <select id="stu-validity" class="input-field rounded px-3 py-1.5 text-sm">
+                                <option>Validade: 15 dias</option><option selected>Validade: 30 dias</option><option>Validade: 60 dias</option><option>Validade: 90 dias</option>
+                            </select>
+                            <div class="flex gap-2">
+                                <button onclick="window.addDay()" class="btn-primary px-3 py-1.5 rounded text-sm"><i class="fas fa-plus"></i> Dia</button>
+                                <button onclick="window.saveAndPrint()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-1.5 rounded text-sm font-bold shadow-lg flex items-center gap-2"><i class="fas fa-save"></i> Imprimir</button>
+                            </div>
+                        </div>
+
+                        <div id="days-container" class="space-y-4">
+                            <!-- Dias JS -->
+                        </div>
+
+                        <div class="card rounded-xl p-4">
+                            <h2 class="font-bold mb-2 text-sm"><i class="fas fa-pen text-primary mr-2"></i> Recomendações Livres</h2>
+                            <textarea id="stu-recs" rows="2" class="input-field w-full rounded p-2 text-sm" placeholder="Hidratação, cuidados..."></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE EXERCÍCIOS E CADASTRO -->
-    <div id="exercise-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-2">
-        <div class="card w-full max-w-6xl rounded-xl shadow-2xl flex flex-col h-[95vh] border border-gray-600">
+    <!-- MODAIS DE GESTÃO -->
+    <div id="unit-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 flex items-center justify-center modals p-4">
+        <div class="card w-full max-w-sm rounded-xl p-5">
+            <h3 class="font-bold text-lg mb-4">Nova Unidade</h3>
+            <input type="text" id="unit-name" class="input-field w-full rounded p-2 text-sm mb-4" placeholder="Nome da Unidade (Ex: Centro)">
+            <div class="flex justify-end gap-2">
+                <button onclick="window.closeModal('unit-modal')" class="px-4 py-2 rounded text-sm opacity-70">Cancelar</button>
+                <button onclick="window.saveUnit()" class="btn-primary px-4 py-2 rounded text-sm">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="member-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 flex items-center justify-center modals p-4">
+        <div class="card w-full max-w-md rounded-xl p-5">
+            <h3 class="font-bold text-lg mb-4">Novo Membro (Equipe)</h3>
+            <div class="space-y-3 text-sm">
+                <input type="text" id="mem-name" class="input-field w-full rounded p-2" placeholder="Nome Completo">
+                <input type="text" id="mem-cpf" class="input-field w-full rounded p-2" placeholder="CPF">
+                <select id="mem-unit" class="input-field w-full rounded p-2"><option value="">Selecione a Unidade...</option></select>
+                <select id="mem-cat" onchange="window.toggleMemCref()" class="input-field w-full rounded p-2">
+                    <option value="PEF">Profissional de Educação Física (PEF)</option>
+                    <option value="TE">Treinador Esportivo (TE)</option>
+                </select>
+                <div class="grid grid-cols-2 gap-2" id="mem-cref-group">
+                    <input type="text" id="mem-cref" class="input-field rounded p-2" placeholder="CREF">
+                    <input type="text" id="mem-state" class="input-field rounded p-2" placeholder="Estado (UF)">
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 mt-5">
+                <button onclick="window.closeModal('member-modal')" class="px-4 py-2 rounded text-sm opacity-70">Cancelar</button>
+                <button onclick="window.saveMember()" class="btn-primary px-4 py-2 rounded text-sm">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE EXERCÍCIOS -->
+    <div id="exercise-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-2 sm:p-4 modals">
+        <div class="card w-full max-w-5xl rounded-xl shadow-2xl flex flex-col h-[90vh]">
             <div class="p-4 border-b flex justify-between items-center bg-black bg-opacity-20" style="border-color: var(--border-color)">
-                <h3 class="text-lg font-bold"><i class="fas fa-search text-primary mr-2"></i> Banco de Exercícios</h3>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 text-2xl">&times;</button>
+                <h3 class="font-bold"><i class="fas fa-search text-primary mr-2"></i> Banco de Exercícios</h3>
+                <button onclick="window.closeModal('exercise-modal')" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
             <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
-                <div class="w-full md:w-1/4 border-r overflow-y-auto p-2" style="border-color: var(--border-color)" id="modal-categories"></div>
-                <div class="w-full md:w-3/4 flex flex-col bg-black bg-opacity-5">
-                    
-                    <!-- Painel Adicionar Novo -->
-                    <div class="p-3 border-b flex flex-wrap gap-2 items-end bg-black bg-opacity-10" style="border-color: var(--border-color)">
-                        <div class="flex-1 min-w-[200px]">
-                            <label class="block text-[10px] mb-1 font-bold">Novo Exercício nesta categoria:</label>
-                            <input type="text" id="new-ex-name" class="input-field w-full rounded px-2 py-1.5 text-sm" placeholder="Nome do exercício">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] mb-1 font-bold">Imagem (Opcional):</label>
-                            <input type="file" id="new-ex-img" accept="image/*" class="text-xs w-48">
-                        </div>
-                        <button onclick="saveCustomExercise()" class="btn-primary px-4 py-1.5 rounded text-sm font-bold"><i class="fas fa-save"></i> Salvar na Nuvem</button>
+                <div class="w-full md:w-1/4 border-r overflow-y-auto p-2 space-y-1 bg-black bg-opacity-10" style="border-color: var(--border-color)" id="modal-categories"></div>
+                <div class="w-full md:w-3/4 flex flex-col">
+                    <div class="p-2 border-b border-gray-600 flex gap-2 bg-black bg-opacity-30">
+                        <input type="text" id="new-custom-ex" class="input-field flex-1 rounded px-2 py-1 text-xs" placeholder="Criar exercício customizado nesta categoria...">
+                        <button onclick="window.saveCustomExercise()" class="btn-primary px-3 py-1 rounded text-xs">Adicionar ao BD</button>
                     </div>
-
-                    <!-- Lista de Exercícios -->
                     <div class="flex-1 overflow-y-auto p-3" id="modal-exercises"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE HISTÓRICO -->
-    <div id="history-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-[70] flex items-center justify-center p-2">
-        <div class="card w-full max-w-4xl rounded-xl flex flex-col max-h-[90vh]">
-            <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
-                <h3 class="text-lg font-bold"><i class="fas fa-cloud text-primary mr-2"></i> Histórico na Nuvem (Sua Unidade)</h3>
-                <button onclick="closeHistory()" class="text-gray-400 hover:text-red-500 text-2xl">&times;</button>
-            </div>
-            <div class="p-4 overflow-y-auto flex-1 space-y-2" id="history-list"></div>
-        </div>
-    </div>
-
-    <!-- MODAL RELATÓRIO DE PRODUTIVIDADE -->
-    <div id="report-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-[80] flex items-center justify-center p-2">
-        <div class="card w-full max-w-3xl rounded-xl flex flex-col max-h-[90vh]">
-            <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
-                <h3 class="text-lg font-bold"><i class="fas fa-chart-line text-primary mr-2"></i> Relatório Mensal</h3>
-                <button onclick="document.getElementById('report-modal').classList.add('hidden')" class="text-gray-400 hover:text-red-500 text-2xl">&times;</button>
-            </div>
-            <div class="p-4 flex gap-2 border-b" style="border-color: var(--border-color)">
-                <select id="report-month" class="input-field rounded px-2 py-1 text-sm"></select>
-                <select id="report-unit" class="input-field rounded px-2 py-1 text-sm"></select>
-                <button onclick="generateReport()" class="btn-primary px-3 py-1 rounded text-sm font-bold">Gerar</button>
-            </div>
-            <div class="p-4 overflow-y-auto flex-1" id="report-content"></div>
-        </div>
-    </div>
-
+    <!-- ÁREA DE IMPRESSÃO -->
     <div id="print-area"></div>
 
-    <!-- TELA DE LOADING GLOBAL -->
-    <div id="global-loader" class="fixed inset-0 bg-black bg-opacity-90 z-[100] hidden flex-col items-center justify-center text-white">
-        <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
-        <h2 class="text-xl font-bold">Sincronizando com a Nuvem...</h2>
-    </div>
-
-    <!-- JAVASCRIPT MASTER MODULE -->
+    <!-- FIREBASE E LÓGICA (MODULAR) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, addDoc, query, where, getDocs, deleteDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBIPqTYYkG5vHr57CndPCmxUeACncNAobM",
@@ -299,59 +342,77 @@
             appId: "1:1080284745812:web:56729b17fcdd3d44aaddc1",
             measurementId: "G-GVPV7SSBTB"
         };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- DADOS ESTÁTICOS BASE ---
-        const healthDataPEF = {
-            "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio.",
-            "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação.",
-            "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico.",
-            "🔴 Obesidade": "Iniciar com exercícios de baixo impacto. Evolução gradual.",
-            "⚖️ Baixo peso": "Foco em musculação para ganho de massa.",
-            "🍬 Diabetes": "Treinos regulares moderados. Monitorar glicemia.",
-            "❤️ Hipertensão": "Treinos moderados, evitar prender a respiração.",
-            "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação.",
-            "💔 Problemas cardíacos": "Treinos leves com liberação médica.",
-            "🦴 Problemas articulares": "Evitar impacto. Priorizar exercícios controlados.",
-            "🫁 Problemas respiratórios": "Treinos leves a moderados. Atenção à respiração.",
+        // --- ESTADO GLOBAL ---
+        const state = {
+            user: null,
+            units: [],
+            members: [],
+            workoutsHistory: [],
+            customExercises: [], // {category, name}
+            
+            // Estado do Criador de Ficha
+            currentWorkoutId: null, // Se estiver editando
+            creatorUnitId: "",
+            creatorMemberId: "",
+            days: [], // { id, title, exercises: [] }
+            activeModalDayId: null,
+            activeCategory: "🔥 PEITO"
+        };
+
+        // --- DADOS FIXOS ---
+        const healthPEF = {
+            "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.",
+            "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.",
+            "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico. Combinar musculação e cardio moderado.",
+            "🔴 Obesidade": "Iniciar com exercícios de baixo impacto. Evolução gradual, priorizando saúde e segurança.",
+            "⚖️ Baixo peso": "Foco em musculação para ganho de massa. Treinos moderados com alimentação adequada.",
+            "🍬 Diabetes": "Treinos regulares moderados. Monitorar glicemia e evitar treinos em jejum.",
+            "❤️ Hipertensão": "Treinos moderados, evitar prender a respiração. Priorizar controle da intensidade.",
+            "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação e intensidade leve a moderada.",
+            "💔 Problemas cardíacos": "Treinos leves com liberação médica. Monitorar frequência cardíaca.",
+            "🦴 Problemas articulares": "Evitar impacto. Priorizar exercícios controlados e máquinas.",
+            "🫁 Problemas respiratórios": "Treinos leves a moderados com progressão gradual. Atenção à respiração.",
             "⚠️ Lesões": "Adaptar exercícios. Evitar dor e focar na recuperação.",
-            "🤰 Gestante": "Treinos leves a moderados, sem impacto. Liberação médica.",
-            "🤱 Lactante": "Treinar normalmente com atenção à hidratação.",
-            "👴 Idoso": "Foco em força, equilíbrio e mobilidade."
+            "🤰 Gestante": "Treinos leves a moderados, sem impacto ou risco. Foco em mobilidade e bem-estar.",
+            "🤱 Lactante": "Treinar normalmente com atenção à hidratação e energia.",
+            "👴 Idoso": "Foco em força, equilíbrio e mobilidade. Intensidade moderada com segurança."
         };
 
-        const healthDataTE = {
-            "🟢 Saudável": "Manter treinos regulares de 3–5x por semana, combinando musculação e cardio.",
-            "⚪ Sedentário": "Início gradual, com treinos leves e foco na adaptação.",
-            "🟡 Sobrepeso": "A prática regular de musculação e cardio contribui para a composição corporal.",
-            "🔴 Obesidade": "Início com exercícios de menor impacto e progressão gradual.",
-            "⚖️ Baixo peso": "Musculação para ganho de massa, priorizando evolução progressiva.",
-            "🍬 Diabetes": "Acompanhamento médico regular. Interromper em caso de mal-estar.",
-            "❤️ Hipertensão": "Evitar manobra de Valsalva e controlar intensidade.",
-            "🔵 Hipotensão": "Evitar mudanças bruscas de posição.",
-            "💔 Problemas cardíacos": "Prática apenas com liberação médica e controle rigoroso.",
-            "🦴 Problemas articulares": "Menor impacto e maior controle de movimento.",
-            "🫁 Problemas respiratórios": "Progressão gradual. Interromper em falta de ar.",
-            "⚠️ Lesões": "Respeitar limitação. Seguir orientação técnica.",
-            "🤰 Gestante": "Apenas com liberação médica e sem risco de impacto.",
-            "🤱 Lactante": "Atividade mantida com atenção à recuperação e hidratação.",
-            "👴 Idoso": "Contribuição para força e autonomia. Intensidade moderada."
+        const healthTE = {
+            "🟢 Saudável": "Manter treinos regulares de 3–5x por semana. Constância, descanso e alimentação contribuem para resultados.",
+            "⚪ Sedentário": "Início gradual, com treinos leves e foco na adaptação do corpo. Aprender a execução correta.",
+            "🟡 Sobrepeso": "Musculação + cardio para melhora do condicionamento. Progressão respeitando a individualidade.",
+            "🔴 Obesidade": "Iniciar com menor impacto. Segurança, mobilidade e constância são prioridades.",
+            "⚖️ Baixo peso": "Musculação auxilia no ganho de massa com alimentação e descanso. Evolução progressiva.",
+            "🍬 Diabetes": "Manter acompanhamento médico. Em casos de tontura, mal-estar ou alteração de glicemia, interromper o treino.",
+            "❤️ Hipertensão": "Acompanhamento médico. Evitar prender a respiração (Valsalva) e controlar a intensidade.",
+            "🔵 Hipotensão": "Evitar mudanças bruscas de posição. Manter hidratação e respeitar a intensidade.",
+            "💔 Problemas cardíacos": "Prática apenas com liberação médica. Respeitar limites e controle de intensidade.",
+            "🦴 Problemas articulares": "Menor impacto e maior controle de movimento são indicados. Adaptação ajuda na segurança.",
+            "🫁 Problemas respiratórios": "Progressão gradual. Interromper em caso de falta de ar excessiva.",
+            "⚠️ Lesões": "Adaptação deve respeitar a limitação e evitar dor. Seguir orientação profissional.",
+            "🤰 Gestante": "Prática com liberação médica. Foco na segurança, mobilidade e bem-estar.",
+            "🤱 Lactante": "Atividade normal, respeitando a recuperação, hidratação e alimentação.",
+            "👴 Idoso": "Contribui para força e autonomia. Respeitar limitações com intensidade moderada."
         };
 
-        const objectiveData = {
-            "Emagrecimento": "Foco em déficit calórico com treinos mistos (força + aeróbico).",
-            "Hipertrofia": "Prioridade na progressão de carga e superávit calórico.",
-            "Definição": "Manutenção muscular reduzindo % de gordura.",
-            "Condicionamento": "Circuitos e alta integração cardiopulmonar.",
-            "Resistência": "Séries mais longas, cadência controlada.",
-            "Força": "Cargas altas, baixas repetições e intervalos longos.",
-            "Reabilitação": "Fortalecimento específico e controle motor.",
-            "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade."
+        const objText = {
+            "Emagrecimento": "Foco em déficit calórico com treinos mistos de força (manter massa magra) e aeróbicos (maior gasto).",
+            "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.",
+            "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.",
+            "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.",
+            "Resistência": "Séries mais longas, cadência controlada e aprimoramento da capacidade muscular.",
+            "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.",
+            "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.",
+            "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar."
         };
 
-        const dbCategories = {
+        const baseDbCategories = {
             "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
             "🦍 COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Cavalinho (T-Bar)", "Serrote", "Facepull (puxada de cima para baixo)"],
             "🦵 PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento no Smith", "Agachamento com passada lateral", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Coice", "Cachorrinho", "Cadeira Extensora", "Adução", "Abdução", "Abdução Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha Livre", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
@@ -361,623 +422,560 @@
             "🧠 ABDÔMEN": ["Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", "Isometria na parede"],
             "🫀 CARDIO": ["Bicicleta 10 Minutos", "Bicicleta 15 Minutos", "Bicicleta 20 Minutos", "Esteira 10 Minutos", "Esteira 15 Minutos", "Esteira 20 Minutos", "Pular Corda"]
         };
+        const techniques = ["Nenhuma", "Drop set", "Bi-set", "Tri-set", "Série gigante", "Rest-pause", "FST-7", "Pré-exaustão", "Pós-exaustão", "Negativa", "Isometria", "Parciais", "Pirâmide"];
+        const dayNames = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"];
 
-        const dbTechniques = ["Nenhuma", "Drop set", "Bi-set", "Tri-set", "Série gigante", "Rest-pause", "FST-7", "Pré-exaustão", "Pós-exaustão", "Negativa", "Isometria", "Parciais", "Pirâmide"];
-        const daysOfWeek = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"];
-
-        // --- ESTADO GLOBAL DA APLICAÇÃO ---
-        window.state = {
-            currentUser: null,
-            networkUnits: [],
-            networkMembers: [],
-            activeMember: null, // Perfil que está montando a ficha
-            customExercises: [], // Carregados da nuvem {id, category, name, imageBase64}
-            workouts: [],
-            activeModalWorkoutId: null,
-            activeCategory: "🔥 PEITO",
-            currentFichaId: null
+        // --- AUTH ---
+        window.loginGoogle = async () => {
+            const provider = new GoogleAuthProvider();
+            try { await signInWithPopup(auth, provider); } 
+            catch (e) { alert("Erro ao fazer login: " + e.message); }
         };
-
-        // --- FUNÇÕES UTILITÁRIAS ---
-        const showLoader = () => document.getElementById('global-loader').classList.remove('hidden');
-        const hideLoader = () => document.getElementById('global-loader').classList.add('hidden');
-        const generateId = () => Math.random().toString(36).substr(2, 9);
-        const switchView = (viewId) => {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-        };
-
-        // --- COMPRESSÃO DE IMAGEM (CANVAS) ---
-        function compressImage(file, callback) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = event => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 150; // Bem pequeno, só para o ícone da planilha
-                    const scaleSize = MAX_WIDTH / img.width;
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scaleSize;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    callback(canvas.toDataURL('image/jpeg', 0.6));
-                }
-            }
-        }
-
-        // --- AUTENTICAÇÃO ---
-        document.getElementById('btn-login').addEventListener('click', async () => {
-            document.getElementById('login-loader').classList.remove('hidden');
-            try {
-                await signInWithPopup(auth, new GoogleAuthProvider());
-            } catch (error) {
-                alert("Erro ao logar: " + error.message);
-                document.getElementById('login-loader').classList.add('hidden');
-            }
-        });
-
-        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+        window.logout = () => signOut(auth);
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                window.state.currentUser = user;
-                switchView('dashboard-view');
-                await loadNetworkData();
+                state.user = user;
+                document.getElementById('login-view').classList.add('hidden');
+                document.getElementById('app-view').classList.remove('hidden');
+                document.getElementById('user-avatar').src = user.photoURL || 'https://via.placeholder.com/32';
+                
+                // Init Defaults
+                const today = new Date();
+                const monthStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+                document.getElementById('report-month').value = monthStr;
+                
+                window.switchTab('dashboard');
+                await loadAllData();
             } else {
-                window.state.currentUser = null;
-                document.getElementById('login-loader').classList.add('hidden');
-                switchView('login-view');
+                state.user = null;
+                document.getElementById('login-view').classList.remove('hidden');
+                document.getElementById('app-view').classList.add('hidden');
             }
         });
 
-        // --- DASHBOARD / REDE ---
-        window.toggleDashCref = () => {
-            const cat = document.getElementById('dash-m-cat').value;
-            document.getElementById('dash-m-cref').style.display = (cat === 'TE') ? 'none' : 'block';
+        // --- TABS ---
+        window.switchTab = (tab) => {
+            if (tab === 'dashboard') {
+                document.getElementById('dashboard-section').classList.remove('hidden');
+                document.getElementById('creator-section').classList.add('hidden');
+                document.getElementById('btn-tab-dashboard').classList.add('btn-primary');
+                document.getElementById('btn-tab-dashboard').classList.remove('border', 'border-transparent', 'hover:bg-black', 'hover:bg-opacity-20');
+                document.getElementById('btn-tab-creator').classList.remove('btn-primary');
+                document.getElementById('btn-tab-creator').classList.add('border', 'border-transparent', 'hover:bg-black', 'hover:bg-opacity-20');
+            } else {
+                document.getElementById('dashboard-section').classList.add('hidden');
+                document.getElementById('creator-section').classList.remove('hidden');
+                document.getElementById('btn-tab-creator').classList.add('btn-primary');
+                document.getElementById('btn-tab-creator').classList.remove('border', 'border-transparent', 'hover:bg-black', 'hover:bg-opacity-20');
+                document.getElementById('btn-tab-dashboard').classList.remove('btn-primary');
+                document.getElementById('btn-tab-dashboard').classList.add('border', 'border-transparent', 'hover:bg-black', 'hover:bg-opacity-20');
+                if(state.days.length === 0) window.addDay();
+            }
         };
 
-        async function loadNetworkData() {
-            showLoader();
-            const uid = window.state.currentUser.uid;
-            
-            // Carregar Unidades (Criadas pelo usuário logado)
-            const qUnits = query(collection(db, "units"), where("ownerUid", "==", uid));
-            const snapUnits = await getDocs(qUnits);
-            window.state.networkUnits = snapUnits.docs.map(d => ({id: d.id, ...d.data()}));
-
-            // Carregar Membros
-            const qMembers = query(collection(db, "members"), where("ownerUid", "==", uid));
-            const snapMembers = await getDocs(qMembers);
-            window.state.networkMembers = snapMembers.docs.map(d => ({id: d.id, ...d.data()}));
-
-            // Preencher Select de Unidades no Cadastro de Membro
-            const selUnit = document.getElementById('dash-sel-unit');
-            selUnit.innerHTML = '<option value="">Selecione a Unidade...</option>' + 
-                window.state.networkUnits.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
-
-            renderNetworkTree();
-            hideLoader();
+        // --- FIREBASE LOADERS ---
+        async function loadAllData() {
+            await Promise.all([loadUnits(), loadMembers(), loadCustomExercises(), loadWorkouts()]);
         }
 
-        document.getElementById('btn-add-unit').addEventListener('click', async () => {
-            const name = document.getElementById('dash-new-unit').value.trim();
-            if(!name) return alert("Digite o nome da unidade.");
-            showLoader();
-            await addDoc(collection(db, "units"), { ownerUid: window.state.currentUser.uid, name });
-            document.getElementById('dash-new-unit').value = '';
-            await loadNetworkData();
-        });
-
-        document.getElementById('btn-add-member').addEventListener('click', async () => {
-            const unitId = document.getElementById('dash-sel-unit').value;
-            const name = document.getElementById('dash-m-name').value.trim();
-            const cpf = document.getElementById('dash-m-cpf').value.trim();
-            const cat = document.getElementById('dash-m-cat').value;
-            const uf = document.getElementById('dash-m-uf').value.trim();
-            const cref = document.getElementById('dash-m-cref').value.trim();
-
-            if(!unitId || !name || !cpf || !uf) return alert("Preencha todos os campos obrigatórios.");
-            if(cat === 'PEF' && !cref) return alert("CREF é obrigatório para Profissional de Educação Física.");
-
-            showLoader();
-            await addDoc(collection(db, "members"), {
-                ownerUid: window.state.currentUser.uid,
-                unitId, name, cpf, category: cat, uf, cref: (cat==='PEF'?cref:'')
+        async function loadUnits() {
+            const q = query(collection(db, `networks/${state.user.uid}/units`), orderBy("name"));
+            const snap = await getDocs(q);
+            state.units = snap.docs.map(d => ({id: d.id, ...d.data()}));
+            
+            // Popula Lists e Selects
+            const list = document.getElementById('units-list');
+            list.innerHTML = state.units.map(u => `<div class="p-2 border-b border-gray-600 flex justify-between text-sm"><span>${u.name}</span> <button onclick="window.deleteUnit('${u.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div>`).join('');
+            
+            const selects = ['mem-unit', 'ctx-unit'];
+            selects.forEach(id => {
+                const el = document.getElementById(id);
+                el.innerHTML = '<option value="">Selecione...</option>' + state.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
             });
-            document.getElementById('dash-m-name').value = '';
-            document.getElementById('dash-m-cpf').value = '';
-            document.getElementById('dash-m-cref').value = '';
-            await loadNetworkData();
-        });
+        }
 
-        function renderNetworkTree() {
-            const tree = document.getElementById('network-tree');
-            tree.innerHTML = '';
-            if(window.state.networkUnits.length === 0) {
-                tree.innerHTML = '<p class="text-sm opacity-50">Nenhuma unidade cadastrada.</p>';
+        async function loadMembers() {
+            const q = query(collection(db, `networks/${state.user.uid}/members`), orderBy("name"));
+            const snap = await getDocs(q);
+            state.members = snap.docs.map(d => ({id: d.id, ...d.data()}));
+            
+            const list = document.getElementById('members-list');
+            list.innerHTML = state.members.map(m => {
+                const u = state.units.find(x => x.id === m.unitId);
+                return `<div class="p-2 border-b border-gray-600 flex justify-between text-xs">
+                    <div><b>${m.name}</b> (${m.cat})<br><span class="opacity-60">${u ? u.name : 'Sem unidade'}</span></div>
+                    <button onclick="window.deleteMember('${m.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
+                </div>`
+            }).join('');
+        }
+
+        async function loadCustomExercises() {
+            const snap = await getDocs(collection(db, `networks/${state.user.uid}/customExercises`));
+            state.customExercises = snap.docs.map(d => d.data());
+        }
+
+        window.loadWorkouts = async () => {
+            const monthStr = document.getElementById('report-month').value; // YYYY-MM
+            if(!monthStr) return;
+            
+            // Simples filtro por prefixo da data ISO armazenada (YYYY-MM)
+            const snap = await getDocs(collection(db, `networks/${state.user.uid}/workouts`));
+            const allW = snap.docs.map(d => ({id: d.id, ...d.data()}));
+            state.workoutsHistory = allW.filter(w => w.createdAt && w.createdAt.startsWith(monthStr));
+            
+            renderReport();
+        };
+
+        // --- GESTÃO CRUD ---
+        window.openModal = id => document.getElementById(id).classList.remove('hidden');
+        window.closeModal = id => document.getElementById(id).classList.add('hidden');
+        
+        window.saveUnit = async () => {
+            const name = document.getElementById('unit-name').value.trim();
+            if(!name) return;
+            await addDoc(collection(db, `networks/${state.user.uid}/units`), { name });
+            document.getElementById('unit-name').value = '';
+            window.closeModal('unit-modal');
+            loadUnits();
+        };
+        window.deleteUnit = async (id) => {
+            if(confirm("Excluir unidade?")) { await deleteDoc(doc(db, `networks/${state.user.uid}/units/${id}`)); loadUnits(); }
+        }
+
+        window.toggleMemCref = () => {
+            const cat = document.getElementById('mem-cat').value;
+            document.getElementById('mem-cref-group').style.display = cat === 'PEF' ? 'grid' : 'none';
+        };
+
+        window.saveMember = async () => {
+            const name = document.getElementById('mem-name').value.trim();
+            const cpf = document.getElementById('mem-cpf').value.trim();
+            const unitId = document.getElementById('mem-unit').value;
+            const cat = document.getElementById('mem-cat').value;
+            const cref = document.getElementById('mem-cref').value;
+            const stateUf = document.getElementById('mem-state').value;
+            
+            if(!name || !unitId) { alert("Nome e Unidade são obrigatórios"); return; }
+            
+            await addDoc(collection(db, `networks/${state.user.uid}/members`), { name, cpf, unitId, cat, cref, stateUf });
+            window.closeModal('member-modal');
+            loadMembers();
+        };
+        window.deleteMember = async (id) => {
+            if(confirm("Excluir membro?")) { await deleteDoc(doc(db, `networks/${state.user.uid}/members/${id}`)); loadMembers(); }
+        }
+
+        // --- DASHBOARD REPORT ---
+        function renderReport() {
+            const summaryDiv = document.getElementById('report-summary');
+            const listDiv = document.getElementById('workouts-history-list');
+            
+            let htmlSummary = `<div class="flex justify-between py-1 font-bold border-b border-gray-600"><span>Total Geral:</span> <span>${state.workoutsHistory.length} fichas</span></div>`;
+            
+            // Agrupar por unidade -> membro
+            const counts = {};
+            state.workoutsHistory.forEach(w => {
+                if(!counts[w.unitId]) counts[w.unitId] = { total: 0, members: {} };
+                counts[w.unitId].total++;
+                if(!counts[w.unitId].members[w.memberId]) counts[w.unitId].members[w.memberId] = 0;
+                counts[w.unitId].members[w.memberId]++;
+            });
+
+            for(const uId in counts) {
+                const uName = state.units.find(u => u.id === uId)?.name || 'Desconhecida';
+                htmlSummary += `<div class="mt-2 font-bold text-primary">${uName} (Total: ${counts[uId].total})</div>`;
+                for(const mId in counts[uId].members) {
+                    const mName = state.members.find(m => m.id === mId)?.name || 'Desconhecido';
+                    htmlSummary += `<div class="flex justify-between pl-2 text-xs"><span>- ${mName}</span> <span>${counts[uId].members[mId]}</span></div>`;
+                }
+            }
+            summaryDiv.innerHTML = htmlSummary || '<p class="opacity-50">Sem dados no mês.</p>';
+
+            // Lista Histórico
+            // Ordenar decrescente
+            const sortedHistory = [...state.workoutsHistory].sort((a,b) => b.createdAt.localeCompare(a.createdAt));
+            
+            listDiv.innerHTML = sortedHistory.map(w => {
+                const mName = state.members.find(m => m.id === w.memberId)?.name || '?';
+                
+                // Verificar Validade
+                let isExpired = false;
+                if(w.createdAt) {
+                    const createdDate = new Date(w.createdAt);
+                    const daysValid = parseInt(w.student.validity.replace(/\D/g, '')) || 30;
+                    const expireDate = new Date(createdDate.getTime() + (daysValid * 24 * 60 * 60 * 1000));
+                    isExpired = new Date() > expireDate;
+                }
+
+                return `
+                <div class="p-3 bg-black bg-opacity-20 rounded border ${isExpired ? 'border-red-500 border-opacity-50' : 'border-gray-600'}">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="font-bold text-sm">${w.student.name || 'Sem nome'}</span>
+                            ${isExpired ? '<span class="ml-2 text-[10px] bg-red-600 px-1.5 py-0.5 rounded text-white">VENCIDA</span>' : ''}
+                            <div class="text-[10px] opacity-70">Criado em: ${w.createdAt ? w.createdAt.substring(0,10).split('-').reverse().join('/') : '-'} | Por: ${mName}</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="window.loadWorkoutToCreator('${w.id}')" class="text-xs bg-primary px-2 py-1 rounded">Carregar</button>
+                            <button onclick="window.deleteWorkout('${w.id}')" class="text-xs text-red-500"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.deleteWorkout = async (id) => {
+            if(confirm("Apagar ficha do histórico?")) { await deleteDoc(doc(db, `networks/${state.user.uid}/workouts/${id}`)); loadWorkouts(); }
+        }
+
+        // --- PRANCHETA LÓGICA ---
+        window.updateCtxMembers = () => {
+            const uid = document.getElementById('ctx-unit').value;
+            const sel = document.getElementById('ctx-member');
+            sel.innerHTML = '<option value="">Selecione o Profissional...</option>';
+            if(!uid) return;
+            const filtered = state.members.filter(m => m.unitId === uid);
+            sel.innerHTML += filtered.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+            window.applyMemberContext();
+        }
+
+        window.applyMemberContext = () => {
+            const mid = document.getElementById('ctx-member').value;
+            const area = document.getElementById('assembly-area');
+            const warn = document.getElementById('ctx-warning');
+            
+            if(!mid) {
+                area.classList.add('opacity-50', 'pointer-events-none');
+                warn.classList.remove('hidden');
+                state.creatorMemberId = null;
                 return;
             }
-
-            window.state.networkUnits.forEach(u => {
-                const members = window.state.networkMembers.filter(m => m.unitId === u.id);
-                const memHtml = members.map(m => `
-                    <div class="flex justify-between items-center bg-black bg-opacity-20 p-2 rounded mt-1 ml-4 border border-gray-600">
-                        <div>
-                            <span class="font-bold text-sm text-primary">${m.name}</span> <span class="text-[10px] opacity-70">(${m.category})</span>
-                        </div>
-                        <button onclick="enterApp('${m.id}')" class="bg-primary hover:bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold shadow">
-                            Acessar Fichas <i class="fas fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                `).join('');
-
-                tree.innerHTML += `
-                    <div class="card p-3 rounded bg-black bg-opacity-10 border border-gray-600">
-                        <h3 class="font-bold text-md"><i class="fas fa-building text-gray-400 mr-2"></i> ${u.name}</h3>
-                        ${memHtml || '<p class="text-xs opacity-50 ml-6 mt-1">Nenhum membro nesta unidade.</p>'}
-                    </div>
-                `;
-            });
-        }
-
-        // --- APP VIEW INIT ---
-        window.enterApp = async (memberId) => {
-            window.state.activeMember = window.state.networkMembers.find(m => m.id === memberId);
-            document.getElementById('app-active-member').innerText = `${window.state.activeMember.name} | ${window.state.activeMember.category}`;
             
-            // Configurar textos e lógicas baseadas no PEF ou TE
-            renderHealthCheckboxes();
+            area.classList.remove('opacity-50', 'pointer-events-none');
+            warn.classList.add('hidden');
+            state.creatorMemberId = mid;
+            state.creatorUnitId = document.getElementById('ctx-unit').value;
+
+            // Renderizar Saúde baseada no tipo do profissional
+            const member = state.members.find(m => m.id === mid);
+            const healthDict = member && member.cat === 'TE' ? healthTE : healthPEF;
             
-            // Limpar ficha atual e adicionar Segunda-Feira
-            window.state.workouts = [{ id: generateId(), title: "TREINO SEGUNDA-FEIRA", exercises: [] }];
-            window.state.currentFichaId = null;
-            renderWorkoutsApp();
-            
-            // Carregar Custom Exercises da Unidade
-            await loadCustomExercises();
-            
-            switchView('app-view');
-        };
-
-        window.backToDashboard = () => {
-            if(confirm("Sair sem salvar?")) switchView('dashboard-view');
-        };
-
-        // --- LÓGICA DO APP (ALUNO, SAÚDE) ---
-        window.changeTheme = () => {
-            document.body.setAttribute('data-theme', document.getElementById('stu-gender').value);
-        };
-
-        window.calculateIMC = () => {
-            const w = parseFloat(document.getElementById('stu-weight').value);
-            const h = parseFloat(document.getElementById('stu-height').value);
-            const display = document.getElementById('imc-display');
-            if (w > 0 && h > 0) {
-                const imc = (w / (h * h)).toFixed(1);
-                let cls = imc < 18.5 ? "Baixo" : imc < 24.9 ? "Normal" : imc < 29.9 ? "Sobrepeso" : "Obesidade";
-                display.innerHTML = `<span class="bg-primary text-white px-2 py-0.5 rounded text-[10px] font-bold">IMC: ${imc} (${cls})</span>`;
-            } else display.innerHTML = '';
-        };
-
-        window.updateObjText = () => {
-            const obj = document.getElementById('stu-objective').value;
-            document.getElementById('obj-info').innerText = objectiveData[obj] || '';
-        };
-
-        function renderHealthCheckboxes() {
+            // Manter checks se houver
+            const checked = Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value);
             const container = document.getElementById('health-container');
-            const dataObj = window.state.activeMember.category === 'PEF' ? healthDataPEF : healthDataTE;
-            container.innerHTML = Object.keys(dataObj).map(opt => `
-                <label class="flex items-start space-x-1 cursor-pointer">
-                    <input type="checkbox" value="${opt}" class="health-cb mt-0.5 w-3 h-3 text-primary">
-                    <span class="font-medium">${opt}</span>
+            container.innerHTML = Object.keys(healthDict).map(k => `
+                <label class="flex items-start space-x-1 cursor-pointer p-1 rounded hover:bg-white hover:bg-opacity-5 border border-transparent">
+                    <input type="checkbox" value="${k}" ${checked.includes(k)?'checked':''} class="health-cb mt-0.5 rounded text-primary focus:ring-primary w-3 h-3">
+                    <span class="leading-tight">${k}</span>
                 </label>
             `).join('');
-            window.updateObjText(); // Força update do obj também
         }
 
-        // --- LÓGICA DE MONTAGEM DE TREINOS ---
-        window.addWorkout = () => {
-            const c = window.state.workouts.length;
-            window.state.workouts.push({ id: generateId(), title: c < 7 ? `TREINO ${daysOfWeek[c]}` : `NOVO TREINO ${c+1}`, exercises: [] });
-            renderWorkoutsApp();
+        window.calcIMC = () => {
+            const w = parseFloat(document.getElementById('stu-weight').value);
+            const h = parseFloat(document.getElementById('stu-height').value);
+            const disp = document.getElementById('imc-display');
+            if(w>0 && h>0) {
+                const imc = (w/(h*h)).toFixed(1);
+                let cls = imc<18.5?"Abaixo":imc<24.9?"Normal":imc<29.9?"Sobrepeso":"Obesidade";
+                disp.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-2 py-0.5 rounded text-xs border border-primary border-opacity-30">IMC: ${imc} (${cls})</span>`;
+            } else disp.innerHTML = '';
         };
 
-        window.duplicateWorkout = (id) => {
-            const w = window.state.workouts.find(w => w.id === id);
-            if(w) {
-                const copy = JSON.parse(JSON.stringify(w));
-                copy.id = generateId(); copy.title += " (Cópia)";
-                window.state.workouts.push(copy); renderWorkoutsApp();
-            }
-        };
-
-        window.removeWorkout = (id) => {
-            if(confirm("Excluir dia?")) { window.state.workouts = window.state.workouts.filter(w => w.id !== id); renderWorkoutsApp(); }
-        };
-
-        window.updateWorkoutTitle = (id, val) => { window.state.workouts.find(w => w.id === id).title = val; };
+        window.changeTheme = () => document.body.setAttribute('data-theme', document.getElementById('stu-gender').value);
         
-        window.removeExercise = (wId, exIdx) => { window.state.workouts.find(w => w.id === wId).exercises.splice(exIdx, 1); renderWorkoutsApp(); };
-        window.moveExercise = (wId, idx, dir) => {
-            const arr = window.state.workouts.find(w => w.id === wId).exercises;
-            if (dir === 'up' && idx > 0) { const t = arr[idx]; arr[idx] = arr[idx-1]; arr[idx-1] = t; }
-            else if (dir === 'down' && idx < arr.length-1) { const t = arr[idx]; arr[idx] = arr[idx+1]; arr[idx+1] = t; }
-            renderWorkoutsApp();
+        window.updateObjText = () => {
+            const val = document.getElementById('stu-objective').value;
+            const hint = document.getElementById('obj-hint');
+            if(objText[val]) { hint.innerText = objText[val]; hint.classList.remove('hidden'); }
+            else hint.classList.add('hidden');
         };
-        window.updateExercise = (wId, idx, field, val) => { window.state.workouts.find(w => w.id === wId).exercises[idx][field] = val; };
 
-        function renderWorkoutsApp() {
-            const cont = document.getElementById('workouts-container');
-            cont.innerHTML = window.state.workouts.map(w => `
-                <div class="card rounded-xl overflow-hidden shadow">
-                    <div class="p-2 border-b flex justify-between bg-black bg-opacity-20" style="border-color: var(--border-color)">
-                        <input type="text" value="${w.title}" onchange="updateWorkoutTitle('${w.id}', this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 uppercase">
-                        <div class="flex gap-1">
-                            <button onclick="duplicateWorkout('${w.id}')" class="text-xs p-1 text-gray-400 hover:text-white"><i class="fas fa-copy"></i></button>
-                            <button onclick="removeWorkout('${w.id}')" class="text-xs p-1 text-red-500 hover:text-white"><i class="fas fa-trash"></i></button>
+        // --- DAYS E EXERCISES ---
+        window.addDay = () => {
+            const idx = state.days.length;
+            state.days.push({
+                id: Math.random().toString(36).substr(2,9),
+                title: idx < 7 ? `TREINO ${dayNames[idx]}` : `NOVO TREINO ${idx+1}`,
+                exercises: []
+            });
+            renderDays();
+        };
+
+        window.removeDay = (id) => {
+            if(confirm("Remover este dia?")) { state.days = state.days.filter(d => d.id !== id); renderDays(); }
+        }
+
+        window.updateDayTitle = (id, val) => {
+            const d = state.days.find(x => x.id === id);
+            if(d) d.title = val;
+        }
+
+        window.moveEx = (dayId, exIdx, dir) => {
+            const d = state.days.find(x => x.id === dayId);
+            if(dir==='up' && exIdx>0) { const tmp = d.exercises[exIdx]; d.exercises[exIdx] = d.exercises[exIdx-1]; d.exercises[exIdx-1] = tmp; }
+            if(dir==='down' && exIdx<d.exercises.length-1) { const tmp = d.exercises[exIdx]; d.exercises[exIdx] = d.exercises[exIdx+1]; d.exercises[exIdx+1] = tmp; }
+            renderDays();
+        }
+        window.rmEx = (dayId, exIdx) => { const d = state.days.find(x => x.id === dayId); d.exercises.splice(exIdx,1); renderDays(); }
+        window.updEx = (dayId, exIdx, field, val) => { const d = state.days.find(x => x.id === dayId); d.exercises[exIdx][field] = val; }
+
+        function renderDays() {
+            const c = document.getElementById('days-container');
+            c.innerHTML = state.days.map(d => {
+                let exs = d.exercises.length ? d.exercises.map((ex, i) => `
+                    <div class="flex gap-2 items-center border-b border-gray-600 p-1">
+                        <div class="flex flex-col gap-1 hidden sm:flex">
+                            <button onclick="window.moveEx('${d.id}',${i},'up')" class="text-[8px] opacity-50 hover:opacity-100"><i class="fas fa-chevron-up"></i></button>
+                            <button onclick="window.moveEx('${d.id}',${i},'down')" class="text-[8px] opacity-50 hover:opacity-100"><i class="fas fa-chevron-down"></i></button>
                         </div>
+                        <div class="w-1/3 min-w-[120px]"><div class="text-[8px] opacity-50 uppercase">${ex.category.split(' ')[1] || ex.category}</div><div class="text-xs font-bold leading-tight">${ex.name}</div></div>
+                        <input value="${ex.sets}" onchange="window.updEx('${d.id}',${i},'sets',this.value)" class="input-field w-10 text-center text-xs p-1 rounded" placeholder="S">
+                        <span class="text-xs opacity-50">x</span>
+                        <input value="${ex.reps}" onchange="window.updEx('${d.id}',${i},'reps',this.value)" class="input-field w-12 text-center text-xs p-1 rounded" placeholder="R">
+                        <select onchange="window.updEx('${d.id}',${i},'technique',this.value)" class="input-field w-20 text-[10px] p-1 rounded">${techniques.map(t=>`<option ${ex.technique===t?'selected':''}>${t}</option>`).join('')}</select>
+                        <input value="${ex.obs}" onchange="window.updEx('${d.id}',${i},'obs',this.value)" class="input-field flex-1 min-w-[80px] text-xs p-1 rounded" placeholder="Obs">
+                        <button onclick="window.rmEx('${d.id}',${i})" class="text-red-500 text-xs ml-1"><i class="fas fa-times"></i></button>
                     </div>
-                    <div class="p-0">
-                        ${w.exercises.length === 0 ? '<div class="text-center p-3 text-xs opacity-50">Sem exercícios.</div>' : w.exercises.map((ex, idx) => `
-                            <div class="flex flex-wrap sm:flex-nowrap gap-2 p-2 items-center border-b border-opacity-10" style="border-color: var(--border-color)">
-                                <div class="flex flex-col gap-1 w-6">
-                                    <button onclick="moveExercise('${w.id}', ${idx}, 'up')" class="text-[10px] hover:text-primary"><i class="fas fa-chevron-up"></i></button>
-                                    <button onclick="moveExercise('${w.id}', ${idx}, 'down')" class="text-[10px] hover:text-primary"><i class="fas fa-chevron-down"></i></button>
-                                </div>
-                                ${ex.img ? `<img src="${ex.img}" class="w-8 h-8 rounded object-cover">` : ''}
-                                <div class="flex-1 w-full sm:w-auto">
-                                    <div class="text-[9px] opacity-60 uppercase">${ex.category}</div>
-                                    <div class="text-xs font-bold leading-tight">${ex.name}</div>
-                                </div>
-                                <div class="flex gap-1 items-center">
-                                    <input type="text" value="${ex.sets}" onchange="updateExercise('${w.id}', ${idx}, 'sets', this.value)" class="input-field w-8 text-center text-xs p-1" placeholder="S"> x
-                                    <input type="text" value="${ex.reps}" onchange="updateExercise('${w.id}', ${idx}, 'reps', this.value)" class="input-field w-12 text-center text-xs p-1" placeholder="R">
-                                    <select onchange="updateExercise('${w.id}', ${idx}, 'technique', this.value)" class="input-field text-[10px] p-1 w-20">
-                                        ${dbTechniques.map(t => `<option ${ex.technique===t?'selected':''}>${t}</option>`).join('')}
-                                    </select>
-                                    <input type="text" value="${ex.obs}" onchange="updateExercise('${w.id}', ${idx}, 'obs', this.value)" class="input-field w-24 text-xs p-1" placeholder="Obs">
-                                    <button onclick="removeExercise('${w.id}', ${idx})" class="text-red-500 p-1"><i class="fas fa-times"></i></button>
-                                </div>
-                            </div>
-                        `).join('')}
+                `).join('') : '<div class="text-xs opacity-50 p-2 text-center">Nenhum exercício</div>';
+
+                return `
+                <div class="card rounded-lg overflow-hidden border border-gray-600">
+                    <div class="bg-black bg-opacity-20 p-2 flex justify-between items-center border-b border-gray-600">
+                        <input value="${d.title}" onchange="window.updateDayTitle('${d.id}',this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 uppercase px-1">
+                        <button onclick="window.removeDay('${d.id}')" class="text-red-500 text-xs px-2"><i class="fas fa-trash"></i></button>
                     </div>
-                    <button onclick="openModal('${w.id}')" class="w-full text-primary py-2 text-xs font-bold hover:bg-primary hover:bg-opacity-10">+ ADD EXERCÍCIO AQUI</button>
+                    <div>${exs}</div>
+                    <button onclick="window.openExModal('${d.id}')" class="w-full text-primary text-xs py-2 bg-black bg-opacity-10 hover:bg-opacity-20 font-bold">+ ADICIONAR EXERCÍCIO</button>
                 </div>
+                `;
+            }).join('');
+        }
+
+        // --- MODAL DE EXERCÍCIOS ---
+        function getFullExercisesDict() {
+            const dict = JSON.parse(JSON.stringify(baseDbCategories));
+            state.customExercises.forEach(cx => {
+                if(!dict[cx.category]) dict[cx.category] = [];
+                if(!dict[cx.category].includes(cx.name)) dict[cx.category].push(cx.name);
+            });
+            // Sort arrays
+            for(let k in dict) dict[k].sort();
+            return dict;
+        }
+
+        window.openExModal = (dayId) => {
+            state.activeModalDayId = dayId;
+            window.openModal('exercise-modal');
+            window.renderExCats();
+            window.renderExList();
+        }
+
+        window.renderExCats = () => {
+            const dict = getFullExercisesDict();
+            const c = document.getElementById('modal-categories');
+            c.innerHTML = Object.keys(dict).map(cat => `
+                <button onclick="state.activeCategory='${cat}'; window.renderExCats(); window.renderExList()" class="w-full text-left px-2 py-1.5 rounded text-xs font-bold ${state.activeCategory===cat?'bg-primary text-white':'hover:bg-white hover:bg-opacity-5'}">${cat}</button>
             `).join('');
         }
 
-        // --- BANCO DE EXERCÍCIOS E CUSTOMIZAÇÃO NA NUVEM ---
-        async function loadCustomExercises() {
-            const q = query(collection(db, "custom_exercises"), where("unitId", "==", window.state.activeMember.unitId));
-            const snap = await getDocs(q);
-            window.state.customExercises = snap.docs.map(d => ({id: d.id, ...d.data()}));
+        window.renderExList = () => {
+            const dict = getFullExercisesDict();
+            const c = document.getElementById('modal-exercises');
+            const exs = dict[state.activeCategory] || [];
+            c.innerHTML = `<div class="grid grid-cols-2 md:grid-cols-3 gap-2">` + exs.map(ex => `
+                <button onclick="window.addExToDay('${ex}')" class="card p-2 text-left text-xs border hover:border-primary transition flex justify-between group">
+                    <span>${ex}</span><i class="fas fa-plus opacity-0 group-hover:opacity-100 text-primary"></i>
+                </button>
+            `).join('') + `</div>`;
         }
 
-        window.openModal = (wId) => { window.state.activeModalWorkoutId = wId; document.getElementById('exercise-modal').classList.remove('hidden'); renderModalCategories(); renderModalExercises(); };
-        window.closeModal = () => { document.getElementById('exercise-modal').classList.add('hidden'); };
-        window.setModalCategory = (cat) => { window.state.activeCategory = cat; renderModalCategories(); renderModalExercises(); };
-        
-        function renderModalCategories() {
-            document.getElementById('modal-categories').innerHTML = Object.keys(dbCategories).map(cat => `
-                <button onclick="setModalCategory('${cat}')" class="w-full text-left px-2 py-2 rounded text-xs font-bold ${window.state.activeCategory===cat?'bg-primary text-white':'hover:bg-white hover:bg-opacity-10'}">${cat}</button>
-            `).join('');
-        }
-
-        function renderModalExercises() {
-            // Merge defaults and customs
-            const defaults = dbCategories[window.state.activeCategory].map(name => ({name, img: null}));
-            const customs = window.state.customExercises.filter(c => c.category === window.state.activeCategory);
-            const all = [...defaults, ...customs];
-
-            document.getElementById('modal-exercises').innerHTML = `
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    ${all.map(ex => {
-                        const imgTag = ex.img ? `<img src="${ex.img}" class="w-8 h-8 rounded object-cover mr-2">` : `<i class="fas fa-dumbbell opacity-30 mr-2"></i>`;
-                        // Escape quotes for onclick
-                        const safeName = ex.name.replace(/'/g, "\\'");
-                        const safeImg = ex.img ? ex.img.replace(/'/g, "\\'") : '';
-                        return `
-                        <button onclick="addExerciseToWorkout('${safeName}', '${safeImg}')" class="card p-2 rounded text-left text-xs font-bold border hover:border-primary flex items-center group">
-                            ${imgTag}
-                            <span class="flex-1">${ex.name}</span>
-                            <i class="fas fa-plus opacity-0 group-hover:opacity-100 text-primary"></i>
-                        </button>`
-                    }).join('')}
-                </div>
-            `;
+        window.addExToDay = (exName) => {
+            const d = state.days.find(x => x.id === state.activeModalDayId);
+            if(d) {
+                const isCardio = state.activeCategory.includes("CARDIO");
+                d.exercises.push({ category: state.activeCategory, name: exName, sets: isCardio?'1':'3', reps: isCardio?'-':'10-12', technique:'Nenhuma', obs:''});
+                renderDays();
+                const container = document.getElementById('modal-exercises');
+                container.style.opacity = '0.5'; setTimeout(()=>container.style.opacity='1', 100);
+            }
         }
 
         window.saveCustomExercise = async () => {
-            const name = document.getElementById('new-ex-name').value.trim();
-            const fileInput = document.getElementById('new-ex-img');
-            if(!name) return alert("Digite o nome.");
+            const input = document.getElementById('new-custom-ex');
+            const name = input.value.trim();
+            if(!name) return;
+            
+            const newEx = { category: state.activeCategory, name: name };
+            await addDoc(collection(db, `networks/${state.user.uid}/customExercises`), newEx);
+            state.customExercises.push(newEx);
+            input.value = '';
+            window.renderExCats();
+            window.renderExList();
+        }
 
-            showLoader();
-            const cat = window.state.activeCategory;
-            const unitId = window.state.activeMember.unitId;
-
-            const saveToDb = async (base64Img = null) => {
-                await addDoc(collection(db, "custom_exercises"), { unitId, category: cat, name, img: base64Img });
-                await loadCustomExercises();
-                document.getElementById('new-ex-name').value = '';
-                fileInput.value = '';
-                renderModalExercises();
-                hideLoader();
-            };
-
-            if(fileInput.files && fileInput.files[0]) {
-                compressImage(fileInput.files[0], saveToDb);
-            } else {
-                saveToDb();
-            }
-        };
-
-        window.addExerciseToWorkout = (name, img) => {
-            const w = window.state.workouts.find(w => w.id === window.state.activeModalWorkoutId);
-            if(w) {
-                w.exercises.push({ category: window.state.activeCategory, name, img: img || null, sets: '3', reps: '10 a 12', technique: 'Nenhuma', obs: '' });
-                renderWorkoutsApp();
-            }
-        };
-
-        // --- SALVAR NA NUVEM, HISTÓRICO E IMPRIMIR ---
-        function getFormData() {
+        // --- SALVAR E IMPRIMIR ---
+        function getWorkoutData() {
             return {
-                studentName: document.getElementById('stu-name').value || 'Sem Nome',
-                stuAge: document.getElementById('stu-age').value,
-                stuWeight: document.getElementById('stu-weight').value,
-                stuHeight: document.getElementById('stu-height').value,
-                stuGender: document.getElementById('stu-gender').value,
-                stuLevel: document.getElementById('stu-level').value,
-                stuObjective: document.getElementById('stu-objective').value,
-                stuFreq: document.getElementById('stu-freq').value,
-                stuValidity: document.getElementById('stu-validity').value,
-                stuRecs: document.getElementById('stu-recs').value,
-                health: Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value)
+                memberId: state.creatorMemberId,
+                unitId: state.creatorUnitId,
+                createdAt: new Date().toISOString(),
+                student: {
+                    name: document.getElementById('stu-name').value,
+                    age: document.getElementById('stu-age').value,
+                    weight: document.getElementById('stu-weight').value,
+                    height: document.getElementById('stu-height').value,
+                    gender: document.getElementById('stu-gender').value,
+                    level: document.getElementById('stu-level').value,
+                    freq: document.getElementById('stu-freq').value,
+                    objective: document.getElementById('stu-objective').value,
+                    validity: document.getElementById('stu-validity').value,
+                    recs: document.getElementById('stu-recs').value,
+                    health: Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value)
+                },
+                days: state.days
             };
         }
 
-        window.generatePrintAndSave = async () => {
-            showLoader();
-            const m = window.state.activeMember;
-            const data = getFormData();
-            const dateStr = new Date().toLocaleDateString('pt-BR');
-            const monthYear = new Date().toISOString().substring(0, 7); // YYYY-MM para relatórios
-
-            const payload = {
-                memberId: m.id,
-                unitId: m.unitId,
-                date: dateStr,
-                monthYear: monthYear,
-                timestamp: Date.now(),
-                ...data,
-                workouts: window.state.workouts
-            };
-
-            try {
-                if(window.state.currentFichaId) {
-                    await setDoc(doc(db, "workouts", window.state.currentFichaId), payload);
-                } else {
-                    const docRef = await addDoc(collection(db, "workouts"), payload);
-                    window.state.currentFichaId = docRef.id;
-                }
-                
-                hideLoader();
-                executePrintHTML(payload, m);
-            } catch (e) {
-                hideLoader();
-                alert("Erro ao salvar: " + e.message);
-            }
-        };
-
-        window.openHistory = async () => {
-            showLoader();
-            const q = query(collection(db, "workouts"), where("unitId", "==", window.state.activeMember.unitId), orderBy("timestamp", "desc"));
-            const snap = await getDocs(q);
-            const list = document.getElementById('history-list');
-            list.innerHTML = '';
+        window.saveAndPrint = async () => {
+            if(!state.creatorMemberId) { alert("Selecione o Autor da Ficha antes de salvar/imprimir."); return; }
             
-            if(snap.empty) {
-                list.innerHTML = `<p class="text-center opacity-50">Nenhuma ficha salva nesta unidade.</p>`;
+            const data = getWorkoutData();
+            
+            // Save to Firebase
+            if(state.currentWorkoutId) {
+                await setDoc(doc(db, `networks/${state.user.uid}/workouts/${state.currentWorkoutId}`), data);
             } else {
-                snap.forEach(doc => {
-                    const d = doc.data();
-                    // Checagem de validade visual (simplificada para demonstração)
-                    const isOld = (Date.now() - d.timestamp) > (30 * 24 * 60 * 60 * 1000); 
-                    list.innerHTML += `
-                        <div class="card p-3 rounded border border-gray-600 flex justify-between items-center ${isOld ? 'opacity-60' : ''}">
-                            <div>
-                                <div class="font-bold text-sm">${d.studentName} ${isOld ? '<span class="text-[9px] bg-red-500 text-white px-1 rounded ml-1">Expirada</span>' : ''}</div>
-                                <div class="text-[10px] opacity-70">${d.date} | ${d.stuObjective} | Val: ${d.stuValidity}</div>
-                            </div>
-                            <div class="flex gap-2">
-                                <button onclick="loadHistoryItem('${doc.id}')" class="btn-primary px-2 py-1 rounded text-[10px] font-bold">CARREGAR</button>
-                                <button onclick="deleteHistoryItem('${doc.id}')" class="bg-red-500 text-white px-2 py-1 rounded text-[10px]"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                    `;
-                });
+                const res = await addDoc(collection(db, `networks/${state.user.uid}/workouts`), data);
+                state.currentWorkoutId = res.id;
             }
-            hideLoader();
-            document.getElementById('history-modal').classList.remove('hidden');
-        };
-
-        window.closeHistory = () => document.getElementById('history-modal').classList.add('hidden');
-
-        window.loadHistoryItem = async (id) => {
-            showLoader();
-            const docSnap = await getDoc(doc(db, "workouts", id));
-            if(docSnap.exists()) {
-                const item = docSnap.data();
-                window.state.currentFichaId = id;
-                
-                document.getElementById('stu-name').value = item.studentName || '';
-                document.getElementById('stu-age').value = item.stuAge || '';
-                document.getElementById('stu-weight').value = item.stuWeight || '';
-                document.getElementById('stu-height').value = item.stuHeight || '';
-                document.getElementById('stu-gender').value = item.stuGender || 'Masculino';
-                document.getElementById('stu-level').value = item.stuLevel || 'Iniciante';
-                document.getElementById('stu-objective').value = item.stuObjective || 'Emagrecimento';
-                document.getElementById('stu-freq').value = item.stuFreq || '3 dias';
-                document.getElementById('stu-validity').value = item.stuValidity || '30 dias';
-                document.getElementById('stu-recs').value = item.stuRecs || '';
-                
-                window.changeTheme();
-                window.calculateIMC();
-                window.updateObjText();
-
-                document.querySelectorAll('.health-cb').forEach(cb => cb.checked = (item.health || []).includes(cb.value));
-
-                window.state.workouts = item.workouts || [];
-                renderWorkoutsApp();
-                closeHistory();
-            }
-            hideLoader();
-        };
-
-        window.deleteHistoryItem = async (id) => {
-            if(confirm("Excluir permanentemente da nuvem?")) {
-                await deleteDoc(doc(db, "workouts", id));
-                if(window.state.currentFichaId === id) window.state.currentFichaId = null;
-                openHistory();
-            }
-        };
-
-        // --- RELATÓRIO DE PRODUTIVIDADE ---
-        document.getElementById('btn-report').addEventListener('click', () => {
-            const mSel = document.getElementById('report-month');
-            const uSel = document.getElementById('report-unit');
             
-            // Gerar ultimos 6 meses
-            let mHtml = '';
-            for(let i=0; i<6; i++) {
-                let d = new Date(); d.setMonth(d.getMonth()-i);
-                let val = d.toISOString().substring(0,7);
-                mHtml += `<option value="${val}">${val}</option>`;
-            }
-            mSel.innerHTML = mHtml;
-            uSel.innerHTML = '<option value="ALL">Todas as Unidades</option>' + window.state.networkUnits.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+            // Generate HTML for Print
+            const m = state.members.find(x => x.id === state.creatorMemberId);
+            const u = state.units.find(x => x.id === state.creatorUnitId);
             
-            document.getElementById('report-content').innerHTML = '<p class="text-sm opacity-50 text-center mt-10">Clique em Gerar.</p>';
-            document.getElementById('report-modal').classList.remove('hidden');
-        });
-
-        window.generateReport = async () => {
-            showLoader();
-            const month = document.getElementById('report-month').value;
-            const unitId = document.getElementById('report-unit').value;
+            const isPEF = m.cat === 'PEF';
+            const profLabel = isPEF ? 'Profissional de Educação Física' : 'Treinador Esportivo';
+            const crefText = isPEF ? `CREF: ${m.cref || '-'} - Estado: ${m.stateUf || '-'}` : '';
             
-            let q;
-            if(unitId === 'ALL') {
-                // Simplificação: Filtra no client se pegar todos, ideal é ter índice.
-                q = query(collection(db, "workouts"), where("monthYear", "==", month));
-            } else {
-                q = query(collection(db, "workouts"), where("monthYear", "==", month), where("unitId", "==", unitId));
-            }
+            let legalTextPEF = `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA: Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º estabelece que compete ao profissional coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados.`;
+            let legalTextTE = `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO: Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida no Brasil. As recomendações desta ficha possuem caráter orientativo. Este material não substitui avaliação médica. Em casos de doenças ou limitações, recomenda-se procurar profissional habilitado. O treinamento respeita os limites individuais, priorizando segurança dentro da atuação técnica e esportiva permitida por lei.`;
 
-            const snap = await getDocs(q);
-            const results = {}; // key: memberId, val: count
-            
-            snap.forEach(d => {
-                const mid = d.data().memberId;
-                results[mid] = (results[mid] || 0) + 1;
-            });
-
-            let html = `<table class="w-full text-sm mt-4"><tr class="bg-gray-800 text-white"><th class="p-2">Profissional</th><th class="p-2">Unidade</th><th class="p-2 text-center">Fichas Geradas</th></tr>`;
-            
-            let total = 0;
-            Object.keys(results).forEach(mid => {
-                const mem = window.state.networkMembers.find(m => m.id === mid);
-                if(mem) {
-                    const unitName = window.state.networkUnits.find(u => u.id === mem.unitId)?.name || 'N/A';
-                    html += `<tr class="border-b border-gray-700"><td class="p-2 font-bold">${mem.name}</td><td class="p-2 opacity-70">${unitName}</td><td class="p-2 text-center text-primary font-bold">${results[mid]}</td></tr>`;
-                    total += results[mid];
-                }
-            });
-
-            html += `<tr class="bg-gray-800 text-white"><th colspan="2" class="p-2 text-right">TOTAL GERAL NO MÊS:</th><th class="p-2 text-center text-xl text-primary">${total}</th></tr></table>`;
-            
-            html += `<button onclick="window.print()" class="mt-6 btn-primary w-full py-2 rounded font-bold"><i class="fas fa-print"></i> Imprimir Relatório</button>`;
-
-            document.getElementById('report-content').innerHTML = html;
-            hideLoader();
-        };
-
-
-        // --- IMPRESSÃO A4 PLANILHA ---
-        function executePrintHTML(d, m) {
             let imcStr = "-";
-            if(d.stuWeight && d.stuHeight) imcStr = (d.stuWeight / (d.stuHeight * d.stuHeight)).toFixed(1);
-            
-            const objTxt = objectiveData[d.stuObjective] || "";
-            const hData = m.category === 'PEF' ? healthDataPEF : healthDataTE;
-            
-            const profLabel = m.category === 'PEF' ? 'Profissional de Educação Física' : 'Treinador Esportivo';
-            const crefText = m.category === 'PEF' ? `CREF: ${m.cref} - Estado: ${m.uf}` : `Estado: ${m.uf}`;
-            
-            const legalTextPEF = `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA: Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º estabelece que compete ao profissional coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados nas áreas de atividades físicas e do desporto.`;
-            const legalTextTE = `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO: Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil, com atuação de caráter técnico e esportivo voltada à preparação, supervisão, orientação e acompanhamento de treinos. A atuação possui finalidade orientativa e não substitui avaliação médica. Em casos de doenças ou lesões, recomenda-se avaliação prévia por profissional habilitado. O treinamento proposto respeita os limites individuais, priorizando segurança.`;
+            const weight = parseFloat(data.student.weight);
+            const height = parseFloat(data.student.height);
+            if(weight>0 && height>0) imcStr = (weight/(height*height)).toFixed(1);
 
             let html = `
                 <div class="print-header">
-                    <h1 class="print-title">PLANILHA DE TREINAMENTO - ${d.stuObjective}</h1>
-                    <div class="prof-info">Prescrição feita por: ${m.name} (${profLabel}) | ${crefText}</div>
+                    <h1 class="print-title">Planilha de Treinamento - ${data.student.objective}</h1>
+                    <div class="prof-info">Prescrição feita por: ${m.name} (${profLabel})<br>${crefText}</div>
                 </div>
 
                 <div class="print-grid">
-                    <div><strong>Aluno:</strong> ${d.studentName}</div>
-                    <div><strong>Idade:</strong> ${d.stuAge} anos</div>
-                    <div><strong>Gênero:</strong> ${d.stuGender}</div>
-                    <div><strong>Validade:</strong> ${d.stuValidity.replace('Validade: ','')}</div>
-                    
-                    <div><strong>Peso:</strong> ${d.stuWeight} kg</div>
-                    <div><strong>Altura:</strong> ${d.stuHeight} m</div>
+                    <div class="full-row"><strong>Aluno:</strong> ${data.student.name || '-'}</div>
+                    <div><strong>Idade:</strong> ${data.student.age || '-'}</div>
+                    <div><strong>Peso:</strong> ${data.student.weight || '-'}kg</div>
+                    <div><strong>Altura:</strong> ${data.student.height || '-'}m</div>
                     <div><strong>IMC:</strong> ${imcStr}</div>
-                    <div><strong>Nível:</strong> ${d.stuLevel} | <strong>Freq:</strong> ${d.stuFreq}</div>
+                    
+                    <div><strong>Gênero:</strong> ${data.student.gender}</div>
+                    <div><strong>Nível:</strong> ${data.student.level}</div>
+                    <div><strong>Freq:</strong> ${data.student.freq}</div>
+                    <div><strong>Validade:</strong> ${data.student.validity.replace('Validade: ','')}</div>
                 </div>
             `;
 
-            if (objTxt || d.health.length > 0) {
+            const healthDict = isPEF ? healthPEF : healthTE;
+            const objRec = objText[data.student.objective] || "";
+            if(objRec || data.student.health.length > 0) {
                 html += `<div class="print-guidelines"><h4>Diretrizes de Perfil</h4><ul>`;
-                if(objTxt) html += `<li><strong>${d.stuObjective}:</strong> ${objTxt}</li>`;
-                d.health.forEach(h => {
-                    const cleanH = h.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu, '').trim();
-                    if(hData[h]) html += `<li><strong>${cleanH}:</strong> ${hData[h]}</li>`;
+                if(objRec) html += `<li><strong>Objetivo:</strong> ${objRec}</li>`;
+                data.student.health.forEach(k => {
+                    if(healthDict[k]) html += `<li><strong>${k.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu, '').trim()}:</strong> ${healthDict[k]}</li>`;
                 });
                 html += `</ul></div>`;
             }
 
-            d.workouts.forEach(w => {
-                html += `<div class="print-workout"><h3>${w.title}</h3><table>
-                            <thead><tr>
-                                <th style="width:40%">Exercício</th><th style="width:8%; text-align:center;">Séries</th>
-                                <th style="width:12%; text-align:center;">Reps</th><th style="width:15%">Técnica</th><th style="width:25%">Observações</th>
-                            </tr></thead><tbody>`;
-                if (w.exercises.length === 0) html += `<tr><td colspan="5" style="text-align:center;">Sem exercícios</td></tr>`;
-                else {
-                    w.exercises.forEach(ex => {
-                        const imgTag = ex.img ? `<img src="${ex.img}" class="ex-img">` : ``;
-                        html += `<tr>
-                            <td><div class="ex-name-container">${imgTag}<strong>${ex.name}</strong></div></td>
-                            <td style="text-align:center;">${ex.sets}</td><td style="text-align:center;">${ex.reps}</td>
-                            <td>${ex.technique==='Nenhuma'?'-':ex.technique}</td><td>${ex.obs||'-'}</td>
-                        </tr>`;
-                    });
-                }
+            data.days.forEach(d => {
+                html += `<div class="print-workout"><h3>${d.title}</h3><table><thead><tr>
+                    <th style="width:35%">Exercício</th><th style="width:8%;text-align:center">Séries</th><th style="width:10%;text-align:center">Reps</th><th style="width:15%">Técnica</th><th style="width:32%">Obs</th>
+                </tr></thead><tbody>`;
+                if(d.exercises.length === 0) html += `<tr><td colspan="5" style="text-align:center;font-style:italic">Sem exercícios</td></tr>`;
+                else d.exercises.forEach(ex => {
+                    html += `<tr><td><strong>${ex.name}</strong></td><td style="text-align:center">${ex.sets}</td><td style="text-align:center">${ex.reps}</td><td>${ex.technique==='Nenhuma'?'-':ex.technique}</td><td>${ex.obs||'-'}</td></tr>`;
+                });
                 html += `</tbody></table></div>`;
             });
 
             html += `<div class="print-footer-section">`;
-            if(d.stuRecs.trim()) html += `<strong>Recomendações do Profissional:</strong><p style="white-space: pre-wrap; margin:2px 0 8px 0;">${d.stuRecs}</p>`;
-            html += `<div class="legal-text">${m.category==='PEF'?legalTextPEF:legalTextTE}</div>
-                     <div style="text-align:center; margin-top:10px; font-size:7px;">Gerado em ${d.date} - PowFit Pro Master</div>
-                     </div>`;
+            if(data.student.recs) html += `<strong>Recomendações Manuais:</strong><br><p style="white-space:pre-wrap;margin:2px 0 6px 0">${data.student.recs}</p>`;
+            html += `<div class="legal-text">${isPEF ? legalTextPEF : legalTextTE}</div>
+                <div style="text-align:center; margin-top:8px; font-size:7px;">Ficha gerada em ${new Date().toLocaleDateString('pt-BR')} - PowFit Pro - Unidade: ${u?.name||'-'}</div>
+            </div>`;
 
             document.getElementById('print-area').innerHTML = html;
-            setTimeout(() => { window.print(); }, 400); // Atraso leve para renderizar imagens Base64
+            
+            // Reload history to reflect the saved item, then print
+            await window.loadWorkouts(); 
+            setTimeout(() => window.print(), 300);
+        }
+
+        // --- LOAD TO CREATOR ---
+        window.loadWorkoutToCreator = (id) => {
+            const w = state.workoutsHistory.find(x => x.id === id);
+            if(!w) return;
+            
+            state.currentWorkoutId = w.id;
+            
+            // Seletores de Contexto
+            document.getElementById('ctx-unit').value = w.unitId || '';
+            window.updateCtxMembers();
+            document.getElementById('ctx-member').value = w.memberId || '';
+            window.applyMemberContext();
+
+            // Form Aluno
+            document.getElementById('stu-name').value = w.student.name || '';
+            document.getElementById('stu-age').value = w.student.age || '';
+            document.getElementById('stu-weight').value = w.student.weight || '';
+            document.getElementById('stu-height').value = w.student.height || '';
+            document.getElementById('stu-gender').value = w.student.gender || 'Masculino';
+            document.getElementById('stu-level').value = w.student.level || 'Iniciante';
+            document.getElementById('stu-objective').value = w.student.objective || 'Emagrecimento';
+            document.getElementById('stu-freq').value = w.student.freq || 'Frequência: 3 dias';
+            document.getElementById('stu-validity').value = w.student.validity || 'Validade: 30 dias';
+            document.getElementById('stu-recs').value = w.student.recs || '';
+
+            window.changeTheme();
+            window.calcIMC();
+            window.updateObjText();
+
+            // Checks Saúde
+            document.querySelectorAll('.health-cb').forEach(cb => {
+                cb.checked = (w.student.health || []).includes(cb.value);
+            });
+
+            state.days = w.days || [];
+            renderDays();
+            
+            window.switchTab('creator');
+        }
+
+        // Relatório solto
+        window.printReport = () => {
+            const html = `
+                <div style="font-family: Arial; padding: 20px;">
+                    <h1 style="text-align:center; font-size: 18px; border-bottom: 2px solid #000; padding-bottom: 10px;">Relatório de Produtividade - ${document.getElementById('report-month').value}</h1>
+                    ${document.getElementById('report-summary').innerHTML}
+                </div>
+            `;
+            const printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>Relatório</title></head><body>');
+            printWindow.document.write(html);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            setTimeout(()=>printWindow.print(), 300);
         }
     </script>
 </body>
