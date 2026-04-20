@@ -2,294 +2,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PowFit Pro - Master Edition</title>
+    <title>PowFit Pro - Master Network Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Tema Masculino (Escuro Fitness) */
-            --bg-body: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --input-bg: #0f172a;
-            --input-border: #475569;
+            --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc; --text-muted: #94a3b8;
+            --border-color: #334155; --primary: #3b82f6; --primary-hover: #2563eb;
+            --input-bg: #0f172a; --input-border: #475569;
         }
         [data-theme="Feminino"] {
-            /* Tema Feminino (Rosa Moderno Elegante) */
-            --bg-body: #fdf2f8;
-            --bg-card: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #fbcfe8;
-            --primary: #ec4899;
-            --primary-hover: #db2777;
-            --input-bg: #f8fafc;
-            --input-border: #f1f5f9;
+            --bg-body: #fdf2f8; --bg-card: #ffffff; --text-main: #1e293b; --text-muted: #64748b;
+            --border-color: #fbcfe8; --primary: #ec4899; --primary-hover: #db2777;
+            --input-bg: #f8fafc; --input-border: #f1f5f9;
         }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); transition: all 0.3s ease; }
-        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); transition: all 0.3s ease; overflow-x: hidden; }
+        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.3s ease; }
         .input-field { background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--text-main); }
         .input-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
         .btn-primary { background-color: var(--primary); color: white; transition: 0.2s; }
         .btn-primary:hover { background-color: var(--primary-hover); }
         
-        /* Ocultar elementos na tela */
-        .hidden-screen { display: none !important; }
+        /* Oculta áreas específicas na tela e na impressão */
+        .hidden { display: none !important; }
         #print-area { display: none; }
 
-        /* Estilos de Impressão A4 - Estilo Planilha */
+        /* Estilos de Impressão (Estilo Planilha) */
         @media print {
             body { background: white !important; color: black !important; margin: 0; padding: 0; }
-            #app-root, .no-print { display: none !important; }
+            #app-screens, #login-screen, #nav-menu, .no-print, .modal-backdrop { display: none !important; }
             #print-area { display: block !important; padding: 10mm; font-family: 'Arial', sans-serif; font-size: 10px; }
             @page { size: A4; margin: 0; }
             
-            .print-header { border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; text-align: center; }
-            .print-title { font-size: 16px; font-weight: bold; margin: 0; text-transform: uppercase; }
-            .prof-info { font-size: 11px; margin-top: 4px; font-weight: bold; }
+            .print-header { border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end;}
+            .print-title { font-size: 16px; font-weight: bold; margin: 0; text-transform: uppercase;}
+            .prof-info { font-size: 10px; text-align: right; font-weight: bold;}
             
-            .print-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 15px; border: 1px solid #000; padding: 6px; }
+            .print-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin-bottom: 10px; border: 1px solid #000; padding: 6px; }
             .print-grid div { font-size: 10px; }
             
-            .print-guidelines { border: 1px solid #000; padding: 6px; margin-bottom: 15px; font-size: 9px; }
-            .print-guidelines h4 { margin: 0 0 4px 0; font-size: 10px; background: #eee; padding: 3px; text-transform: uppercase; }
+            .print-guidelines { border: 1px solid #000; padding: 6px; margin-bottom: 10px; font-size: 9px; }
+            .print-guidelines h4 { margin: 0 0 4px 0; font-size: 10px; text-transform: uppercase; background: #eee; padding: 2px;}
             .print-guidelines ul { margin: 0; padding-left: 15px; }
-            .print-guidelines li { margin-bottom: 2px; }
+            
+            .print-workout { margin-bottom: 10px; page-break-inside: avoid; }
+            .print-workout h3 { background: #e0e0e0; border: 1px solid #000; border-bottom: none; padding: 3px 6px; margin: 0; font-size: 11px; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 0; border: 1px solid #000; }
+            th, td { border: 1px solid #000; padding: 4px; text-align: left; font-size: 9px; vertical-align: middle;}
+            th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; }
+            
+            .ex-img-print { width: 30px; height: 30px; object-fit: cover; border-radius: 4px; display: inline-block; vertical-align: middle; margin-right: 5px; border: 1px solid #ccc;}
+            
+            .print-footer-section { margin-top: 10px; border: 1px solid #000; padding: 6px; font-size: 9px; page-break-inside: avoid;}
+            .legal-text { font-size: 8px; color: #333; text-align: justify; margin-top: 5px; font-style: italic;}
 
-            .print-workout { margin-bottom: 15px; page-break-inside: avoid; }
-            .print-workout h3 { background: #d1d5db; border: 1px solid #000; border-bottom: none; padding: 4px; margin: 0; font-size: 11px; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact;}
-            table { width: 100%; border-collapse: collapse; border: 1px solid #000; }
-            th, td { border: 1px solid #000; padding: 4px; text-align: center; font-size: 9px; vertical-align: middle; }
-            td.text-left { text-align: left; }
-            th { background-color: #f3f4f6; font-weight: bold; -webkit-print-color-adjust: exact; color-adjust: exact;}
-            .ex-img-print { width: 30px; height: 30px; object-fit: cover; border-radius: 4px; margin-right: 5px; vertical-align: middle; display: inline-block; }
-
-            .print-footer-section { margin-top: 15px; border: 1px solid #000; padding: 8px; page-break-inside: avoid; }
-            .legal-text { font-size: 7px; color: #333; text-align: justify; margin-top: 5px; font-style: italic; }
+            /* Relatórios */
+            .report-title { font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 15px; text-transform: uppercase;}
+            .report-unit { margin-bottom: 15px; border: 1px solid #000; padding: 10px;}
+            .report-unit h3 { background: #333; color: white; padding: 5px; margin: -10px -10px 10px -10px; -webkit-print-color-adjust: exact; color-adjust: exact;}
+            .report-member { display: flex; justify-content: space-between; border-bottom: 1px solid #ccc; padding: 4px 0;}
+            .report-total { font-weight: bold; font-size: 12px; margin-top: 10px; text-align: right;}
         }
+
         ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        
+        .loader { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 24px; height: 24px; -webkit-animation: spin 1s linear infinite; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body data-theme="Masculino">
+<body data-theme="Masculino" class="min-h-screen flex flex-col">
 
-    <div id="app-root">
-        <!-- TELA DE LOGIN -->
-        <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
-            <div class="card p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
-                <i class="fas fa-dumbbell text-5xl text-primary mb-4"></i>
-                <h1 class="text-3xl font-bold mb-2">PowFit Pro</h1>
-                <p class="text-sm var(--text-muted) mb-8">Plataforma Profissional de Prescrição & Gestão de Rede</p>
-                <button onclick="window.loginGoogle()" class="btn-primary w-full py-3 rounded-xl font-bold text-lg flex items-center justify-center gap-3">
-                    <i class="fab fa-google"></i> Entrar com Google
-                </button>
-            </div>
-        </div>
+    <!-- OVERLAY DE CARREGAMENTO GLOBAL -->
+    <div id="global-loader" class="fixed inset-0 bg-black bg-opacity-90 z-[100] flex flex-col items-center justify-center">
+        <div class="loader mb-4 w-12 h-12 border-4"></div>
+        <p class="text-white font-medium tracking-wider">Sincronizando Nuvem...</p>
+    </div>
 
-        <!-- TELA DE SETUP DE PERFIL (Primeiro Acesso) -->
-        <div id="setup-screen" class="hidden-screen min-h-screen flex items-center justify-center p-4">
-            <div class="card p-8 rounded-2xl shadow-2xl max-w-lg w-full">
-                <h2 class="text-2xl font-bold mb-6 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">Configuração de Perfil Profissional</h2>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Nome Completo</label>
-                        <input type="text" id="setup-name" class="input-field w-full rounded-lg px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Rede de Academias / Franquia</label>
-                        <input type="text" id="setup-network" class="input-field w-full rounded-lg px-3 py-2" placeholder="Ex: Power Fitness">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Unidade de Atuação</label>
-                        <input type="text" id="setup-unit" class="input-field w-full rounded-lg px-3 py-2" placeholder="Ex: Unidade Centro">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Categoria Profissional</label>
-                        <select id="setup-role" onchange="window.toggleSetupCref()" class="input-field w-full rounded-lg px-3 py-2">
-                            <option value="PEF">Profissional de Educação Física</option>
-                            <option value="TE">Treinador Esportivo</option>
-                        </select>
-                    </div>
-                    <div id="setup-cref-container" class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-sm font-medium mb-1">CREF</label>
-                            <input type="text" id="setup-cref" class="input-field w-full rounded-lg px-3 py-2" placeholder="000000">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Estado (UF)</label>
-                            <input type="text" id="setup-state" class="input-field w-full rounded-lg px-3 py-2" placeholder="SP">
-                        </div>
-                    </div>
-                    <button onclick="window.saveProfile()" class="btn-primary w-full py-3 rounded-xl font-bold mt-4">Salvar e Entrar no Sistema</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- TELA PRINCIPAL (DASHBOARD E FICHA) -->
-        <div id="main-screen" class="hidden-screen max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 pb-20">
+    <!-- TELA DE LOGIN -->
+    <div id="login-screen" class="flex-1 flex flex-col items-center justify-center p-6 hidden">
+        <div class="card p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
+            <i class="fas fa-dumbbell text-5xl text-primary mb-4"></i>
+            <h1 class="text-3xl font-bold mb-2">PowFit Pro</h1>
+            <p class="text-sm var(--text-muted) mb-8">Master Network Edition</p>
             
-            <!-- Navbar -->
-            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-black bg-opacity-20 p-4 rounded-xl border border-opacity-10" style="border-color: var(--border-color)">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-dumbbell text-2xl text-primary"></i>
-                    <div>
-                        <h1 class="text-xl font-bold leading-tight">PowFit Pro</h1>
-                        <p class="text-[10px] var(--text-muted)" id="nav-user-info">Carregando...</p>
-                    </div>
-                </div>
-                <div class="flex flex-wrap justify-center gap-2">
-                    <button onclick="window.switchTab('prescribe')" id="tab-btn-prescribe" class="px-4 py-2 rounded-lg font-medium text-sm transition bg-primary text-white"><i class="fas fa-pen"></i> Nova Ficha</button>
-                    <button onclick="window.switchTab('history')" id="tab-btn-history" class="px-4 py-2 rounded-lg font-medium text-sm transition hover:bg-black hover:bg-opacity-20"><i class="fas fa-chart-bar"></i> Gestão & Nuvem</button>
-                    <button onclick="window.switchTab('images')" id="tab-btn-images" class="px-4 py-2 rounded-lg font-medium text-sm transition hover:bg-black hover:bg-opacity-20"><i class="fas fa-images"></i> Banco de Imagens</button>
-                    <button onclick="window.logout()" class="px-4 py-2 rounded-lg font-medium text-sm transition text-red-400 hover:bg-red-500 hover:text-white"><i class="fas fa-sign-out-alt"></i> Sair</button>
-                </div>
+            <button onclick="loginGoogle()" class="w-full bg-white text-gray-800 hover:bg-gray-100 font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-3 transition shadow-md border border-gray-200">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6" alt="Google">
+                Entrar com Google
+            </button>
+            <p class="text-xs opacity-50 mt-4"><i class="fas fa-cloud"></i> Dados salvos em nuvem segura</p>
+        </div>
+    </div>
+
+    <!-- NAVEGAÇÃO SUPERIOR -->
+    <nav id="nav-menu" class="card border-b px-4 py-3 sticky top-0 z-50 hidden">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-dumbbell text-2xl text-primary"></i>
+                <span class="font-bold text-lg tracking-tight">PowFit Pro</span>
+            </div>
+            <div class="flex gap-1 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 hide-scrollbar">
+                <button onclick="switchTab('builder')" id="tab-builder" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition bg-primary text-white"><i class="fas fa-plus-circle mr-1"></i> Montar Ficha</button>
+                <button onclick="switchTab('network')" id="tab-network" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition hover:bg-black hover:bg-opacity-10"><i class="fas fa-sitemap mr-1"></i> Gestão de Rede</button>
+                <button onclick="switchTab('database')" id="tab-database" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition hover:bg-black hover:bg-opacity-10"><i class="fas fa-database mr-1"></i> Exercícios</button>
+                <button onclick="switchTab('history')" id="tab-history" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition hover:bg-black hover:bg-opacity-10"><i class="fas fa-history mr-1"></i> Nuvem</button>
+                <button onclick="switchTab('reports')" id="tab-reports" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition hover:bg-black hover:bg-opacity-10"><i class="fas fa-chart-bar mr-1"></i> Relatórios</button>
+            </div>
+            <button onclick="logout()" class="text-sm text-red-500 hover:text-red-400 font-medium"><i class="fas fa-sign-out-alt"></i> Sair</button>
+        </div>
+    </nav>
+
+    <!-- TELAS DA APLICAÇÃO -->
+    <div id="app-screens" class="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 hidden">
+        
+        <!-- ============================================== -->
+        <!-- ABA: MONTAR FICHA -->
+        <!-- ============================================== -->
+        <div id="screen-builder" class="screen-content">
+            <!-- Seleção do Profissional Responsável -->
+            <div class="card rounded-xl p-4 shadow-sm mb-6 bg-opacity-50 border-primary border-opacity-30">
+                <label class="block text-sm font-bold mb-2 text-primary"><i class="fas fa-id-badge"></i> Profissional Responsável pela Prescrição</label>
+                <select id="active-member" onchange="onMemberChange()" class="input-field w-full md:w-1/2 rounded-lg px-3 py-2 text-sm font-medium">
+                    <option value="">Selecione o membro da equipe...</option>
+                </select>
+                <p id="active-member-info" class="text-xs mt-2 opacity-70 italic"></p>
             </div>
 
-            <!-- ABA: PRESCREVER FICHA -->
-            <div id="tab-prescribe" class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6" id="builder-workspace" style="display: none;">
                 <!-- Coluna Esquerda: Dados -->
-                <div class="xl:col-span-4 space-y-4">
+                <div class="xl:col-span-4 space-y-6">
                     <div class="card rounded-xl p-5 shadow-sm">
                         <div class="flex justify-between items-center mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
-                            <h2 class="text-lg font-semibold flex items-center gap-2"><i class="fas fa-user text-primary"></i> Cadastro do Aluno</h2>
+                            <h2 class="text-lg font-semibold flex items-center gap-2"><i class="fas fa-user text-primary"></i> Aluno</h2>
                             <div id="imc-display"></div>
                         </div>
-                        <div class="space-y-3">
-                            <input type="text" id="stu-name" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Nome do aluno">
+                        <div class="space-y-4">
+                            <div><label class="block text-xs font-medium mb-1">Nome</label><input type="text" id="stu-name" class="input-field w-full rounded-lg px-3 py-2 text-sm"></div>
                             <div class="grid grid-cols-3 gap-2">
-                                <input type="number" id="stu-age" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Idade">
-                                <input type="number" id="stu-weight" oninput="window.calcIMC()" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Peso (kg)">
-                                <input type="number" id="stu-height" step="0.01" oninput="window.calcIMC()" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Alt (m)">
+                                <div><label class="block text-xs font-medium mb-1">Idade</label><input type="number" id="stu-age" class="input-field w-full rounded-lg px-3 py-2 text-sm"></div>
+                                <div><label class="block text-xs font-medium mb-1">Peso(kg)</label><input type="number" id="stu-weight" oninput="calcIMC()" class="input-field w-full rounded-lg px-3 py-2 text-sm"></div>
+                                <div><label class="block text-xs font-medium mb-1">Alt.(m)</label><input type="number" id="stu-height" step="0.01" oninput="calcIMC()" class="input-field w-full rounded-lg px-3 py-2 text-sm"></div>
                             </div>
                             <div class="grid grid-cols-2 gap-2">
-                                <select id="stu-gender" onchange="window.updateTheme()" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                                    <option value="Masculino">Masculino</option>
-                                    <option value="Feminino">Feminino</option>
-                                </select>
-                                <select id="stu-level" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                                    <option>Iniciante</option><option>Intermediário</option><option>Avançado</option>
+                                <div>
+                                    <label class="block text-xs font-medium mb-1">Gênero</label>
+                                    <select id="stu-gender" onchange="changeTheme()" class="input-field w-full rounded-lg px-3 py-2 text-sm"><option value="Masculino">Masculino</option><option value="Feminino">Feminino</option></select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium mb-1">Nível</label>
+                                    <select id="stu-level" class="input-field w-full rounded-lg px-3 py-2 text-sm"><option>Iniciante</option><option>Intermediário</option><option>Avançado</option></select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium mb-1">Objetivo (Gera diretriz)</label>
+                                <select id="stu-objective" class="input-field w-full rounded-lg px-3 py-2 text-sm">
+                                    <option>Emagrecimento</option><option>Hipertrofia</option><option>Definição</option><option>Condicionamento</option><option>Resistência</option><option>Força</option><option>Reabilitação</option><option>Saúde geral</option>
                                 </select>
                             </div>
-                            <select id="stu-objective" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                                <option value="Emagrecimento">Emagrecimento</option><option value="Hipertrofia">Hipertrofia</option>
-                                <option value="Definição">Definição</option><option value="Condicionamento">Condicionamento</option>
-                                <option value="Resistência">Resistência</option><option value="Força">Força</option>
-                                <option value="Reabilitação">Reabilitação</option><option value="Saúde geral">Saúde geral</option>
-                            </select>
-                            <select id="stu-freq" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                                <option>3 dias</option><option>5 dias</option><option>6 dias</option><option>Personalizado</option>
-                            </select>
-                            <select id="stu-validity" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                                <option>15 dias</option><option selected>30 dias</option><option>60 dias</option><option>90 dias</option>
-                            </select>
+                            <div>
+                                <label class="block text-xs font-medium mb-1">Frequência</label>
+                                <select id="stu-freq" class="input-field w-full rounded-lg px-3 py-2 text-sm"><option>3 dias</option><option>5 dias</option><option>6 dias</option><option>Personalizado</option></select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium mb-1">Validade</label>
+                                <select id="stu-validity" class="input-field w-full rounded-lg px-3 py-2 text-sm"><option>15 dias</option><option selected>30 dias</option><option>60 dias</option><option>90 dias</option></select>
+                            </div>
                         </div>
                     </div>
 
                     <div class="card rounded-xl p-5 shadow-sm">
-                        <h2 class="text-md font-semibold mb-2 flex items-center gap-2"><i class="fas fa-heartbeat text-primary"></i> Estado de Saúde</h2>
-                        <p class="text-[10px] opacity-70 mb-2">Gera orientações automáticas de acordo com seu perfil (PEF/TE).</p>
+                        <h2 class="text-lg font-semibold mb-2 flex items-center gap-2 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)"><i class="fas fa-notes-medical text-primary"></i> Saúde (Diretrizes)</h2>
                         <div class="grid grid-cols-2 gap-2 text-[11px]" id="health-container"></div>
                     </div>
                 </div>
 
                 <!-- Coluna Direita: Treinos -->
                 <div class="xl:col-span-8 space-y-4">
-                    <div class="flex justify-between items-center card p-4 rounded-xl border-dashed border-2">
-                        <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-clipboard text-primary"></i> Montagem</h2>
+                    <div class="flex justify-between items-center bg-opacity-10 p-4 rounded-xl card border-dashed border-2">
+                        <h2 class="text-xl font-bold"><i class="fas fa-clipboard-list text-primary mr-2"></i> Prancheta</h2>
                         <div class="flex gap-2">
-                            <button onclick="window.addDay()" class="btn-primary px-3 py-2 rounded-lg text-xs font-bold"><i class="fas fa-plus"></i> DIA</button>
-                            <button onclick="window.printAndSave()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-lg"><i class="fas fa-print"></i> SALVAR & IMPRIMIR</button>
+                            <button onclick="addWorkoutDay()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-medium"><i class="fas fa-plus mr-1"></i> Dia</button>
+                            <button onclick="saveAndPrint()" class="btn-primary px-4 py-2 rounded-lg text-sm font-bold shadow-lg"><i class="fas fa-print mr-1"></i> Salvar & Imprimir</button>
                         </div>
                     </div>
-                    <div id="workout-days-container" class="space-y-4"></div>
-                    <div class="card rounded-xl p-4 shadow-sm">
-                        <h2 class="text-sm font-semibold mb-2">Recomendações Livres</h2>
-                        <textarea id="stu-recs" rows="3" class="input-field w-full rounded-lg px-3 py-2 text-xs" placeholder="Hidratação, descanso..."></textarea>
+                    <div id="workouts-container" class="space-y-4"></div>
+                    <div class="card rounded-xl p-5 shadow-sm">
+                        <h2 class="text-sm font-bold mb-2"><i class="fas fa-pen text-primary mr-1"></i> Recomendações Livres</h2>
+                        <textarea id="stu-recs" rows="3" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Ex: Hidratação, execução..."></textarea>
                     </div>
-                </div>
-            </div>
-
-            <!-- ABA: GESTÃO & NUVEM (Relatório de Rede) -->
-            <div id="tab-history" class="hidden-screen space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="card p-6 rounded-xl text-center">
-                        <i class="fas fa-network-wired text-3xl text-primary mb-2"></i>
-                        <h3 class="font-bold text-lg" id="dash-network">Rede</h3>
-                        <p class="text-xs opacity-70">Sua Franquia</p>
-                    </div>
-                    <div class="card p-6 rounded-xl text-center">
-                        <i class="fas fa-map-marker-alt text-3xl text-primary mb-2"></i>
-                        <h3 class="font-bold text-lg" id="dash-unit">Unidade</h3>
-                        <p class="text-xs opacity-70">Sua Base</p>
-                    </div>
-                    <div class="card p-6 rounded-xl text-center">
-                        <i class="fas fa-file-invoice text-3xl text-primary mb-2"></i>
-                        <h3 class="font-bold text-lg" id="dash-count">0</h3>
-                        <p class="text-xs opacity-70">Fichas Geradas (Mês Atual)</p>
-                    </div>
-                </div>
-                
-                <div class="card rounded-xl p-5">
-                    <div class="flex justify-between items-center mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
-                        <h2 class="text-lg font-bold"><i class="fas fa-cloud text-primary"></i> Histórico de Fichas da Equipe (Nuvem)</h2>
-                        <button onclick="window.loadHistoryCloud()" class="text-xs btn-primary px-3 py-1 rounded"><i class="fas fa-sync"></i> Atualizar</button>
-                    </div>
-                    <div id="cloud-history-list" class="space-y-2 max-h-96 overflow-y-auto pr-2">
-                        <!-- Itens carregados via JS -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- ABA: BANCO DE IMAGENS -->
-            <div id="tab-images" class="hidden-screen space-y-4">
-                <div class="card p-5 rounded-xl text-center border-dashed border-2">
-                    <h2 class="text-xl font-bold mb-2">Banco de Imagens Customizado</h2>
-                    <p class="text-sm opacity-70 mb-4">Faça upload de miniaturas para os exercícios. Elas ficarão salvas na nuvem e sairão na impressão.</p>
-                    
-                    <div class="max-w-md mx-auto space-y-3 text-left">
-                        <select id="img-ex-select" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                            <option value="">-- Selecione o Exercício --</option>
-                            <!-- Povoado via JS -->
-                        </select>
-                        <input type="file" id="img-upload" accept="image/*" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                        <button onclick="window.saveExerciseImage()" class="btn-primary w-full py-2 rounded-lg font-bold"><i class="fas fa-upload"></i> Salvar Imagem na Nuvem</button>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="image-gallery">
-                    <!-- Galeria carregada via JS -->
                 </div>
             </div>
         </div>
 
-        <!-- MODAL DE EXERCÍCIOS -->
-        <div id="exercise-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-            <div class="card w-full max-w-5xl rounded-xl shadow-2xl flex flex-col h-[85vh]">
-                <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
-                    <h3 class="text-lg font-bold"><i class="fas fa-search text-primary mr-2"></i> Adicionar Exercício</h3>
-                    <button onclick="window.closeExModal()" class="text-gray-400 hover:text-red-500 text-2xl">&times;</button>
+        <!-- ============================================== -->
+        <!-- ABA: GESTÃO DE REDE -->
+        <!-- ============================================== -->
+        <div id="screen-network" class="screen-content hidden space-y-6">
+            <h2 class="text-2xl font-bold"><i class="fas fa-sitemap text-primary mr-2"></i> Gestão de Franquias e Equipe</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Unidades -->
+                <div class="card p-5 rounded-xl">
+                    <h3 class="text-lg font-bold mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">Unidades</h3>
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="new-unit-name" class="input-field flex-1 rounded px-3 py-2 text-sm" placeholder="Nome da Unidade (Ex: Matriz)">
+                        <button onclick="addUnit()" class="btn-primary px-4 rounded text-sm font-bold"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <div id="units-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
                 </div>
-                <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
-                    <div class="w-full md:w-1/4 border-r overflow-y-auto p-2" style="border-color: var(--border-color)" id="modal-categories"></div>
-                    <div class="w-full md:w-3/4 overflow-y-auto p-3 bg-black bg-opacity-5" id="modal-exercises"></div>
+
+                <!-- Membros -->
+                <div class="card p-5 rounded-xl">
+                    <h3 class="text-lg font-bold mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">Adicionar Membro</h3>
+                    <div class="space-y-3">
+                        <select id="member-unit" class="input-field w-full rounded px-3 py-2 text-sm"><option value="">Selecione a Unidade...</option></select>
+                        <input type="text" id="member-name" class="input-field w-full rounded px-3 py-2 text-sm" placeholder="Nome do Treinador">
+                        <input type="text" id="member-cpf" class="input-field w-full rounded px-3 py-2 text-sm" placeholder="CPF">
+                        <select id="member-role" onchange="toggleCrefNetwork()" class="input-field w-full rounded px-3 py-2 text-sm">
+                            <option value="PEF">Profissional de Educação Física (PEF)</option>
+                            <option value="TE">Treinador Esportivo (TE)</option>
+                        </select>
+                        <div id="cref-box" class="grid grid-cols-2 gap-2">
+                            <input type="text" id="member-cref" class="input-field w-full rounded px-3 py-2 text-sm" placeholder="CREF">
+                            <input type="text" id="member-state" class="input-field w-full rounded px-3 py-2 text-sm" placeholder="Estado (UF)">
+                        </div>
+                        <button onclick="addMember()" class="w-full btn-primary py-2 rounded font-bold mt-2">Cadastrar Membro</button>
+                    </div>
                 </div>
+            </div>
+
+            <!-- Lista de Membros Cadastrados -->
+            <div class="card p-5 rounded-xl">
+                <h3 class="text-lg font-bold mb-4">Equipe Cadastrada</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm whitespace-nowrap">
+                        <thead class="bg-black bg-opacity-10">
+                            <tr><th class="p-2">Nome</th><th class="p-2">Unidade</th><th class="p-2">Categoria</th><th class="p-2">Documento</th><th class="p-2">Ação</th></tr>
+                        </thead>
+                        <tbody id="members-table-body" class="divide-y divide-gray-500 divide-opacity-20"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- ABA: BANCO DE EXERCÍCIOS -->
+        <!-- ============================================== -->
+        <div id="screen-database" class="screen-content hidden space-y-6">
+            <h2 class="text-2xl font-bold"><i class="fas fa-database text-primary mr-2"></i> Customizar Banco de Exercícios</h2>
+            <div class="card p-5 rounded-xl flex flex-col md:flex-row gap-6">
+                <div class="flex-1 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Categoria</label>
+                        <select id="custom-ex-cat" class="input-field w-full rounded px-3 py-2 text-sm"></select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Nome do Exercício</label>
+                        <input type="text" id="custom-ex-name" class="input-field w-full rounded px-3 py-2 text-sm" placeholder="Ex: Supino Máquina Convergente">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Imagem Demonstrativa (Opcional)</label>
+                        <input type="file" id="custom-ex-img" accept="image/*" class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-hover">
+                        <p class="text-[10px] opacity-60 mt-1">Imagens serão comprimidas automaticamente para economizar espaço.</p>
+                    </div>
+                    <button onclick="saveCustomExercise()" class="btn-primary px-6 py-2 rounded font-bold w-full"><i class="fas fa-save mr-1"></i> Adicionar ao Banco</button>
+                </div>
+                <div class="flex-1 border-l pl-0 md:pl-6 border-opacity-20 mt-4 md:mt-0" style="border-color: var(--border-color)">
+                    <h3 class="font-bold mb-3">Exercícios Customizados Cadastrados</h3>
+                    <div id="custom-ex-list" class="space-y-2 max-h-64 overflow-y-auto pr-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- ABA: NUVEM / HISTÓRICO -->
+        <!-- ============================================== -->
+        <div id="screen-history" class="screen-content hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold"><i class="fas fa-cloud text-primary mr-2"></i> Arquivo em Nuvem</h2>
+                <input type="text" id="search-history" oninput="renderHistory()" class="input-field rounded-lg px-3 py-2 text-sm w-64" placeholder="Buscar aluno...">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="history-grid"></div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- ABA: RELATÓRIOS -->
+        <!-- ============================================== -->
+        <div id="screen-reports" class="screen-content hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold"><i class="fas fa-chart-bar text-primary mr-2"></i> Produtividade Mensal</h2>
+                <button onclick="printReport()" class="btn-primary px-4 py-2 rounded-lg font-bold"><i class="fas fa-print mr-1"></i> Imprimir Relatório</button>
+            </div>
+            <div class="card p-5 rounded-xl">
+                <div class="flex gap-4 mb-6">
+                    <select id="report-month" onchange="generateReport()" class="input-field rounded px-3 py-2 text-sm w-32"></select>
+                    <select id="report-year" onchange="generateReport()" class="input-field rounded px-3 py-2 text-sm w-32"></select>
+                </div>
+                <div id="report-content" class="bg-black bg-opacity-5 p-6 rounded-lg border border-opacity-20" style="border-color: var(--border-color);">
+                    <!-- Relatorio JS -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL DE SELEÇÃO DE EXERCÍCIOS -->
+    <div id="exercise-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-2 sm:p-4 modal-backdrop">
+        <div class="card w-full max-w-6xl rounded-xl shadow-2xl flex flex-col h-[90vh]">
+            <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
+                <h3 class="text-lg font-bold"><i class="fas fa-search text-primary mr-2"></i> Adicionar Exercício</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 transition-colors text-2xl leading-none">&times;</button>
+            </div>
+            <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
+                <div class="w-full md:w-1/4 border-r overflow-y-auto p-2 space-y-1" style="border-color: var(--border-color)" id="modal-categories"></div>
+                <div class="w-full md:w-3/4 overflow-y-auto p-4 bg-black bg-opacity-5" id="modal-exercises"></div>
             </div>
         </div>
     </div>
 
-    <!-- ÁREA DE IMPRESSÃO (Oculta) -->
+    <!-- ÁREA DE IMPRESSÃO -->
     <div id="print-area"></div>
 
+    <!-- FIREBASE & LÓGICA DO APP -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
+        // CONFIGURAÇÃO FIREBASE DO USUÁRIO
         const firebaseConfig = {
             apiKey: "AIzaSyBIPqTYYkG5vHr57CndPCmxUeACncNAobM",
             authDomain: "powfitpro-582df.firebaseapp.com",
@@ -299,363 +341,468 @@
             appId: "1:1080284745812:web:56729b17fcdd3d44aaddc1",
             measurementId: "G-GVPV7SSBTB"
         };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- BANCO DE DADOS LOCAL ---
-        const dbCat = {
+        // --- BANCO DE DADOS LOCAL (ESTÁTICO + CUSTOMIZADO) ---
+        const healthPEF = {
+            "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.",
+            "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.",
+            "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico. Combinar musculação e cardio moderado.",
+            "🔴 Obesidade": "Iniciar com exercícios de baixo impacto. Evolução gradual, priorizando saúde e segurança.",
+            "⚖️ Baixo peso": "Foco em musculação para ganho de massa. Treinos moderados com alimentação adequada.",
+            "🍬 Diabetes": "Treinos regulares moderados. Monitorar glicemia e evitar treinos em jejum.",
+            "❤️ Hipertensão": "Treinos moderados, evitar prender a respiração. Priorizar controle da intensidade.",
+            "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação e intensidade leve a moderada.",
+            "💔 Problemas cardíacos": "Treinos leves com liberação médica. Monitorar frequência cardíaca.",
+            "🦴 Problemas articulares": "Evitar impacto. Priorizar exercícios controlados e máquinas.",
+            "🫁 Problemas respiratórios": "Treinos leves a moderados com progressão gradual. Atenção à respiração.",
+            "⚠️ Lesões": "Adaptar exercícios. Evitar dor e focar na recuperação.",
+            "🤰 Gestante": "Treinos leves a moderados, sem impacto ou risco. Foco em mobilidade e bem-estar.",
+            "🤱 Lactante": "Treinar normalmente com atenção à hidratação e energia.",
+            "👴 Idoso": "Foco em força, equilíbrio e mobilidade. Intensidade moderada com segurança."
+        };
+
+        const healthTE = {
+            "🟢 Saudável": "Manter treinos regulares de 3–5x por semana, combinando musculação e atividades cardiovasculares.",
+            "⚪ Sedentário": "O início deve ser gradual, com treinos leves e foco na adaptação do corpo.",
+            "🟡 Sobrepeso": "A prática regular de musculação associada ao cardio pode contribuir para melhora do condicionamento físico.",
+            "🔴 Obesidade": "Recomendado iniciar com exercícios de menor impacto e progressão gradual.",
+            "⚖️ Baixo peso": "A musculação pode auxiliar no ganho de massa muscular associada a alimentação e descanso.",
+            "🍬 Diabetes": "Manter acompanhamento médico regular. Interromper em caso de alteração de glicemia.",
+            "❤️ Hipertensão": "Evitar prender a respiração (Manobra de Valsalva) e controlar a intensidade.",
+            "🔵 Hipotensão": "Evitar mudanças bruscas de posição. Manter boa hidratação.",
+            "💔 Problemas cardíacos": "Prática apenas com liberação e acompanhamento médico.",
+            "🦴 Problemas articulares": "Exercícios com menor impacto e maior controle de movimento.",
+            "🫁 Problemas respiratórios": "Progressão gradual. Interromper em caso de falta de ar excessiva.",
+            "⚠️ Lesões": "Adaptar exercícios respeitando a limitação existente.",
+            "🤰 Gestante": "Prática com liberação médica. Foco na segurança e mobilidade.",
+            "🤱 Lactante": "Atividade normal, respeitando recuperação e hidratação.",
+            "👴 Idoso": "Contribuir para força e equilíbrio respeitando limitações."
+        };
+
+        const objData = {
+            "Emagrecimento": "Foco em déficit calórico com treinos mistos de força e aeróbicos.",
+            "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Superávit calórico.",
+            "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura.",
+            "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e integração cardiopulmonar.",
+            "Resistência": "Séries mais longas, cadência controlada e aprimoramento da capacidade.",
+            "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.",
+            "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor.",
+            "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. Constância e bem-estar."
+        };
+
+        const defaultCategories = {
             "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
             "🦍 COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Cavalinho (T-Bar)", "Serrote", "Facepull (puxada de cima para baixo)"],
             "🦵 PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento no Smith", "Agachamento com passada lateral", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Coice", "Cachorrinho", "Cadeira Extensora", "Adução", "Abdução", "Abdução Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha Livre", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
-            "💪 BRAÇOS (Bíceps)": ["Rosca Direta", "Rosca Alternada", "Rosca 21", "Rosca Scott Barra W", "Rosca Scott Unilateral", "Rosca Scott com Halteres", "Rosca Martelo", "Rosca Cross", "Rosca Inversa", "Rosca 45°"],
-            "💪 BRAÇOS (Tríceps)": ["Triceps Pulley Unilateral", "Tríceps Pulley Barra", "Tríceps Pulley Corda", "Tríceps Pulley Pegada Inversa", "Tríceps Francês na Corda", "Tríceps Francês com Halter", "Tríceps Francês Unilateral", "Tríceps Cruzado Polia Dupla", "Tríceps Coice Unilateral", "Tríceps Arremesso", "Tríceps Testa", "Mergulho no Banco"],
+            "💪 BRAÇOS": ["(Bíceps) Rosca Direta", "(Bíceps) Rosca Alternada", "(Bíceps) Rosca 21", "(Bíceps) Rosca Scott Barra W", "(Bíceps) Rosca Scott Unilateral", "(Bíceps) Rosca Scott com Halteres", "(Bíceps) Rosca Martelo", "(Bíceps) Rosca Cross", "(Bíceps) Rosca Inversa", "(Bíceps) Rosca 45°", "(Tríceps) Pulley Unilateral", "(Tríceps) Pulley Barra", "(Tríceps) Pulley Corda", "(Tríceps) Pulley Pegada Inversa", "(Tríceps) Francês na Corda", "(Tríceps) Francês com Halter", "(Tríceps) Francês Unilateral", "(Tríceps) Cruzado Polia Dupla", "(Tríceps) Coice Unilateral", "(Tríceps) Arremesso", "(Tríceps) Testa", "(Tríceps) Mergulho no Banco"],
             "🪨 OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral Unilateral Cross", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta", "Encolhimento (Trapézio)"],
-            "🧠 ABDÔMEN": ["Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", "Isometria na parede", "Abdominal isometrico"],
+            "🧠 ABDÔMEN": ["Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", "Isometria na parede"],
             "🫀 CARDIO": ["Bicicleta 10 Minutos", "Bicicleta 15 Minutos", "Bicicleta 20 Minutos", "Esteira 10 Minutos", "Esteira 15 Minutos", "Esteira 20 Minutos", "Pular Corda"]
         };
-        const dbTech = ["Nenhuma", "Drop set", "Bi-set", "Tri-set", "Série gigante", "Rest-pause", "FST-7", "Pré-exaustão", "Pós-exaustão", "Negativa", "Isometria", "Parciais", "Pirâmide"];
-        const healthPEF = {"🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio.", "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação.", "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico.", "🔴 Obesidade": "Iniciar com exercícios de baixo impacto. Evolução gradual.", "⚖️ Baixo peso": "Foco em musculação para ganho de massa.", "🍬 Diabetes": "Monitorar glicemia e evitar treinos em jejum.", "❤️ Hipertensão": "Treinos moderados, evitar prender a respiração.", "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação.", "💔 Problemas cardíacos": "Treinos leves com liberação médica.", "🦴 Problemas articulares": "Evitar impacto. Priorizar exercícios controlados.", "🫁 Problemas respiratórios": "Progressão gradual. Atenção à respiração.", "⚠️ Lesões": "Adaptar exercícios. Evitar dor e focar na recuperação.", "🤰 Gestante": "Sem impacto ou risco. Foco em mobilidade e bem-estar.", "🤱 Lactante": "Atenção à hidratação e energia.", "👴 Idoso": "Foco em força, equilíbrio e mobilidade com segurança."};
-        const healthTE = {"🟢 Saudável": "Manter treinos regulares de 3–5x por semana, combinando musculação e cardio. Constância e alimentação contribuem para resultados.", "⚪ Sedentário": "Início gradual, treinos leves. Prioridade é constância e execução correta.", "🟡 Sobrepeso": "A prática regular contribui para melhora do condicionamento. Progressão individual.", "🔴 Obesidade": "Menor impacto e progressão gradual. Segurança e constância são prioridades.", "⚖️ Baixo peso": "Auxilia ganho de massa associado a alimentação. Priorizar recuperação.", "🍬 Diabetes": "Acompanhamento médico regular. Em casos de mal-estar, interromper o treino e buscar orientação.", "❤️ Hipertensão": "Evitar Manobra de Valsalva e controlar intensidade. Respeitar orientação médica.", "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação.", "💔 Problemas cardíacos": "Apenas com liberação médica. Respeitar limites.", "🦴 Problemas articulares": "Menor impacto. Acompanhamento ajuda na segurança.", "🫁 Problemas respiratórios": "Progressão gradual. Interromper em caso de falta de ar.", "⚠️ Lesões": "Respeitar limitações e evitar dor. Seguir orientação técnica.", "🤰 Gestante": "Prática com liberação médica. Foco na segurança e mobilidade.", "🤱 Lactante": "Atividade mantida respeitando recuperação e hidratação.", "👴 Idoso": "Contribui para força e autonomia. Respeitar limitações individuais."};
-        const objTexts = {"Emagrecimento": "Foco em déficit calórico com treinos mistos de força e aeróbicos.", "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Superávit calórico.", "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura.", "Condicionamento": "Treinos com menor intervalo, circuitos e integração cardiopulmonar.", "Resistência": "Séries longas, cadência controlada.", "Força": "Cargas altas, baixas repetições e intervalos maiores.", "Reabilitação": "Fortalecimento específico, mobilidade e controle motor.", "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade."};
-        const weekDays = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"];
+        const techniques = ["Nenhuma", "Drop set", "Bi-set", "Tri-set", "Série gigante", "Rest-pause", "FST-7", "Pré-exaustão", "Pós-exaustão", "Negativa", "Isometria", "Parciais", "Pirâmide"];
+        const daysSequence = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"];
 
-        // --- ESTADO ---
-        let appState = {
-            user: null,
-            profile: null,
-            workouts: [],
-            modalDayId: null,
-            modalCat: "🔥 PEITO",
-            exerciseImages: {} // Map: "Nome do Exercicio" -> "Base64"
+        // --- ESTADO GLOBAL (MEMÓRIA) ---
+        window.appState = {
+            currentUser: null,
+            units: [],
+            members: [],
+            customExercises: [],
+            cloudHistory: [],
+            builderWorkouts: [],
+            activeModalWorkoutId: null,
+            activeCategory: "🔥 PEITO",
+            currentDocId: null // Id do documento no firestore se estiver editando
         };
 
-        // --- AUTH & INIT ---
-        window.loginGoogle = () => signInWithPopup(auth, new GoogleAuthProvider());
+        // --- AUTENTICAÇÃO E INICIALIZAÇÃO ---
+        window.loginGoogle = () => {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider).catch(error => alert("Erro ao fazer login: " + error.message));
+        };
         window.logout = () => signOut(auth);
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                appState.user = user;
-                document.getElementById('login-screen').classList.add('hidden-screen');
-                await loadUserProfile(user.uid);
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('nav-menu').classList.remove('hidden');
+                document.getElementById('app-screens').classList.remove('hidden');
+                document.getElementById('global-loader').classList.remove('hidden');
+                appState.currentUser = user;
+                await fetchCloudData();
+                document.getElementById('global-loader').classList.add('hidden');
+                switchTab('network'); // Começa na aba de rede para forçar setup se vazio
+                if(appState.members.length > 0) switchTab('builder'); // Vai pra builder se ja tem membro
             } else {
-                appState.user = null;
-                appState.profile = null;
-                document.getElementById('login-screen').classList.remove('hidden-screen');
-                document.getElementById('setup-screen').classList.add('hidden-screen');
-                document.getElementById('main-screen').classList.add('hidden-screen');
+                appState.currentUser = null;
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('nav-menu').classList.add('hidden');
+                document.getElementById('app-screens').classList.add('hidden');
+                document.getElementById('global-loader').classList.add('hidden');
             }
         });
 
-        async function loadUserProfile(uid) {
-            const docRef = doc(db, "users", uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                appState.profile = docSnap.data();
-                startApp();
-            } else {
-                document.getElementById('setup-screen').classList.remove('hidden-screen');
-                document.getElementById('setup-name').value = appState.user.displayName || "";
-            }
-        }
-
-        window.toggleSetupCref = () => {
-            const role = document.getElementById('setup-role').value;
-            document.getElementById('setup-cref-container').style.display = role === 'TE' ? 'none' : 'grid';
-        };
-
-        window.saveProfile = async () => {
-            const p = {
-                name: document.getElementById('setup-name').value,
-                network: document.getElementById('setup-network').value || "Independente",
-                unit: document.getElementById('setup-unit').value || "Principal",
-                role: document.getElementById('setup-role').value,
-                cref: document.getElementById('setup-cref').value,
-                state: document.getElementById('setup-state').value,
-                createdAt: new Date().toISOString()
-            };
-            if(p.role === 'PEF' && !p.cref) return alert('Preencha o CREF');
-            if(!p.name) return alert('Preencha o nome');
+        async function fetchCloudData() {
+            if (!appState.currentUser) return;
+            const uid = appState.currentUser.uid;
             
-            await setDoc(doc(db, "users", appState.user.uid), p);
-            appState.profile = p;
-            document.getElementById('setup-screen').classList.add('hidden-screen');
-            startApp();
-        };
+            // Unidades
+            const snapUnits = await getDocs(collection(db, 'artifacts', 'powfitpro', 'users', uid, 'units'));
+            appState.units = snapUnits.docs.map(d => ({ id: d.id, ...d.data() }));
+            
+            // Membros
+            const snapMembers = await getDocs(collection(db, 'artifacts', 'powfitpro', 'users', uid, 'members'));
+            appState.members = snapMembers.docs.map(d => ({ id: d.id, ...d.data() }));
+            
+            // Custom Exercises
+            const snapEx = await getDocs(collection(db, 'artifacts', 'powfitpro', 'users', uid, 'customExercises'));
+            appState.customExercises = snapEx.docs.map(d => ({ id: d.id, ...d.data() }));
 
-        async function startApp() {
-            document.getElementById('main-screen').classList.remove('hidden-screen');
-            document.getElementById('nav-user-info').innerText = `${appState.profile.name} | ${appState.profile.unit} (${appState.profile.network})`;
-            document.getElementById('dash-network').innerText = appState.profile.network;
-            document.getElementById('dash-unit').innerText = appState.profile.unit;
-            
-            renderHealthList();
-            populateImageSelect();
-            await loadExerciseImages();
-            
-            if(appState.workouts.length === 0) window.addDay();
-            window.switchTab('prescribe');
+            // Workouts History
+            const snapWorkouts = await getDocs(collection(db, 'artifacts', 'powfitpro', 'users', uid, 'workouts'));
+            appState.cloudHistory = snapWorkouts.docs.map(d => ({ id: d.id, ...d.data() }));
+
+            renderNetworkUI();
+            populateMemberSelect();
+            populateReportSelects();
+            renderHistory();
+            initBuilderCatSelect();
+            if(appState.builderWorkouts.length === 0) window.addWorkoutDay();
         }
 
         // --- NAVEGAÇÃO ---
-        window.switchTab = (tab) => {
-            ['prescribe', 'history', 'images'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden-screen');
-                document.getElementById(`tab-btn-${t}`).classList.remove('bg-primary', 'text-white');
-                document.getElementById(`tab-btn-${t}`).classList.add('hover:bg-black', 'hover:bg-opacity-20');
+        window.switchTab = (tabId) => {
+            document.querySelectorAll('.screen-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('bg-primary', 'text-white');
+                el.classList.add('hover:bg-black', 'hover:bg-opacity-10');
             });
-            document.getElementById(`tab-${tab}`).classList.remove('hidden-screen');
-            document.getElementById(`tab-btn-${tab}`).classList.remove('hover:bg-black', 'hover:bg-opacity-20');
-            document.getElementById(`tab-btn-${tab}`).classList.add('bg-primary', 'text-white');
+            document.getElementById(`screen-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('bg-primary', 'text-white');
+            document.getElementById(`tab-${tabId}`).classList.remove('hover:bg-black', 'hover:bg-opacity-10');
+        };
+
+        // --- GESTÃO DE REDE (UNIDADES E MEMBROS) ---
+        window.addUnit = async () => {
+            const nameInput = document.getElementById('new-unit-name');
+            const name = nameInput.value.trim();
+            if(!name) return;
             
-            if(tab === 'history') window.loadHistoryCloud();
+            const docRef = await addDoc(collection(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'units'), { name });
+            appState.units.push({ id: docRef.id, name });
+            nameInput.value = '';
+            renderNetworkUI();
         };
 
-        // --- PRESCRIÇÃO LÓGICA ---
-        window.calcIMC = () => {
-            const w = parseFloat(document.getElementById('stu-weight').value);
-            const h = parseFloat(document.getElementById('stu-height').value);
-            const d = document.getElementById('imc-display');
-            if(w>0 && h>0) {
-                const imc = (w/(h*h)).toFixed(1);
-                d.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-3 py-1 rounded-full text-[10px] font-bold">IMC: ${imc}</span>`;
-            } else d.innerHTML = '';
+        window.toggleCrefNetwork = () => {
+            const role = document.getElementById('member-role').value;
+            document.getElementById('cref-box').style.display = role === 'TE' ? 'none' : 'grid';
         };
 
-        window.updateTheme = () => {
-            document.body.setAttribute('data-theme', document.getElementById('stu-gender').value);
+        window.addMember = async () => {
+            const unitId = document.getElementById('member-unit').value;
+            const name = document.getElementById('member-name').value.trim();
+            const cpf = document.getElementById('member-cpf').value.trim();
+            const role = document.getElementById('member-role').value;
+            const cref = role === 'PEF' ? document.getElementById('member-cref').value.trim() : '';
+            const state = role === 'PEF' ? document.getElementById('member-state').value.trim() : '';
+
+            if(!unitId || !name || !cpf) return alert("Preencha Unidade, Nome e CPF.");
+
+            const memberData = { unitId, name, cpf, role, cref, state };
+            const docRef = await addDoc(collection(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'members'), memberData);
+            appState.members.push({ id: docRef.id, ...memberData });
+            
+            document.getElementById('member-name').value = '';
+            document.getElementById('member-cpf').value = '';
+            document.getElementById('member-cref').value = '';
+            document.getElementById('member-state').value = '';
+            renderNetworkUI();
+            populateMemberSelect();
         };
 
-        function renderHealthList() {
-            const hData = appState.profile.role === 'PEF' ? healthPEF : healthTE;
-            const c = document.getElementById('health-container');
-            c.innerHTML = Object.keys(hData).map(k => `
-                <label class="flex items-start gap-1 cursor-pointer hover:bg-black hover:bg-opacity-5 p-1 rounded">
-                    <input type="checkbox" value="${k}" class="health-cb mt-0.5"> <span class="leading-tight">${k}</span>
+        window.deleteMember = async (id) => {
+            if(confirm("Excluir membro da equipe?")) {
+                await deleteDoc(doc(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'members', id));
+                appState.members = appState.members.filter(m => m.id !== id);
+                renderNetworkUI();
+                populateMemberSelect();
+            }
+        };
+
+        function renderNetworkUI() {
+            // Units list
+            const uList = document.getElementById('units-list');
+            uList.innerHTML = appState.units.map(u => `<div class="bg-black bg-opacity-10 p-2 rounded text-sm font-bold flex justify-between"><span><i class="fas fa-building text-primary mr-2"></i>${u.name}</span></div>`).join('');
+            
+            // Unit select in member form
+            const uSelect = document.getElementById('member-unit');
+            uSelect.innerHTML = `<option value="">Selecione a Unidade...</option>` + appState.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+            
+            // Members Table
+            const tbody = document.getElementById('members-table-body');
+            tbody.innerHTML = appState.members.map(m => {
+                const unitName = appState.units.find(u => u.id === m.unitId)?.name || 'Sem Unidade';
+                const docStr = m.role === 'PEF' ? `CREF: ${m.cref}/${m.state}` : `CPF: ${m.cpf}`;
+                return `<tr>
+                    <td class="p-2 font-medium">${m.name}</td>
+                    <td class="p-2">${unitName}</td>
+                    <td class="p-2">${m.role === 'PEF' ? 'Ed. Física' : 'Treinador Esp.'}</td>
+                    <td class="p-2 text-xs opacity-70">${docStr}</td>
+                    <td class="p-2"><button onclick="deleteMember('${m.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td>
+                </tr>`;
+            }).join('');
+        }
+
+        // --- BANCO DE EXERCÍCIOS CUSTOMIZADOS ---
+        function initBuilderCatSelect() {
+            const select = document.getElementById('custom-ex-cat');
+            select.innerHTML = Object.keys(defaultCategories).map(c => `<option value="${c}">${c}</option>`).join('');
+            renderCustomExList();
+        }
+
+        window.saveCustomExercise = async () => {
+            const cat = document.getElementById('custom-ex-cat').value;
+            const name = document.getElementById('custom-ex-name').value.trim();
+            const fileInput = document.getElementById('custom-ex-img');
+            
+            if(!name) return alert("Digite o nome do exercício.");
+
+            let imgBase64 = null;
+            if (fileInput.files && fileInput.files[0]) {
+                imgBase64 = await resizeImage(fileInput.files[0], 200); // max 200px
+            }
+
+            const exData = { category: cat, name: name, image: imgBase64 };
+            const docRef = await addDoc(collection(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'customExercises'), exData);
+            appState.customExercises.push({ id: docRef.id, ...exData });
+            
+            document.getElementById('custom-ex-name').value = '';
+            fileInput.value = '';
+            renderCustomExList();
+        };
+
+        window.deleteCustomEx = async (id) => {
+            if(confirm("Excluir do banco customizado?")) {
+                await deleteDoc(doc(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'customExercises', id));
+                appState.customExercises = appState.customExercises.filter(e => e.id !== id);
+                renderCustomExList();
+            }
+        };
+
+        function renderCustomExList() {
+            const list = document.getElementById('custom-ex-list');
+            list.innerHTML = appState.customExercises.map(ex => `
+                <div class="flex justify-between items-center p-2 border-b border-opacity-10 text-sm" style="border-color: var(--border-color)">
+                    <div class="flex items-center gap-2">
+                        ${ex.image ? `<img src="${ex.image}" class="w-8 h-8 object-cover rounded">` : `<div class="w-8 h-8 bg-gray-500 bg-opacity-20 rounded flex items-center justify-center text-[10px]">Sem img</div>`}
+                        <div><div class="text-[10px] opacity-60">${ex.category}</div><div>${ex.name}</div></div>
+                    </div>
+                    <button onclick="deleteCustomEx('${ex.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function resizeImage(file, maxSize) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width; let height = img.height;
+                        if (width > height) { if (width > maxSize) { height *= maxSize / width; width = maxSize; } } 
+                        else { if (height > maxSize) { width *= maxSize / height; height = maxSize; } }
+                        canvas.width = width; canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.7)); // Compress to jpeg 70% quality
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function getFullExerciseList(category) {
+            const defaults = defaultCategories[category] || [];
+            const customs = appState.customExercises.filter(c => c.category === category);
+            // Returns array of objects {name, image}
+            const list = defaults.map(name => ({ name, image: null }));
+            customs.forEach(c => list.push({ name: c.name, image: c.image }));
+            return list;
+        }
+
+
+        // --- MONTAR FICHA (BUILDER) ---
+        function populateMemberSelect() {
+            const select = document.getElementById('active-member');
+            select.innerHTML = `<option value="">Selecione o membro da equipe...</option>` + 
+                appState.members.map(m => `<option value="${m.id}">${m.name} (${m.role})</option>`).join('');
+        }
+
+        window.onMemberChange = () => {
+            const memberId = document.getElementById('active-member').value;
+            const ws = document.getElementById('builder-workspace');
+            const info = document.getElementById('active-member-info');
+            
+            if(!memberId) { ws.style.display = 'none'; info.innerText = ''; return; }
+            
+            const member = appState.members.find(m => m.id === memberId);
+            const unit = appState.units.find(u => u.id === member.unitId)?.name || 'Sem Unidade';
+            info.innerText = `Atuando como: ${member.role === 'PEF' ? 'Prof. Ed. Física' : 'Treinador Esportivo'} | Unidade: ${unit}`;
+            
+            ws.style.display = 'grid';
+            renderBuilderHealthOptions(member.role);
+        };
+
+        function renderBuilderHealthOptions(role) {
+            const dataObj = role === 'PEF' ? healthPEF : healthTE;
+            const container = document.getElementById('health-container');
+            const currentSelected = Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value);
+            
+            container.innerHTML = Object.keys(dataObj).map(opt => `
+                <label class="flex items-start space-x-2 cursor-pointer p-1 rounded hover:bg-black hover:bg-opacity-5">
+                    <input type="checkbox" value="${opt}" ${currentSelected.includes(opt)?'checked':''} class="health-cb mt-0.5 w-3 h-3 text-primary">
+                    <span>${opt}</span>
                 </label>
             `).join('');
         }
 
-        window.addDay = () => {
-            appState.workouts.push({ id: Date.now().toString(), title: `TREINO ${weekDays[appState.workouts.length % 7] || 'EXTRA'}`, exercises: [] });
-            renderDays();
-        };
-        window.removeDay = (id) => { appState.workouts = appState.workouts.filter(w=>w.id!==id); renderDays(); };
-        window.dupDay = (id) => { 
-            const w = appState.workouts.find(x=>x.id===id);
-            if(w) { appState.workouts.push(JSON.parse(JSON.stringify({...w, id: Date.now().toString(), title: w.title+' CÓPIA'}))); renderDays(); }
-        };
-        window.updateDayTitle = (id, val) => { appState.workouts.find(w=>w.id===id).title = val; };
-
-        // Exercicio actions
-        window.remEx = (dId, eIdx) => { appState.workouts.find(w=>w.id===dId).exercises.splice(eIdx,1); renderDays(); };
-        window.updEx = (dId, eIdx, f, v) => { appState.workouts.find(w=>w.id===dId).exercises[eIdx][f] = v; };
-        window.movEx = (dId, eIdx, dir) => {
-            const list = appState.workouts.find(w=>w.id===dId).exercises;
-            if(dir==='up' && eIdx>0) [list[eIdx], list[eIdx-1]] = [list[eIdx-1], list[eIdx]];
-            if(dir==='down' && eIdx<list.length-1) [list[eIdx], list[eIdx+1]] = [list[eIdx+1], list[eIdx]];
-            renderDays();
+        window.changeTheme = () => { document.body.setAttribute('data-theme', document.getElementById('stu-gender').value); };
+        
+        window.calcIMC = () => {
+            const w = parseFloat(document.getElementById('stu-weight').value);
+            const h = parseFloat(document.getElementById('stu-height').value);
+            const display = document.getElementById('imc-display');
+            if (w > 0 && h > 0) {
+                const imc = (w / (h * h)).toFixed(1);
+                let cls = imc < 18.5 ? "Abaixo" : imc < 24.9 ? "Normal" : imc < 29.9 ? "Sobrepeso" : "Obesidade";
+                display.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-2 py-1 rounded-full text-[10px] font-bold border border-primary border-opacity-30">IMC: ${imc} (${cls})</span>`;
+            } else { display.innerHTML = ''; }
         };
 
-        function renderDays() {
-            const c = document.getElementById('workout-days-container');
-            c.innerHTML = appState.workouts.map(w => `
-                <div class="card rounded-xl shadow-sm overflow-hidden">
-                    <div class="bg-black bg-opacity-5 p-2 border-b flex justify-between items-center" style="border-color: var(--border-color)">
-                        <input type="text" value="${w.title}" onchange="window.updateDayTitle('${w.id}', this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 px-2 py-1 uppercase rounded">
-                        <div class="flex gap-1">
-                            <button onclick="window.dupDay('${w.id}')" class="p-1 hover:bg-black hover:bg-opacity-10 rounded text-xs"><i class="fas fa-copy"></i></button>
-                            <button onclick="window.removeDay('${w.id}')" class="p-1 text-red-500 hover:bg-red-500 hover:text-white rounded text-xs"><i class="fas fa-trash"></i></button>
+        window.addWorkoutDay = () => {
+            const idx = appState.builderWorkouts.length;
+            const title = idx < daysSequence.length ? `TREINO ${daysSequence[idx]}` : `NOVO TREINO ${idx+1}`;
+            appState.builderWorkouts.push({ id: generateId(), title, exercises: [] });
+            renderBuilderWorkouts();
+        };
+
+        window.duplicateWorkout = (id) => {
+            const w = appState.builderWorkouts.find(w => w.id === id);
+            if(w) {
+                appState.builderWorkouts.push({ ...JSON.parse(JSON.stringify(w)), id: generateId(), title: w.title + " (Cópia)" });
+                renderBuilderWorkouts();
+            }
+        };
+
+        window.removeWorkout = (id) => {
+            if(confirm("Excluir dia?")) { appState.builderWorkouts = appState.builderWorkouts.filter(w => w.id !== id); renderBuilderWorkouts(); }
+        };
+
+        window.updateWorkoutTitle = (id, val) => { const w = appState.builderWorkouts.find(w => w.id === id); if(w) w.title = val; };
+        window.removeExercise = (wId, eIdx) => { appState.builderWorkouts.find(w => w.id === wId).exercises.splice(eIdx, 1); renderBuilderWorkouts(); };
+        window.updateExercise = (wId, eIdx, f, v) => { appState.builderWorkouts.find(w => w.id === wId).exercises[eIdx][f] = v; };
+        
+        window.moveExercise = (wId, eIdx, dir) => {
+            const w = appState.builderWorkouts.find(w => w.id === wId);
+            if (dir === 'up' && eIdx > 0) { [w.exercises[eIdx], w.exercises[eIdx-1]] = [w.exercises[eIdx-1], w.exercises[eIdx]]; }
+            else if (dir === 'down' && eIdx < w.exercises.length - 1) { [w.exercises[eIdx], w.exercises[eIdx+1]] = [w.exercises[eIdx+1], w.exercises[eIdx]]; }
+            renderBuilderWorkouts();
+        };
+
+        function renderBuilderWorkouts() {
+            const container = document.getElementById('workouts-container');
+            container.innerHTML = appState.builderWorkouts.map(w => {
+                const exHtml = w.exercises.length === 0 ? `<div class="p-3 text-xs opacity-50 text-center">Vazio</div>` : w.exercises.map((ex, idx) => `
+                    <div class="flex flex-col sm:flex-row gap-2 p-2 items-start sm:items-center border-b border-opacity-10" style="border-color: var(--border-color)">
+                        <div class="flex gap-1 hidden sm:flex">
+                            <button onclick="moveExercise('${w.id}', ${idx}, 'up')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-up"></i></button>
+                            <button onclick="moveExercise('${w.id}', ${idx}, 'down')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-down"></i></button>
+                        </div>
+                        <div class="flex items-center gap-2 flex-1 w-full sm:w-auto">
+                            ${ex.image ? `<img src="${ex.image}" class="w-6 h-6 object-cover rounded">` : ''}
+                            <div><div class="text-[9px] opacity-60 uppercase">${ex.category}</div><div class="text-xs font-bold">${ex.name}</div></div>
+                        </div>
+                        <div class="flex flex-wrap gap-1 w-full sm:w-auto">
+                            <input type="text" value="${ex.sets}" onchange="updateExercise('${w.id}', ${idx}, 'sets', this.value)" class="input-field w-12 rounded px-1 py-1 text-xs text-center" placeholder="Séries">
+                            <span class="self-center opacity-50 text-xs">x</span>
+                            <input type="text" value="${ex.reps}" onchange="updateExercise('${w.id}', ${idx}, 'reps', this.value)" class="input-field w-16 rounded px-1 py-1 text-xs text-center" placeholder="Reps">
+                            <select onchange="updateExercise('${w.id}', ${idx}, 'technique', this.value)" class="input-field w-24 rounded px-1 py-1 text-[10px]">
+                                ${techniques.map(t => `<option value="${t}" ${ex.technique === t ? 'selected' : ''}>${t}</option>`).join('')}
+                            </select>
+                            <input type="text" value="${ex.obs}" onchange="updateExercise('${w.id}', ${idx}, 'obs', this.value)" class="input-field flex-1 sm:w-32 rounded px-1 py-1 text-xs" placeholder="Obs...">
+                            <button onclick="removeExercise('${w.id}', ${idx})" class="text-red-500 hover:text-red-700 p-1 rounded"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
-                    <div>
-                        ${w.exercises.length === 0 ? '<div class="p-3 text-center text-xs opacity-50">Vazio</div>' : w.exercises.map((ex, i) => `
-                            <div class="flex flex-col md:flex-row gap-2 p-2 border-b last:border-0 border-opacity-10 items-start md:items-center" style="border-color: var(--border-color)">
-                                <div class="flex flex-row md:flex-col gap-1">
-                                    <button onclick="window.movEx('${w.id}', ${i}, 'up')" class="text-[9px] bg-black bg-opacity-10 px-1 rounded"><i class="fas fa-chevron-up"></i></button>
-                                    <button onclick="window.movEx('${w.id}', ${i}, 'down')" class="text-[9px] bg-black bg-opacity-10 px-1 rounded"><i class="fas fa-chevron-down"></i></button>
-                                </div>
-                                <div class="flex-1 w-full">
-                                    <div class="text-[8px] uppercase opacity-60">${ex.category}</div>
-                                    <div class="text-xs font-bold">${ex.name}</div>
-                                </div>
-                                <div class="flex gap-1 items-center w-full md:w-auto">
-                                    <input type="text" value="${ex.sets}" onchange="window.updEx('${w.id}', ${i}, 'sets', this.value)" class="input-field w-10 text-center text-xs p-1 rounded" placeholder="S"> x
-                                    <input type="text" value="${ex.reps}" onchange="window.updEx('${w.id}', ${i}, 'reps', this.value)" class="input-field w-14 text-center text-xs p-1 rounded" placeholder="Reps">
-                                    <select onchange="window.updEx('${w.id}', ${i}, 'technique', this.value)" class="input-field w-24 text-[9px] p-1 rounded">
-                                        ${dbTech.map(t=>`<option ${ex.technique===t?'selected':''}>${t}</option>`).join('')}
-                                    </select>
-                                    <input type="text" value="${ex.obs}" onchange="window.updEx('${w.id}', ${i}, 'obs', this.value)" class="input-field flex-1 md:w-32 text-xs p-1 rounded" placeholder="Obs">
-                                    <button onclick="window.remEx('${w.id}', ${i})" class="text-red-500 p-1 text-sm"><i class="fas fa-times"></i></button>
-                                </div>
-                            </div>
-                        `).join('')}
+                `).join('');
+
+                return `
+                <div class="card rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-2 border-b flex justify-between items-center bg-black bg-opacity-5" style="border-color: var(--border-color)">
+                        <input type="text" value="${w.title}" onchange="updateWorkoutTitle('${w.id}', this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 px-2 py-1 rounded uppercase">
+                        <div class="flex gap-1">
+                            <button onclick="duplicateWorkout('${w.id}')" class="text-xs p-1.5 rounded"><i class="fas fa-copy"></i></button>
+                            <button onclick="removeWorkout('${w.id}')" class="text-xs p-1.5 text-red-500 rounded"><i class="fas fa-trash"></i></button>
+                        </div>
                     </div>
-                    <button onclick="window.openExModal('${w.id}')" class="w-full p-2 text-xs font-bold text-primary hover:bg-primary hover:bg-opacity-10 border-t" style="border-color: var(--border-color)">+ ADICIONAR EXERCÍCIO</button>
-                </div>
-            `).join('');
+                    <div>${exHtml}</div>
+                    <div class="p-2 border-t" style="border-color: var(--border-color)">
+                        <button onclick="openModal('${w.id}')" class="w-full text-primary py-1 rounded text-xs font-bold hover:bg-black hover:bg-opacity-5">+ ADICIONAR EXERCÍCIO</button>
+                    </div>
+                </div>`;
+            }).join('');
         }
 
-        // --- MODAL EXERCICIOS ---
-        window.openExModal = (id) => { appState.modalDayId = id; document.getElementById('exercise-modal').classList.remove('hidden'); renderExCat(); renderExList(); };
-        window.closeExModal = () => document.getElementById('exercise-modal').classList.add('hidden');
-        window.setExCat = (c) => { appState.modalCat = c; renderExCat(); renderExList(); };
-
-        function renderExCat() {
-            document.getElementById('modal-categories').innerHTML = Object.keys(dbCat).map(c=>`
-                <button onclick="window.setExCat('${c}')" class="w-full text-left p-2 rounded text-xs mb-1 ${appState.modalCat===c?'bg-primary text-white':'hover:bg-black hover:bg-opacity-10'}">${c}</button>
-            `).join('');
+        // Modal de Exercícios
+        window.openModal = (wId) => { appState.activeModalWorkoutId = wId; document.getElementById('exercise-modal').classList.remove('hidden'); renderModalCat(); renderModalEx(); };
+        window.closeModal = () => { document.getElementById('exercise-modal').classList.add('hidden'); appState.activeModalWorkoutId = null; };
+        
+        function renderModalCat() {
+            document.getElementById('modal-categories').innerHTML = Object.keys(defaultCategories).map(c => 
+                `<button onclick="setModalCat('${c}')" class="w-full text-left px-2 py-2 rounded text-xs font-bold transition ${appState.activeCategory === c ? 'bg-primary text-white' : 'hover:bg-black hover:bg-opacity-10'}">${c}</button>`
+            ).join('');
         }
-        function renderExList() {
-            const isCardio = appState.modalCat === "🫀 CARDIO";
-            document.getElementById('modal-exercises').innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">` + 
-                dbCat[appState.modalCat].map(ex => `
-                <button onclick="window.addExToDay('${ex}', ${isCardio})" class="card p-2 text-left text-xs font-bold rounded flex justify-between group hover:border-primary">
-                    <span>${ex}</span> <i class="fas fa-plus opacity-0 group-hover:opacity-100 text-primary"></i>
+        window.setModalCat = (c) => { appState.activeCategory = c; renderModalCat(); renderModalEx(); };
+        
+        function renderModalEx() {
+            const list = getFullExerciseList(appState.activeCategory);
+            const isCardio = appState.activeCategory === "🫀 CARDIO";
+            document.getElementById('modal-exercises').innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">` + list.map((ex, i) => `
+                <button onclick="addExToWorkout(${i}, ${isCardio})" class="card p-2 rounded text-left text-xs font-bold border hover:border-primary transition flex justify-between items-center group">
+                    <div class="flex items-center gap-2">
+                        ${ex.image ? `<img src="${ex.image}" class="w-6 h-6 object-cover rounded">` : ''}
+                        <span>${ex.name}</span>
+                    </div>
+                    <i class="fas fa-plus opacity-0 group-hover:opacity-100 text-primary"></i>
                 </button>
             `).join('') + `</div>`;
         }
-        window.addExToDay = (exName, isCardio) => {
-            appState.workouts.find(w=>w.id===appState.modalDayId).exercises.push({
-                category: appState.modalCat, name: exName, sets: isCardio?'1':'3', reps: isCardio?'-':'10-12', technique: 'Nenhuma', obs: ''
-            });
-            renderDays();
-            const m = document.getElementById('modal-exercises'); m.style.opacity='0.5'; setTimeout(()=>m.style.opacity='1', 100);
-        };
 
-        // --- GESTÃO DE IMAGENS NA NUVEM ---
-        function populateImageSelect() {
-            const sel = document.getElementById('img-ex-select');
-            Object.values(dbCat).flat().sort().forEach(ex => {
-                sel.insertAdjacentHTML('beforeend', `<option value="${ex}">${ex}</option>`);
-            });
-        }
-
-        async function loadExerciseImages() {
-            // Busca o documento de imagens do usuario
-            const docRef = doc(db, "user_images", appState.user.uid);
-            const docSnap = await getDoc(docRef);
-            if(docSnap.exists()) {
-                appState.exerciseImages = docSnap.data().images || {};
-            }
-            renderImageGallery();
-        }
-
-        window.saveExerciseImage = () => {
-            const exName = document.getElementById('img-ex-select').value;
-            const file = document.getElementById('img-upload').files[0];
-            if(!exName || !file) return alert("Selecione o exercício e a imagem.");
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = async function() {
-                    // Redimensiona p/ economizar firebase
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 150; const MAX_HEIGHT = 150;
-                    let width = img.width; let height = img.height;
-                    if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } } 
-                    else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
-                    canvas.width = width; canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    const base64 = canvas.toDataURL('image/jpeg', 0.8);
-                    
-                    appState.exerciseImages[exName] = base64;
-                    
-                    // Salva na nuvem
-                    await setDoc(doc(db, "user_images", appState.user.uid), { images: appState.exerciseImages });
-                    alert("Imagem salva na nuvem com sucesso!");
-                    renderImageGallery();
-                }
-                img.src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-        };
-
-        function renderImageGallery() {
-            const g = document.getElementById('image-gallery');
-            g.innerHTML = Object.keys(appState.exerciseImages).map(k => `
-                <div class="card p-2 rounded text-center relative group">
-                    <img src="${appState.exerciseImages[k]}" class="w-full h-24 object-cover rounded mb-1">
-                    <p class="text-[9px] font-bold truncate">${k}</p>
-                    <button onclick="window.deleteImage('${k}')" class="absolute top-1 right-1 bg-red-500 text-white p-1 rounded text-[10px] opacity-0 group-hover:opacity-100"><i class="fas fa-trash"></i></button>
-                </div>
-            `).join('');
-        }
-        
-        window.deleteImage = async (k) => {
-            if(confirm("Excluir imagem da nuvem?")) {
-                delete appState.exerciseImages[k];
-                await setDoc(doc(db, "user_images", appState.user.uid), { images: appState.exerciseImages });
-                renderImageGallery();
-            }
-        };
-
-
-        // --- NUVEM & RELATÓRIOS ---
-        window.loadHistoryCloud = async () => {
-            const list = document.getElementById('cloud-history-list');
-            list.innerHTML = `<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Sincronizando...</div>`;
-            
-            // Puxa tudo da unidade do cara
-            const q = collection(db, "workouts");
-            const querySnapshot = await getDocs(q);
-            
-            let myUnitWorkouts = [];
-            let currentMonthCount = 0;
-            const currentMonth = new Date().getMonth();
-            const currentYear = new Date().getFullYear();
-
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                // Filtra no cliente pela unidade para respeitar restrições de indice simples no prompt
-                if(data.unit === appState.profile.unit && data.network === appState.profile.network) {
-                    data.docId = doc.id;
-                    myUnitWorkouts.push(data);
-                    
-                    const d = new Date(data.createdAt);
-                    if(d.getMonth() === currentMonth && d.getFullYear() === currentYear) {
-                        currentMonthCount++;
-                    }
-                }
-            });
-
-            document.getElementById('dash-count').innerText = currentMonthCount;
-
-            myUnitWorkouts.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-            list.innerHTML = myUnitWorkouts.length === 0 ? '<div class="text-center text-xs opacity-50 p-4">Nenhuma ficha salva nesta unidade.</div>' : 
-                myUnitWorkouts.map(w => {
-                    const dateObj = new Date(w.createdAt);
-                    const isExpired = (new Date() - dateObj) > (parseInt(w.validity) * 24*60*60*1000);
-                    return `
-                    <div class="card p-3 rounded-lg border flex justify-between items-center text-sm ${isExpired ? 'border-red-500 border-opacity-50 opacity-70' : ''}">
-                        <div>
-                            <div class="font-bold flex items-center gap-2">
-                                ${w.stuName} ${isExpired ? '<span class="text-[9px] bg-red-500 text-white px-1 rounded">VENCIDA</span>' : ''}
-                            </div>
-                            <div class="text-[10px] opacity-70">
-                                Criado por: ${w.profName} | ${dateObj.toLocaleDateString('pt-BR')}
-                            </div>
-                        </div>
-                        <button onclick="window.deleteWorkoutCloud('${w.docId}')" class="text-red-500 p-2"><i class="fas fa-trash"></i></button>
-                    </div>
-                `}).join('');
-        };
-
-        window.deleteWorkoutCloud = async (docId) => {
-            if(confirm("Apagar da nuvem permanentemente?")) {
-                await deleteDoc(doc(db, "workouts", docId));
-                window.loadHistoryCloud();
+        window.addExToWorkout = (idx, isCardio) => {
+            const exObj = getFullExerciseList(appState.activeCategory)[idx];
+            const w = appState.builderWorkouts.find(w => w.id === appState.activeModalWorkoutId);
+            if(w) {
+                w.exercises.push({ category: appState.activeCategory, name: exObj.name, image: exObj.image, sets: isCardio ? '1' : '3', reps: isCardio ? '-' : '10 a 12', technique: 'Nenhuma', obs: '' });
+                renderBuilderWorkouts();
             }
         };
 
         // --- SALVAR & IMPRIMIR ---
-        window.printAndSave = async () => {
-            const stuData = {
-                stuName: document.getElementById('stu-name').value || 'Não informado',
+        window.saveAndPrint = async () => {
+            const memberId = document.getElementById('active-member').value;
+            if(!memberId) return alert("Selecione o Profissional Responsável na aba Montar Ficha!");
+            
+            const payload = {
+                memberId,
+                timestamp: new Date().getTime(),
+                dateStr: new Date().toLocaleDateString('pt-BR'),
+                stuName: document.getElementById('stu-name').value || 'Sem Nome',
                 stuAge: document.getElementById('stu-age').value,
                 stuWeight: document.getElementById('stu-weight').value,
                 stuHeight: document.getElementById('stu-height').value,
@@ -663,90 +810,288 @@
                 stuLevel: document.getElementById('stu-level').value,
                 stuObjective: document.getElementById('stu-objective').value,
                 stuFreq: document.getElementById('stu-freq').value,
-                validity: document.getElementById('stu-validity').value.replace(/\D/g, ''),
-                recs: document.getElementById('stu-recs').value,
-                healthKeys: Array.from(document.querySelectorAll('.health-cb:checked')).map(cb=>cb.value)
+                stuValidity: document.getElementById('stu-validity').value,
+                stuRecs: document.getElementById('stu-recs').value,
+                health: Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value),
+                workouts: appState.builderWorkouts
             };
 
-            if(!stuData.stuName || appState.workouts.length === 0) return alert("Preencha o nome do aluno e adicione treinos.");
-
-            // Salva no Firestore
-            const workoutDoc = {
-                uid: appState.user.uid,
-                profName: appState.profile.name,
-                network: appState.profile.network,
-                unit: appState.profile.unit,
-                createdAt: new Date().toISOString(),
-                ...stuData,
-                workouts: appState.workouts
-            };
-            await addDoc(collection(db, "workouts"), workoutDoc);
-
-            // Gera HTML para impressão
-            generatePrintView(stuData);
+            document.getElementById('global-loader').classList.remove('hidden');
+            try {
+                if(appState.currentDocId) {
+                    await setDoc(doc(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'workouts', appState.currentDocId), payload);
+                    // Atualiza cache local
+                    const idx = appState.cloudHistory.findIndex(h => h.id === appState.currentDocId);
+                    if(idx > -1) appState.cloudHistory[idx] = { id: appState.currentDocId, ...payload };
+                } else {
+                    const docRef = await addDoc(collection(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'workouts'), payload);
+                    appState.currentDocId = docRef.id;
+                    appState.cloudHistory.push({ id: docRef.id, ...payload });
+                }
+                
+                generatePrintHTML(payload);
+            } catch(e) { alert("Erro ao salvar na nuvem: " + e.message); }
+            finally { document.getElementById('global-loader').classList.add('hidden'); renderHistory(); }
         };
 
-        function generatePrintView(d) {
-            let imcStr = "-";
-            if(d.stuWeight && d.stuHeight) imcStr = (parseFloat(d.stuWeight) / Math.pow(parseFloat(d.stuHeight), 2)).toFixed(1);
-
-            const isPEF = appState.profile.role === 'PEF';
-            const hDict = isPEF ? healthPEF : healthTE;
-            const profLabel = isPEF ? 'Profissional de Educação Física' : 'Treinador Esportivo';
-            const crefStr = isPEF ? `CREF: ${appState.profile.cref} - ${appState.profile.state}` : '';
+        function generatePrintHTML(data) {
+            const member = appState.members.find(m => m.id === data.memberId);
+            if(!member) return;
+            const unitName = appState.units.find(u => u.id === member.unitId)?.name || '';
+            const isPEF = member.role === 'PEF';
             
-            const legalPEF = `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA: Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º estabelece que compete ao profissional coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados.`;
-            const legalTE = `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO: Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil, com atuação de caráter técnico e esportivo. A atuação possui finalidade orientativa e não substitui avaliação médica. Em casos de doenças ou lesões, recomenda-se avaliação prévia. O treinamento respeita os limites individuais, priorizando segurança, dentro da atuação técnica e esportiva permitida por lei. As recomendações possuem caráter informativo voltadas ao treinamento esportivo.`;
+            let imcStr = "-";
+            if(data.stuWeight && data.stuHeight) imcStr = (data.stuWeight / (data.stuHeight * data.stuHeight)).toFixed(1);
+            
+            const objTxt = objData[data.stuObjective] || "";
+            const hDict = isPEF ? healthPEF : healthTE;
 
+            let legalText = isPEF ? 
+                `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA<br>Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º estabelece que compete ao profissional coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados.` : 
+                `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO<br>Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil. A atuação possui finalidade orientativa e não substitui avaliação médica. Em casos de doenças ou lesões, recomenda-se avaliação prévia por profissional habilitado. O treinamento respeita limites individuais dentro da atuação técnica e esportiva permitida por lei.`;
+
+            const printArea = document.getElementById('print-area');
             let html = `
                 <div class="print-header">
-                    <h1 class="print-title">Planilha de Treino - ${d.stuObjective}</h1>
-                    <div class="prof-info">${appState.profile.name} (${profLabel}) <br> ${crefStr} <br> ${appState.profile.network} - ${appState.profile.unit}</div>
+                    <div>
+                        <h1 class="print-title">Planilha de Treinamento - ${data.stuObjective}</h1>
+                        <div style="font-size:9px; margin-top:2px;">Unidade: ${unitName}</div>
+                    </div>
+                    <div class="prof-info">
+                        Prescrição feita por: ${member.name} (${isPEF ? 'Prof. Educação Física' : 'Treinador Esportivo'})<br>
+                        ${isPEF ? `CREF: ${member.cref} - UF: ${member.state}` : `CPF: ${member.cpf}`}
+                    </div>
                 </div>
+
                 <div class="print-grid">
-                    <div><strong>Aluno:</strong> ${d.stuName}</div>
-                    <div><strong>Idade:</strong> ${d.stuAge||'-'}</div>
-                    <div><strong>Peso/Alt:</strong> ${d.stuWeight||'-'}kg / ${d.stuHeight||'-'}m</div>
+                    <div><strong>Aluno:</strong> ${data.stuName}</div>
+                    <div><strong>Idade:</strong> ${data.stuAge||'-'}</div>
+                    <div><strong>Gênero:</strong> ${data.stuGender}</div>
+                    <div><strong>Peso:</strong> ${data.stuWeight||'-'}kg</div>
+                    <div><strong>Altura:</strong> ${data.stuHeight||'-'}m</div>
                     <div><strong>IMC:</strong> ${imcStr}</div>
-                    <div><strong>Objetivo:</strong> ${d.stuObjective}</div>
-                    <div><strong>Nível:</strong> ${d.stuLevel}</div>
-                    <div><strong>Freq:</strong> ${d.stuFreq}</div>
-                    <div><strong>Validade:</strong> ${d.validity} dias</div>
+                    <div><strong>Nível:</strong> ${data.stuLevel}</div>
+                    <div><strong>Frequência:</strong> ${data.stuFreq}</div>
+                    <div><strong>Validade:</strong> ${data.stuValidity}</div>
                 </div>
             `;
 
-            if(objTexts[d.stuObjective] || d.healthKeys.length > 0) {
+            if(objTxt || data.health.length > 0) {
                 html += `<div class="print-guidelines"><h4>Diretrizes de Perfil</h4><ul>`;
-                html += `<li><strong>${d.stuObjective}:</strong> ${objTexts[d.stuObjective]}</li>`;
-                d.healthKeys.forEach(k => {
-                    const cleanK = k.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu, '').trim();
-                    html += `<li><strong>Saúde (${cleanK}):</strong> ${hDict[k]}</li>`;
+                if(objTxt) html += `<li><strong>Objetivo (${data.stuObjective}):</strong> ${objTxt}</li>`;
+                data.health.forEach(h => {
+                    const cleanH = h.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu, '').trim();
+                    if(hDict[h]) html += `<li><strong>Saúde (${cleanH}):</strong> ${hDict[h]}</li>`;
                 });
                 html += `</ul></div>`;
             }
 
-            appState.workouts.forEach(w => {
+            data.workouts.forEach(w => {
                 html += `<div class="print-workout"><h3>${w.title}</h3><table>
-                    <thead><tr><th style="width:40%">Exercício</th><th style="width:10%">Séries</th><th style="width:15%">Reps</th><th style="width:15%">Técnica</th><th style="width:20%">Obs</th></tr></thead><tbody>`;
-                if(w.exercises.length===0) html += `<tr><td colspan="5">Sem exercícios</td></tr>`;
+                    <thead><tr><th style="width:35%">Exercício</th><th style="width:10%; text-align:center;">Séries</th><th style="width:10%; text-align:center;">Reps</th><th style="width:15%">Técnica</th><th style="width:30%">Observações</th></tr></thead><tbody>`;
+                
+                if(w.exercises.length === 0) html += `<tr><td colspan="5" style="text-align:center;">Vazio</td></tr>`;
                 else {
                     w.exercises.forEach(ex => {
-                        const imgTag = appState.exerciseImages[ex.name] ? `<img src="${appState.exerciseImages[ex.name]}" class="ex-img-print">` : '';
-                        html += `<tr><td class="text-left">${imgTag} <strong>${ex.name}</strong></td><td>${ex.sets}</td><td>${ex.reps}</td><td>${ex.technique==='Nenhuma'?'-':ex.technique}</td><td>${ex.obs||'-'}</td></tr>`;
+                        const imgHtml = ex.image ? `<img src="${ex.image}" class="ex-img-print">` : ``;
+                        html += `<tr>
+                            <td>${imgHtml}<strong>${ex.name}</strong></td>
+                            <td style="text-align:center;">${ex.sets}</td><td style="text-align:center;">${ex.reps}</td>
+                            <td>${ex.technique !== 'Nenhuma' ? ex.technique : '-'}</td><td>${ex.obs || '-'}</td>
+                        </tr>`;
                     });
                 }
                 html += `</tbody></table></div>`;
             });
 
             html += `<div class="print-footer-section">`;
-            if(d.recs.trim()) html += `<strong>Recomendações:</strong><p style="white-space:pre-wrap; margin:3px 0 8px 0; font-size:9px;">${d.recs}</p>`;
-            html += `<div class="legal-text">${isPEF ? legalPEF : legalTE}</div>
-                <div style="text-align:center; font-size:7px; margin-top:10px;">PowFit Pro Cloud - Gerado em ${new Date().toLocaleDateString('pt-BR')}</div>
-            </div>`;
+            if(data.stuRecs) html += `<strong>Recomendações:</strong><p style="white-space: pre-wrap; margin:2px 0 8px 0;">${data.stuRecs}</p>`;
+            html += `<div class="legal-text">${legalText}</div><div style="text-align:center; margin-top:10px; font-size:7px;">Ficha gerada em ${data.dateStr} - PowFit Pro Network</div></div>`;
 
-            document.getElementById('print-area').innerHTML = html;
-            setTimeout(() => window.print(), 500);
+            printArea.innerHTML = html;
+            setTimeout(() => window.print(), 300);
         }
+
+
+        // --- NUVEM / HISTÓRICO ---
+        window.renderHistory = () => {
+            const term = document.getElementById('search-history').value.toLowerCase();
+            const grid = document.getElementById('history-grid');
+            
+            // Ordenar mais recente primeiro
+            let arr = [...appState.cloudHistory].sort((a,b) => b.timestamp - a.timestamp);
+            if(term) arr = arr.filter(h => h.stuName.toLowerCase().includes(term));
+
+            const now = new Date().getTime();
+            
+            grid.innerHTML = arr.map(h => {
+                const member = appState.members.find(m => m.id === h.memberId)?.name || 'Prof. Removido';
+                
+                // Checa validade (aprox)
+                let isExpired = false;
+                const days = parseInt(h.stuValidity.replace(/\D/g, '')) || 30;
+                if(now > h.timestamp + (days * 24 * 60 * 60 * 1000)) isExpired = true;
+
+                return `
+                <div class="card p-4 rounded-xl border border-opacity-20 flex flex-col justify-between" style="border-color: var(--border-color)">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-lg leading-tight truncate" title="${h.stuName}">${h.stuName}</h3>
+                            ${isExpired ? `<span class="bg-red-500 bg-opacity-20 text-red-500 text-[10px] font-bold px-2 py-0.5 rounded border border-red-500 border-opacity-30">VENCIDA</span>` : ''}
+                        </div>
+                        <p class="text-xs opacity-70 mb-1"><i class="fas fa-user-tie"></i> Resp: ${member}</p>
+                        <p class="text-xs opacity-70 mb-3"><i class="fas fa-calendar-alt"></i> Emissão: ${h.dateStr}</p>
+                    </div>
+                    <div class="flex gap-2 mt-auto">
+                        <button onclick="loadFromCloud('${h.id}')" class="btn-primary flex-1 py-1.5 rounded text-xs font-bold shadow"><i class="fas fa-download mr-1"></i> Carregar</button>
+                        <button onclick="deleteFromCloud('${h.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs transition"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>`;
+            }).join('');
+        };
+
+        window.loadFromCloud = (id) => {
+            const h = appState.cloudHistory.find(d => d.id === id);
+            if(!h) return;
+            
+            appState.currentDocId = h.id;
+            document.getElementById('active-member').value = h.memberId;
+            window.onMemberChange(); // atualiza checks e textos
+            
+            document.getElementById('stu-name').value = h.stuName || '';
+            document.getElementById('stu-age').value = h.stuAge || '';
+            document.getElementById('stu-weight').value = h.stuWeight || '';
+            document.getElementById('stu-height').value = h.stuHeight || '';
+            document.getElementById('stu-gender').value = h.stuGender || 'Masculino';
+            document.getElementById('stu-level').value = h.stuLevel || 'Iniciante';
+            document.getElementById('stu-objective').value = h.stuObjective || 'Emagrecimento';
+            document.getElementById('stu-freq').value = h.stuFreq || '3 dias';
+            document.getElementById('stu-validity').value = h.stuValidity || '30 dias';
+            document.getElementById('stu-recs').value = h.stuRecs || '';
+            
+            window.changeTheme();
+            window.calcIMC();
+
+            document.querySelectorAll('.health-cb').forEach(cb => cb.checked = (h.health || []).includes(cb.value));
+
+            appState.builderWorkouts = h.workouts || [];
+            renderBuilderWorkouts();
+            switchTab('builder');
+        };
+
+        window.deleteFromCloud = async (id) => {
+            if(!confirm("Excluir definitivamente da nuvem?")) return;
+            document.getElementById('global-loader').classList.remove('hidden');
+            try {
+                await deleteDoc(doc(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'workouts', id));
+                appState.cloudHistory = appState.cloudHistory.filter(h => h.id !== id);
+                if(appState.currentDocId === id) appState.currentDocId = null;
+                renderHistory();
+            } catch(e) { alert("Erro ao deletar."); }
+            finally { document.getElementById('global-loader').classList.add('hidden'); }
+        };
+
+        // --- RELATÓRIOS ---
+        function populateReportSelects() {
+            const m = document.getElementById('report-month');
+            const y = document.getElementById('report-year');
+            const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+            m.innerHTML = months.map((name, i) => `<option value="${i}">${name}</option>`).join('');
+            m.value = new Date().getMonth();
+            
+            const curYear = new Date().getFullYear();
+            y.innerHTML = `<option value="${curYear}">${curYear}</option><option value="${curYear-1}">${curYear-1}</option>`;
+        }
+
+        window.generateReport = () => {
+            const m = parseInt(document.getElementById('report-month').value);
+            const y = parseInt(document.getElementById('report-year').value);
+            
+            // Filtrar history
+            const filtered = appState.cloudHistory.filter(h => {
+                const d = new Date(h.timestamp);
+                return d.getMonth() === m && d.getFullYear() === y;
+            });
+
+            // Agrupar
+            let reportData = {}; // { unitId: { total: 0, members: { memberId: count } } }
+            appState.units.forEach(u => reportData[u.id] = { name: u.name, total: 0, members: {} });
+            
+            // Lidar com sem unidade
+            reportData['none'] = { name: 'Sem Unidade', total: 0, members: {} };
+
+            filtered.forEach(h => {
+                const member = appState.members.find(mem => mem.id === h.memberId);
+                const uId = member ? (member.unitId || 'none') : 'none';
+                const mName = member ? member.name : 'Membro Excluído';
+                
+                if(!reportData[uId]) reportData[uId] = { name: 'Desconhecida', total: 0, members: {} };
+                
+                reportData[uId].total++;
+                if(!reportData[uId].members[mName]) reportData[uId].members[mName] = 0;
+                reportData[uId].members[mName]++;
+            });
+
+            let globalTotal = 0;
+            let html = '';
+            
+            for(const [uId, uData] of Object.entries(reportData)) {
+                if(uData.total === 0) continue;
+                globalTotal += uData.total;
+                
+                let membersHtml = '';
+                for(const [mName, count] of Object.entries(uData.members)) {
+                    membersHtml += `<div class="flex justify-between py-1 text-sm border-b border-opacity-10" style="border-color: var(--border-color)"><span>${mName}</span><span class="font-bold">${count} fichas</span></div>`;
+                }
+                
+                html += `
+                <div class="mb-6 bg-white bg-opacity-5 p-4 rounded-lg">
+                    <h3 class="font-bold text-primary mb-2">${uData.name} (Total: ${uData.total})</h3>
+                    <div class="pl-4">${membersHtml}</div>
+                </div>`;
+            }
+
+            if(globalTotal === 0) html = `<p class="text-center opacity-50">Nenhuma ficha registrada neste mês.</p>`;
+            else html = `<div class="text-xl font-bold mb-4 text-center">TOTAL GERAL: ${globalTotal} Fichas</div>` + html;
+
+            document.getElementById('report-content').innerHTML = html;
+        };
+
+        window.printReport = () => {
+            const content = document.getElementById('report-content').innerHTML;
+            const printArea = document.getElementById('print-area');
+            const mText = document.getElementById('report-month').options[document.getElementById('report-month').selectedIndex].text;
+            const yText = document.getElementById('report-year').value;
+            
+            // Reaproveitar a lógica gerada com estilos de impressão
+            let html = `
+                <div class="report-title">Relatório de Produtividade da Rede - ${mText}/${yText}</div>
+            `;
+            
+            // Adaptar o content do dashboard para o formato de impressao
+            const div = document.createElement('div');
+            div.innerHTML = content;
+            
+            const units = div.querySelectorAll('.mb-6');
+            if(units.length === 0) {
+                 html += `<p style="text-align:center;">Nenhum dado encontrado para o período.</p>`;
+            } else {
+                html += `<div style="text-align:center; font-weight:bold; font-size:14px; margin-bottom: 10px; border-bottom: 2px solid #000; padding-bottom: 5px;">${div.querySelector('.text-xl').innerText}</div>`;
+                
+                units.forEach(u => {
+                    const title = u.querySelector('h3').innerText;
+                    let mList = '';
+                    u.querySelectorAll('.flex').forEach(row => {
+                        mList += `<div class="report-member"><span>${row.children[0].innerText}</span><span>${row.children[1].innerText}</span></div>`;
+                    });
+                    html += `<div class="report-unit"><h3>${title}</h3>${mList}</div>`;
+                });
+            }
+
+            printArea.innerHTML = html;
+            setTimeout(() => window.print(), 100);
+        };
+
     </script>
 </body>
 </html>
