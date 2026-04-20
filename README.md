@@ -24,11 +24,9 @@
         .btn-primary { background-color: var(--primary); color: white; transition: 0.2s; }
         .btn-primary:hover { background-color: var(--primary-hover); }
         
-        /* Oculta áreas específicas na tela e na impressão */
         .hidden { display: none !important; }
         #print-area { display: none; }
 
-        /* Estilos de Impressão (Estilo Planilha) */
         @media print {
             body { background: white !important; color: black !important; margin: 0; padding: 0; }
             #app-screens, #login-screen, #nav-menu, .no-print, .modal-backdrop { display: none !important; }
@@ -57,7 +55,6 @@
             .print-footer-section { margin-top: 10px; border: 1px solid #000; padding: 6px; font-size: 9px; page-break-inside: avoid;}
             .legal-text { font-size: 8px; color: #333; text-align: justify; margin-top: 5px; font-style: italic;}
 
-            /* Relatórios */
             .report-title { font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 15px; text-transform: uppercase;}
             .report-unit { margin-bottom: 15px; border: 1px solid #000; padding: 10px;}
             .report-unit h3 { background: #333; color: white; padding: 5px; margin: -10px -10px 10px -10px; -webkit-print-color-adjust: exact; color-adjust: exact;}
@@ -69,24 +66,22 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
         
-        .loader { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 24px; height: 24px; -webkit-animation: spin 1s linear infinite; animation: spin 1s linear infinite; }
+        .loader { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body data-theme="Masculino" class="min-h-screen flex flex-col">
 
-    <!-- OVERLAY DE CARREGAMENTO GLOBAL -->
-    <div id="global-loader" class="fixed inset-0 bg-black bg-opacity-90 z-[100] flex flex-col items-center justify-center">
+    <div id="global-loader" class="fixed inset-0 bg-black bg-opacity-90 z-[100] flex flex-col items-center justify-center hidden">
         <div class="loader mb-4 w-12 h-12 border-4"></div>
         <p class="text-white font-medium tracking-wider">Sincronizando Nuvem...</p>
     </div>
 
-    <!-- TELA DE LOGIN -->
     <div id="login-screen" class="flex-1 flex flex-col items-center justify-center p-6 hidden">
         <div class="card p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
             <i class="fas fa-dumbbell text-5xl text-primary mb-4"></i>
             <h1 class="text-3xl font-bold mb-2">PowFit Pro</h1>
-            <p class="text-sm var(--text-muted) mb-8">Master Network Edition</p>
+            <p class="text-sm opacity-70 mb-8">Master Network Edition</p>
             
             <button onclick="loginGoogle()" class="w-full bg-white text-gray-800 hover:bg-gray-100 font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-3 transition shadow-md border border-gray-200">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6" alt="Google">
@@ -96,12 +91,33 @@
         </div>
     </div>
 
-    <!-- NAVEGAÇÃO SUPERIOR -->
+    <div id="setup-screen" class="flex-1 flex flex-col items-center justify-center p-6 hidden">
+        <div class="card p-8 rounded-2xl shadow-2xl max-w-lg w-full">
+            <h2 class="text-2xl font-bold mb-2"><i class="fas fa-building text-primary"></i> Criar Franquia / Rede</h2>
+            <p class="opacity-70 mb-6 text-sm">Estruture sua marca principal. Mais unidades poderão ser adicionadas depois.</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Sua Marca / Rede</label>
+                    <input type="text" id="setup-network-name" class="input-field w-full rounded-lg px-3 py-3" placeholder="Ex: Academia FitLife">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Sua Primeira Unidade</label>
+                    <input type="text" id="setup-unit-name" class="input-field w-full rounded-lg px-3 py-3" placeholder="Ex: Matriz (Centro)">
+                </div>
+                <button id="btn-save-setup" class="w-full btn-primary py-3 rounded-lg font-bold mt-4 shadow-lg">Finalizar Configuração</button>
+            </div>
+        </div>
+    </div>
+
     <nav id="nav-menu" class="card border-b px-4 py-3 sticky top-0 z-50 hidden">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-2">
                 <i class="fas fa-dumbbell text-2xl text-primary"></i>
-                <span class="font-bold text-lg tracking-tight">PowFit Pro</span>
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg tracking-tight leading-tight">PowFit Pro</span>
+                    <span id="nav-network-name" class="text-[10px] text-primary uppercase font-bold tracking-widest"></span>
+                </div>
             </div>
             <div class="flex gap-1 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 hide-scrollbar">
                 <button onclick="switchTab('builder')" id="tab-builder" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition bg-primary text-white"><i class="fas fa-plus-circle mr-1"></i> Montar Ficha</button>
@@ -114,14 +130,9 @@
         </div>
     </nav>
 
-    <!-- TELAS DA APLICAÇÃO -->
     <div id="app-screens" class="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 hidden">
         
-        <!-- ============================================== -->
-        <!-- ABA: MONTAR FICHA -->
-        <!-- ============================================== -->
         <div id="screen-builder" class="screen-content">
-            <!-- Seleção do Profissional Responsável -->
             <div class="card rounded-xl p-4 shadow-sm mb-6 bg-opacity-50 border-primary border-opacity-30">
                 <label class="block text-sm font-bold mb-2 text-primary"><i class="fas fa-id-badge"></i> Profissional Responsável pela Prescrição</label>
                 <select id="active-member" onchange="onMemberChange()" class="input-field w-full md:w-1/2 rounded-lg px-3 py-2 text-sm font-medium">
@@ -131,7 +142,6 @@
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-12 gap-6" id="builder-workspace" style="display: none;">
-                <!-- Coluna Esquerda: Dados -->
                 <div class="xl:col-span-4 space-y-6">
                     <div class="card rounded-xl p-5 shadow-sm">
                         <div class="flex justify-between items-center mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
@@ -178,7 +188,6 @@
                     </div>
                 </div>
 
-                <!-- Coluna Direita: Treinos -->
                 <div class="xl:col-span-8 space-y-4">
                     <div class="flex justify-between items-center bg-opacity-10 p-4 rounded-xl card border-dashed border-2">
                         <h2 class="text-xl font-bold"><i class="fas fa-clipboard-list text-primary mr-2"></i> Prancheta</h2>
@@ -196,14 +205,9 @@
             </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- ABA: GESTÃO DE REDE -->
-        <!-- ============================================== -->
         <div id="screen-network" class="screen-content hidden space-y-6">
             <h2 class="text-2xl font-bold"><i class="fas fa-sitemap text-primary mr-2"></i> Gestão de Franquias e Equipe</h2>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Unidades -->
                 <div class="card p-5 rounded-xl">
                     <h3 class="text-lg font-bold mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">Unidades</h3>
                     <div class="flex gap-2 mb-4">
@@ -212,8 +216,6 @@
                     </div>
                     <div id="units-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
                 </div>
-
-                <!-- Membros -->
                 <div class="card p-5 rounded-xl">
                     <h3 class="text-lg font-bold mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">Adicionar Membro</h3>
                     <div class="space-y-3">
@@ -232,8 +234,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Lista de Membros Cadastrados -->
             <div class="card p-5 rounded-xl">
                 <h3 class="text-lg font-bold mb-4">Equipe Cadastrada</h3>
                 <div class="overflow-x-auto">
@@ -247,25 +247,16 @@
             </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- ABA: BANCO DE EXERCÍCIOS -->
-        <!-- ============================================== -->
         <div id="screen-database" class="screen-content hidden space-y-6">
             <h2 class="text-2xl font-bold"><i class="fas fa-database text-primary mr-2"></i> Customizar Banco de Exercícios</h2>
             <div class="card p-5 rounded-xl flex flex-col md:flex-row gap-6">
                 <div class="flex-1 space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Categoria</label>
-                        <select id="custom-ex-cat" class="input-field w-full rounded px-3 py-2 text-sm"></select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Nome do Exercício</label>
-                        <input type="text" id="custom-ex-name" class="input-field w-full rounded px-3 py-2 text-sm" placeholder="Ex: Supino Máquina Convergente">
-                    </div>
+                    <div><label class="block text-sm font-medium mb-1">Categoria</label><select id="custom-ex-cat" class="input-field w-full rounded px-3 py-2 text-sm"></select></div>
+                    <div><label class="block text-sm font-medium mb-1">Nome do Exercício</label><input type="text" id="custom-ex-name" class="input-field w-full rounded px-3 py-2 text-sm" placeholder="Ex: Supino Máquina Convergente"></div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Imagem Demonstrativa (Opcional)</label>
                         <input type="file" id="custom-ex-img" accept="image/*" class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-hover">
-                        <p class="text-[10px] opacity-60 mt-1">Imagens serão comprimidas automaticamente para economizar espaço.</p>
+                        <p class="text-[10px] opacity-60 mt-1">Imagens serão comprimidas automaticamente.</p>
                     </div>
                     <button onclick="saveCustomExercise()" class="btn-primary px-6 py-2 rounded font-bold w-full"><i class="fas fa-save mr-1"></i> Adicionar ao Banco</button>
                 </div>
@@ -276,9 +267,6 @@
             </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- ABA: NUVEM / HISTÓRICO -->
-        <!-- ============================================== -->
         <div id="screen-history" class="screen-content hidden space-y-6">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-bold"><i class="fas fa-cloud text-primary mr-2"></i> Arquivo em Nuvem</h2>
@@ -287,9 +275,6 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="history-grid"></div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- ABA: RELATÓRIOS -->
-        <!-- ============================================== -->
         <div id="screen-reports" class="screen-content hidden space-y-6">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-bold"><i class="fas fa-chart-bar text-primary mr-2"></i> Produtividade Mensal</h2>
@@ -300,15 +285,12 @@
                     <select id="report-month" onchange="generateReport()" class="input-field rounded px-3 py-2 text-sm w-32"></select>
                     <select id="report-year" onchange="generateReport()" class="input-field rounded px-3 py-2 text-sm w-32"></select>
                 </div>
-                <div id="report-content" class="bg-black bg-opacity-5 p-6 rounded-lg border border-opacity-20" style="border-color: var(--border-color);">
-                    <!-- Relatorio JS -->
-                </div>
+                <div id="report-content" class="bg-black bg-opacity-5 p-6 rounded-lg border border-opacity-20" style="border-color: var(--border-color);"></div>
             </div>
         </div>
 
     </div>
 
-    <!-- MODAL DE SELEÇÃO DE EXERCÍCIOS -->
     <div id="exercise-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-2 sm:p-4 modal-backdrop">
         <div class="card w-full max-w-6xl rounded-xl shadow-2xl flex flex-col h-[90vh]">
             <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
@@ -322,16 +304,13 @@
         </div>
     </div>
 
-    <!-- ÁREA DE IMPRESSÃO -->
     <div id="print-area"></div>
 
-    <!-- FIREBASE & LÓGICA DO APP -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // CONFIGURAÇÃO FIREBASE DO USUÁRIO
         const firebaseConfig = {
             apiKey: "AIzaSyBIPqTYYkG5vHr57CndPCmxUeACncNAobM",
             authDomain: "powfitpro-582df.firebaseapp.com",
@@ -406,102 +385,112 @@
         const techniques = ["Nenhuma", "Drop set", "Bi-set", "Tri-set", "Série gigante", "Rest-pause", "FST-7", "Pré-exaustão", "Pós-exaustão", "Negativa", "Isometria", "Parciais", "Pirâmide"];
         const daysSequence = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"];
 
-        // --- ESTADO GLOBAL (MEMÓRIA) ---
         window.appState = {
             currentUser: null,
-            units: [],
-            members: [],
-            customExercises: [],
-            cloudHistory: [],
-            builderWorkouts: [],
-            activeModalWorkoutId: null,
-            activeCategory: "🔥 PEITO",
-            currentDocId: null // Id do documento no firestore se estiver editando
+            networkName: '',
+            units: [], members: [], customExercises: [], cloudHistory: [], builderWorkouts: [],
+            activeModalWorkoutId: null, activeCategory: "🔥 PEITO", currentDocId: null
         };
 
+        const genId = () => Math.random().toString(36).substr(2, 9);
+
         // --- AUTENTICAÇÃO E INICIALIZAÇÃO ---
-        window.loginGoogle = () => {
-            const provider = new GoogleAuthProvider();
-            signInWithPopup(auth, provider).catch(error => alert("Erro ao fazer login: " + error.message));
-        };
+        window.loginGoogle = () => { signInWithPopup(auth, new GoogleAuthProvider()).catch(e => alert("Erro: " + e.message)); };
         window.logout = () => signOut(auth);
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('nav-menu').classList.remove('hidden');
-                document.getElementById('app-screens').classList.remove('hidden');
-                document.getElementById('global-loader').classList.remove('hidden');
                 appState.currentUser = user;
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('global-loader').classList.remove('hidden');
                 await fetchCloudData();
                 document.getElementById('global-loader').classList.add('hidden');
-                switchTab('network'); // Começa na aba de rede para forçar setup se vazio
-                if(appState.members.length > 0) switchTab('builder'); // Vai pra builder se ja tem membro
             } else {
                 appState.currentUser = null;
                 document.getElementById('login-screen').classList.remove('hidden');
                 document.getElementById('nav-menu').classList.add('hidden');
                 document.getElementById('app-screens').classList.add('hidden');
+                document.getElementById('setup-screen').classList.add('hidden');
                 document.getElementById('global-loader').classList.add('hidden');
             }
         });
 
         async function fetchCloudData() {
-            if (!appState.currentUser) return;
             const uid = appState.currentUser.uid;
-            
-            // Unidades
-            const snapUnits = await getDocs(collection(db, 'artifacts', 'powfitpro', 'users', uid, 'units'));
-            appState.units = snapUnits.docs.map(d => ({ id: d.id, ...d.data() }));
-            
-            // Membros
-            const snapMembers = await getDocs(collection(db, 'artifacts', 'powfitpro', 'users', uid, 'members'));
-            appState.members = snapMembers.docs.map(d => ({ id: d.id, ...d.data() }));
-            
-            // Custom Exercises
-            const snapEx = await getDocs(collection(db, 'artifacts', 'powfitpro', 'users', uid, 'customExercises'));
-            appState.customExercises = snapEx.docs.map(d => ({ id: d.id, ...d.data() }));
+            try {
+                // Checa a rede
+                const netDoc = await getDoc(doc(db, 'users', uid));
+                if (!netDoc.exists() || !netDoc.data().networkName) {
+                    document.getElementById('setup-screen').classList.remove('hidden');
+                    return;
+                }
+                
+                appState.networkName = netDoc.data().networkName;
+                document.getElementById('nav-network-name').innerText = appState.networkName;
 
-            // Workouts History
-            const snapWorkouts = await getDocs(collection(db, 'artifacts', 'powfitpro', 'users', uid, 'workouts'));
-            appState.cloudHistory = snapWorkouts.docs.map(d => ({ id: d.id, ...d.data() }));
+                // Resto dos dados (Usando a hierarquia correta que obedece as regras do firestore)
+                const [snapUnits, snapMembers, snapEx, snapWorkouts] = await Promise.all([
+                    getDocs(collection(db, 'users', uid, 'units')),
+                    getDocs(collection(db, 'users', uid, 'members')),
+                    getDocs(collection(db, 'users', uid, 'customExercises')),
+                    getDocs(collection(db, 'users', uid, 'workouts'))
+                ]);
 
-            renderNetworkUI();
-            populateMemberSelect();
-            populateReportSelects();
-            renderHistory();
-            initBuilderCatSelect();
-            if(appState.builderWorkouts.length === 0) window.addWorkoutDay();
+                appState.units = snapUnits.docs.map(d => ({ id: d.id, ...d.data() }));
+                appState.members = snapMembers.docs.map(d => ({ id: d.id, ...d.data() }));
+                appState.customExercises = snapEx.docs.map(d => ({ id: d.id, ...d.data() }));
+                appState.cloudHistory = snapWorkouts.docs.map(d => ({ id: d.id, ...d.data() }));
+
+                document.getElementById('nav-menu').classList.remove('hidden');
+                document.getElementById('app-screens').classList.remove('hidden');
+                document.getElementById('setup-screen').classList.add('hidden');
+                
+                renderNetworkUI(); populateMemberSelect(); populateReportSelects(); renderHistory(); initBuilderCatSelect();
+                
+                if(appState.members.length > 0) switchTab('builder'); else switchTab('network');
+                if(appState.builderWorkouts.length === 0) window.addWorkoutDay();
+
+            } catch(e) {
+                alert("Erro ao conectar base de dados: " + e.message);
+            }
         }
+
+        // --- SALVAR SETUP DE REDE ---
+        document.getElementById('btn-save-setup').onclick = async () => {
+            const netName = document.getElementById('setup-network-name').value.trim();
+            const unitName = document.getElementById('setup-unit-name').value.trim();
+            if(!netName || !unitName) return alert("Preencha o Nome da Rede e da Primeira Unidade.");
+            
+            document.getElementById('global-loader').classList.remove('hidden');
+            try {
+                await setDoc(doc(db, 'users', appState.currentUser.uid), { networkName: netName }, {merge: true});
+                await addDoc(collection(db, 'users', appState.currentUser.uid, 'units'), { name: unitName });
+                await fetchCloudData();
+            } catch(e) { alert("Erro ao configurar rede: " + e.message); }
+            document.getElementById('global-loader').classList.add('hidden');
+        };
 
         // --- NAVEGAÇÃO ---
         window.switchTab = (tabId) => {
             document.querySelectorAll('.screen-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('bg-primary', 'text-white');
-                el.classList.add('hover:bg-black', 'hover:bg-opacity-10');
-            });
+            document.querySelectorAll('.nav-btn').forEach(el => { el.classList.remove('bg-primary', 'text-white'); el.classList.add('hover:bg-black', 'hover:bg-opacity-10'); });
             document.getElementById(`screen-${tabId}`).classList.remove('hidden');
             document.getElementById(`tab-${tabId}`).classList.add('bg-primary', 'text-white');
             document.getElementById(`tab-${tabId}`).classList.remove('hover:bg-black', 'hover:bg-opacity-10');
         };
 
-        // --- GESTÃO DE REDE (UNIDADES E MEMBROS) ---
+        // --- GESTÃO DE REDE ---
         window.addUnit = async () => {
             const nameInput = document.getElementById('new-unit-name');
             const name = nameInput.value.trim();
             if(!name) return;
-            
-            const docRef = await addDoc(collection(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'units'), { name });
+            const docRef = await addDoc(collection(db, 'users', appState.currentUser.uid, 'units'), { name });
             appState.units.push({ id: docRef.id, name });
             nameInput.value = '';
             renderNetworkUI();
         };
 
-        window.toggleCrefNetwork = () => {
-            const role = document.getElementById('member-role').value;
-            document.getElementById('cref-box').style.display = role === 'TE' ? 'none' : 'grid';
-        };
+        window.toggleCrefNetwork = () => { document.getElementById('cref-box').style.display = document.getElementById('member-role').value === 'TE' ? 'none' : 'grid'; };
 
         window.addMember = async () => {
             const unitId = document.getElementById('member-unit').value;
@@ -512,56 +501,35 @@
             const state = role === 'PEF' ? document.getElementById('member-state').value.trim() : '';
 
             if(!unitId || !name || !cpf) return alert("Preencha Unidade, Nome e CPF.");
-
             const memberData = { unitId, name, cpf, role, cref, state };
-            const docRef = await addDoc(collection(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'members'), memberData);
+            const docRef = await addDoc(collection(db, 'users', appState.currentUser.uid, 'members'), memberData);
             appState.members.push({ id: docRef.id, ...memberData });
             
-            document.getElementById('member-name').value = '';
-            document.getElementById('member-cpf').value = '';
-            document.getElementById('member-cref').value = '';
-            document.getElementById('member-state').value = '';
-            renderNetworkUI();
-            populateMemberSelect();
+            document.getElementById('member-name').value = ''; document.getElementById('member-cpf').value = ''; document.getElementById('member-cref').value = ''; document.getElementById('member-state').value = '';
+            renderNetworkUI(); populateMemberSelect();
         };
 
         window.deleteMember = async (id) => {
             if(confirm("Excluir membro da equipe?")) {
-                await deleteDoc(doc(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'members', id));
+                await deleteDoc(doc(db, 'users', appState.currentUser.uid, 'members', id));
                 appState.members = appState.members.filter(m => m.id !== id);
-                renderNetworkUI();
-                populateMemberSelect();
+                renderNetworkUI(); populateMemberSelect();
             }
         };
 
         function renderNetworkUI() {
-            // Units list
-            const uList = document.getElementById('units-list');
-            uList.innerHTML = appState.units.map(u => `<div class="bg-black bg-opacity-10 p-2 rounded text-sm font-bold flex justify-between"><span><i class="fas fa-building text-primary mr-2"></i>${u.name}</span></div>`).join('');
-            
-            // Unit select in member form
-            const uSelect = document.getElementById('member-unit');
-            uSelect.innerHTML = `<option value="">Selecione a Unidade...</option>` + appState.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
-            
-            // Members Table
-            const tbody = document.getElementById('members-table-body');
-            tbody.innerHTML = appState.members.map(m => {
+            document.getElementById('units-list').innerHTML = appState.units.map(u => `<div class="bg-black bg-opacity-10 p-2 rounded text-sm font-bold"><i class="fas fa-building text-primary mr-2"></i>${u.name}</div>`).join('');
+            document.getElementById('member-unit').innerHTML = `<option value="">Selecione a Unidade...</option>` + appState.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+            document.getElementById('members-table-body').innerHTML = appState.members.map(m => {
                 const unitName = appState.units.find(u => u.id === m.unitId)?.name || 'Sem Unidade';
                 const docStr = m.role === 'PEF' ? `CREF: ${m.cref}/${m.state}` : `CPF: ${m.cpf}`;
-                return `<tr>
-                    <td class="p-2 font-medium">${m.name}</td>
-                    <td class="p-2">${unitName}</td>
-                    <td class="p-2">${m.role === 'PEF' ? 'Ed. Física' : 'Treinador Esp.'}</td>
-                    <td class="p-2 text-xs opacity-70">${docStr}</td>
-                    <td class="p-2"><button onclick="deleteMember('${m.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td>
-                </tr>`;
+                return `<tr><td class="p-2 font-medium">${m.name}</td><td class="p-2">${unitName}</td><td class="p-2">${m.role === 'PEF' ? 'Ed. Física' : 'Treinador Esp.'}</td><td class="p-2 text-xs opacity-70">${docStr}</td><td class="p-2"><button onclick="deleteMember('${m.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`;
             }).join('');
         }
 
         // --- BANCO DE EXERCÍCIOS CUSTOMIZADOS ---
         function initBuilderCatSelect() {
-            const select = document.getElementById('custom-ex-cat');
-            select.innerHTML = Object.keys(defaultCategories).map(c => `<option value="${c}">${c}</option>`).join('');
+            document.getElementById('custom-ex-cat').innerHTML = Object.keys(defaultCategories).map(c => `<option value="${c}">${c}</option>`).join('');
             renderCustomExList();
         }
 
@@ -569,34 +537,29 @@
             const cat = document.getElementById('custom-ex-cat').value;
             const name = document.getElementById('custom-ex-name').value.trim();
             const fileInput = document.getElementById('custom-ex-img');
-            
             if(!name) return alert("Digite o nome do exercício.");
 
             let imgBase64 = null;
-            if (fileInput.files && fileInput.files[0]) {
-                imgBase64 = await resizeImage(fileInput.files[0], 200); // max 200px
-            }
+            if (fileInput.files && fileInput.files[0]) imgBase64 = await resizeImage(fileInput.files[0], 200);
 
             const exData = { category: cat, name: name, image: imgBase64 };
-            const docRef = await addDoc(collection(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'customExercises'), exData);
+            const docRef = await addDoc(collection(db, 'users', appState.currentUser.uid, 'customExercises'), exData);
             appState.customExercises.push({ id: docRef.id, ...exData });
             
-            document.getElementById('custom-ex-name').value = '';
-            fileInput.value = '';
+            document.getElementById('custom-ex-name').value = ''; fileInput.value = '';
             renderCustomExList();
         };
 
         window.deleteCustomEx = async (id) => {
             if(confirm("Excluir do banco customizado?")) {
-                await deleteDoc(doc(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'customExercises', id));
+                await deleteDoc(doc(db, 'users', appState.currentUser.uid, 'customExercises', id));
                 appState.customExercises = appState.customExercises.filter(e => e.id !== id);
                 renderCustomExList();
             }
         };
 
         function renderCustomExList() {
-            const list = document.getElementById('custom-ex-list');
-            list.innerHTML = appState.customExercises.map(ex => `
+            document.getElementById('custom-ex-list').innerHTML = appState.customExercises.map(ex => `
                 <div class="flex justify-between items-center p-2 border-b border-opacity-10 text-sm" style="border-color: var(--border-color)">
                     <div class="flex items-center gap-2">
                         ${ex.image ? `<img src="${ex.image}" class="w-8 h-8 object-cover rounded">` : `<div class="w-8 h-8 bg-gray-500 bg-opacity-20 rounded flex items-center justify-center text-[10px]">Sem img</div>`}
@@ -615,12 +578,10 @@
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         let width = img.width; let height = img.height;
-                        if (width > height) { if (width > maxSize) { height *= maxSize / width; width = maxSize; } } 
-                        else { if (height > maxSize) { width *= maxSize / height; height = maxSize; } }
+                        if (width > height) { if (width > maxSize) { height *= maxSize / width; width = maxSize; } } else { if (height > maxSize) { width *= maxSize / height; height = maxSize; } }
                         canvas.width = width; canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.7)); // Compress to jpeg 70% quality
+                        const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.7));
                     };
                     img.src = e.target.result;
                 };
@@ -631,25 +592,20 @@
         function getFullExerciseList(category) {
             const defaults = defaultCategories[category] || [];
             const customs = appState.customExercises.filter(c => c.category === category);
-            // Returns array of objects {name, image}
             const list = defaults.map(name => ({ name, image: null }));
             customs.forEach(c => list.push({ name: c.name, image: c.image }));
             return list;
         }
 
-
-        // --- MONTAR FICHA (BUILDER) ---
+        // --- BUILDER (MONTAR FICHA) ---
         function populateMemberSelect() {
-            const select = document.getElementById('active-member');
-            select.innerHTML = `<option value="">Selecione o membro da equipe...</option>` + 
-                appState.members.map(m => `<option value="${m.id}">${m.name} (${m.role})</option>`).join('');
+            document.getElementById('active-member').innerHTML = `<option value="">Selecione o membro da equipe...</option>` + appState.members.map(m => `<option value="${m.id}">${m.name} (${m.role})</option>`).join('');
         }
 
         window.onMemberChange = () => {
             const memberId = document.getElementById('active-member').value;
             const ws = document.getElementById('builder-workspace');
             const info = document.getElementById('active-member-info');
-            
             if(!memberId) { ws.style.display = 'none'; info.innerText = ''; return; }
             
             const member = appState.members.find(m => m.id === memberId);
@@ -662,135 +618,95 @@
 
         function renderBuilderHealthOptions(role) {
             const dataObj = role === 'PEF' ? healthPEF : healthTE;
-            const container = document.getElementById('health-container');
             const currentSelected = Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value);
-            
-            container.innerHTML = Object.keys(dataObj).map(opt => `
+            document.getElementById('health-container').innerHTML = Object.keys(dataObj).map(opt => `
                 <label class="flex items-start space-x-2 cursor-pointer p-1 rounded hover:bg-black hover:bg-opacity-5">
-                    <input type="checkbox" value="${opt}" ${currentSelected.includes(opt)?'checked':''} class="health-cb mt-0.5 w-3 h-3 text-primary">
-                    <span>${opt}</span>
+                    <input type="checkbox" value="${opt}" ${currentSelected.includes(opt)?'checked':''} class="health-cb mt-0.5 w-3 h-3 text-primary"><span>${opt}</span>
                 </label>
             `).join('');
         }
 
         window.changeTheme = () => { document.body.setAttribute('data-theme', document.getElementById('stu-gender').value); };
-        
         window.calcIMC = () => {
-            const w = parseFloat(document.getElementById('stu-weight').value);
-            const h = parseFloat(document.getElementById('stu-height').value);
+            const w = parseFloat(document.getElementById('stu-weight').value), h = parseFloat(document.getElementById('stu-height').value);
             const display = document.getElementById('imc-display');
             if (w > 0 && h > 0) {
                 const imc = (w / (h * h)).toFixed(1);
                 let cls = imc < 18.5 ? "Abaixo" : imc < 24.9 ? "Normal" : imc < 29.9 ? "Sobrepeso" : "Obesidade";
                 display.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-2 py-1 rounded-full text-[10px] font-bold border border-primary border-opacity-30">IMC: ${imc} (${cls})</span>`;
-            } else { display.innerHTML = ''; }
+            } else display.innerHTML = '';
         };
 
         window.addWorkoutDay = () => {
             const idx = appState.builderWorkouts.length;
-            const title = idx < daysSequence.length ? `TREINO ${daysSequence[idx]}` : `NOVO TREINO ${idx+1}`;
-            appState.builderWorkouts.push({ id: generateId(), title, exercises: [] });
+            appState.builderWorkouts.push({ id: genId(), title: idx < daysSequence.length ? `TREINO ${daysSequence[idx]}` : `NOVO TREINO ${idx+1}`, exercises: [] });
             renderBuilderWorkouts();
         };
 
         window.duplicateWorkout = (id) => {
             const w = appState.builderWorkouts.find(w => w.id === id);
-            if(w) {
-                appState.builderWorkouts.push({ ...JSON.parse(JSON.stringify(w)), id: generateId(), title: w.title + " (Cópia)" });
-                renderBuilderWorkouts();
-            }
+            if(w) { appState.builderWorkouts.push({ ...JSON.parse(JSON.stringify(w)), id: genId(), title: w.title + " (Cópia)" }); renderBuilderWorkouts(); }
         };
 
-        window.removeWorkout = (id) => {
-            if(confirm("Excluir dia?")) { appState.builderWorkouts = appState.builderWorkouts.filter(w => w.id !== id); renderBuilderWorkouts(); }
-        };
-
+        window.removeWorkout = (id) => { if(confirm("Excluir dia?")) { appState.builderWorkouts = appState.builderWorkouts.filter(w => w.id !== id); renderBuilderWorkouts(); } };
         window.updateWorkoutTitle = (id, val) => { const w = appState.builderWorkouts.find(w => w.id === id); if(w) w.title = val; };
         window.removeExercise = (wId, eIdx) => { appState.builderWorkouts.find(w => w.id === wId).exercises.splice(eIdx, 1); renderBuilderWorkouts(); };
         window.updateExercise = (wId, eIdx, f, v) => { appState.builderWorkouts.find(w => w.id === wId).exercises[eIdx][f] = v; };
-        
         window.moveExercise = (wId, eIdx, dir) => {
             const w = appState.builderWorkouts.find(w => w.id === wId);
-            if (dir === 'up' && eIdx > 0) { [w.exercises[eIdx], w.exercises[eIdx-1]] = [w.exercises[eIdx-1], w.exercises[eIdx]]; }
-            else if (dir === 'down' && eIdx < w.exercises.length - 1) { [w.exercises[eIdx], w.exercises[eIdx+1]] = [w.exercises[eIdx+1], w.exercises[eIdx]]; }
+            if (dir === 'up' && eIdx > 0) [w.exercises[eIdx], w.exercises[eIdx-1]] = [w.exercises[eIdx-1], w.exercises[eIdx]];
+            else if (dir === 'down' && eIdx < w.exercises.length - 1) [w.exercises[eIdx], w.exercises[eIdx+1]] = [w.exercises[eIdx+1], w.exercises[eIdx]];
             renderBuilderWorkouts();
         };
 
         function renderBuilderWorkouts() {
-            const container = document.getElementById('workouts-container');
-            container.innerHTML = appState.builderWorkouts.map(w => {
+            document.getElementById('workouts-container').innerHTML = appState.builderWorkouts.map(w => {
                 const exHtml = w.exercises.length === 0 ? `<div class="p-3 text-xs opacity-50 text-center">Vazio</div>` : w.exercises.map((ex, idx) => `
                     <div class="flex flex-col sm:flex-row gap-2 p-2 items-start sm:items-center border-b border-opacity-10" style="border-color: var(--border-color)">
-                        <div class="flex gap-1 hidden sm:flex">
-                            <button onclick="moveExercise('${w.id}', ${idx}, 'up')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-up"></i></button>
-                            <button onclick="moveExercise('${w.id}', ${idx}, 'down')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-down"></i></button>
-                        </div>
-                        <div class="flex items-center gap-2 flex-1 w-full sm:w-auto">
-                            ${ex.image ? `<img src="${ex.image}" class="w-6 h-6 object-cover rounded">` : ''}
-                            <div><div class="text-[9px] opacity-60 uppercase">${ex.category}</div><div class="text-xs font-bold">${ex.name}</div></div>
-                        </div>
+                        <div class="flex gap-1 hidden sm:flex"><button onclick="moveExercise('${w.id}', ${idx}, 'up')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-up"></i></button><button onclick="moveExercise('${w.id}', ${idx}, 'down')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-down"></i></button></div>
+                        <div class="flex items-center gap-2 flex-1 w-full sm:w-auto">${ex.image ? `<img src="${ex.image}" class="w-6 h-6 object-cover rounded">` : ''}<div><div class="text-[9px] opacity-60 uppercase">${ex.category}</div><div class="text-xs font-bold">${ex.name}</div></div></div>
                         <div class="flex flex-wrap gap-1 w-full sm:w-auto">
-                            <input type="text" value="${ex.sets}" onchange="updateExercise('${w.id}', ${idx}, 'sets', this.value)" class="input-field w-12 rounded px-1 py-1 text-xs text-center" placeholder="Séries">
-                            <span class="self-center opacity-50 text-xs">x</span>
+                            <input type="text" value="${ex.sets}" onchange="updateExercise('${w.id}', ${idx}, 'sets', this.value)" class="input-field w-12 rounded px-1 py-1 text-xs text-center" placeholder="Séries"><span class="self-center opacity-50 text-xs">x</span>
                             <input type="text" value="${ex.reps}" onchange="updateExercise('${w.id}', ${idx}, 'reps', this.value)" class="input-field w-16 rounded px-1 py-1 text-xs text-center" placeholder="Reps">
-                            <select onchange="updateExercise('${w.id}', ${idx}, 'technique', this.value)" class="input-field w-24 rounded px-1 py-1 text-[10px]">
-                                ${techniques.map(t => `<option value="${t}" ${ex.technique === t ? 'selected' : ''}>${t}</option>`).join('')}
-                            </select>
+                            <select onchange="updateExercise('${w.id}', ${idx}, 'technique', this.value)" class="input-field w-24 rounded px-1 py-1 text-[10px]">${techniques.map(t => `<option value="${t}" ${ex.technique === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
                             <input type="text" value="${ex.obs}" onchange="updateExercise('${w.id}', ${idx}, 'obs', this.value)" class="input-field flex-1 sm:w-32 rounded px-1 py-1 text-xs" placeholder="Obs...">
                             <button onclick="removeExercise('${w.id}', ${idx})" class="text-red-500 hover:text-red-700 p-1 rounded"><i class="fas fa-trash"></i></button>
                         </div>
-                    </div>
-                `).join('');
+                    </div>`).join('');
 
                 return `
                 <div class="card rounded-xl overflow-hidden shadow-sm">
                     <div class="p-2 border-b flex justify-between items-center bg-black bg-opacity-5" style="border-color: var(--border-color)">
                         <input type="text" value="${w.title}" onchange="updateWorkoutTitle('${w.id}', this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 px-2 py-1 rounded uppercase">
-                        <div class="flex gap-1">
-                            <button onclick="duplicateWorkout('${w.id}')" class="text-xs p-1.5 rounded"><i class="fas fa-copy"></i></button>
-                            <button onclick="removeWorkout('${w.id}')" class="text-xs p-1.5 text-red-500 rounded"><i class="fas fa-trash"></i></button>
-                        </div>
+                        <div class="flex gap-1"><button onclick="duplicateWorkout('${w.id}')" class="text-xs p-1.5 rounded"><i class="fas fa-copy"></i></button><button onclick="removeWorkout('${w.id}')" class="text-xs p-1.5 text-red-500 rounded"><i class="fas fa-trash"></i></button></div>
                     </div>
                     <div>${exHtml}</div>
-                    <div class="p-2 border-t" style="border-color: var(--border-color)">
-                        <button onclick="openModal('${w.id}')" class="w-full text-primary py-1 rounded text-xs font-bold hover:bg-black hover:bg-opacity-5">+ ADICIONAR EXERCÍCIO</button>
-                    </div>
+                    <div class="p-2 border-t" style="border-color: var(--border-color)"><button onclick="openModal('${w.id}')" class="w-full text-primary py-1 rounded text-xs font-bold hover:bg-black hover:bg-opacity-5">+ ADICIONAR EXERCÍCIO</button></div>
                 </div>`;
             }).join('');
         }
 
-        // Modal de Exercícios
         window.openModal = (wId) => { appState.activeModalWorkoutId = wId; document.getElementById('exercise-modal').classList.remove('hidden'); renderModalCat(); renderModalEx(); };
         window.closeModal = () => { document.getElementById('exercise-modal').classList.add('hidden'); appState.activeModalWorkoutId = null; };
         
         function renderModalCat() {
-            document.getElementById('modal-categories').innerHTML = Object.keys(defaultCategories).map(c => 
-                `<button onclick="setModalCat('${c}')" class="w-full text-left px-2 py-2 rounded text-xs font-bold transition ${appState.activeCategory === c ? 'bg-primary text-white' : 'hover:bg-black hover:bg-opacity-10'}">${c}</button>`
-            ).join('');
+            document.getElementById('modal-categories').innerHTML = Object.keys(defaultCategories).map(c => `<button onclick="setModalCat('${c}')" class="w-full text-left px-2 py-2 rounded text-xs font-bold transition ${appState.activeCategory === c ? 'bg-primary text-white' : 'hover:bg-black hover:bg-opacity-10'}">${c}</button>`).join('');
         }
         window.setModalCat = (c) => { appState.activeCategory = c; renderModalCat(); renderModalEx(); };
-        
         function renderModalEx() {
             const list = getFullExerciseList(appState.activeCategory);
             const isCardio = appState.activeCategory === "🫀 CARDIO";
             document.getElementById('modal-exercises').innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">` + list.map((ex, i) => `
                 <button onclick="addExToWorkout(${i}, ${isCardio})" class="card p-2 rounded text-left text-xs font-bold border hover:border-primary transition flex justify-between items-center group">
-                    <div class="flex items-center gap-2">
-                        ${ex.image ? `<img src="${ex.image}" class="w-6 h-6 object-cover rounded">` : ''}
-                        <span>${ex.name}</span>
-                    </div>
+                    <div class="flex items-center gap-2">${ex.image ? `<img src="${ex.image}" class="w-6 h-6 object-cover rounded">` : ''}<span>${ex.name}</span></div>
                     <i class="fas fa-plus opacity-0 group-hover:opacity-100 text-primary"></i>
-                </button>
-            `).join('') + `</div>`;
+                </button>`).join('') + `</div>`;
         }
 
         window.addExToWorkout = (idx, isCardio) => {
             const exObj = getFullExerciseList(appState.activeCategory)[idx];
             const w = appState.builderWorkouts.find(w => w.id === appState.activeModalWorkoutId);
-            if(w) {
-                w.exercises.push({ category: appState.activeCategory, name: exObj.name, image: exObj.image, sets: isCardio ? '1' : '3', reps: isCardio ? '-' : '10 a 12', technique: 'Nenhuma', obs: '' });
-                renderBuilderWorkouts();
-            }
+            if(w) { w.exercises.push({ category: appState.activeCategory, name: exObj.name, image: exObj.image, sets: isCardio ? '1' : '3', reps: isCardio ? '-' : '10 a 12', technique: 'Nenhuma', obs: '' }); renderBuilderWorkouts(); }
         };
 
         // --- SALVAR & IMPRIMIR ---
@@ -799,19 +715,12 @@
             if(!memberId) return alert("Selecione o Profissional Responsável na aba Montar Ficha!");
             
             const payload = {
-                memberId,
-                timestamp: new Date().getTime(),
-                dateStr: new Date().toLocaleDateString('pt-BR'),
-                stuName: document.getElementById('stu-name').value || 'Sem Nome',
-                stuAge: document.getElementById('stu-age').value,
-                stuWeight: document.getElementById('stu-weight').value,
-                stuHeight: document.getElementById('stu-height').value,
-                stuGender: document.getElementById('stu-gender').value,
-                stuLevel: document.getElementById('stu-level').value,
-                stuObjective: document.getElementById('stu-objective').value,
-                stuFreq: document.getElementById('stu-freq').value,
-                stuValidity: document.getElementById('stu-validity').value,
-                stuRecs: document.getElementById('stu-recs').value,
+                memberId, timestamp: new Date().getTime(), dateStr: new Date().toLocaleDateString('pt-BR'),
+                stuName: document.getElementById('stu-name').value || 'Sem Nome', stuAge: document.getElementById('stu-age').value,
+                stuWeight: document.getElementById('stu-weight').value, stuHeight: document.getElementById('stu-height').value,
+                stuGender: document.getElementById('stu-gender').value, stuLevel: document.getElementById('stu-level').value,
+                stuObjective: document.getElementById('stu-objective').value, stuFreq: document.getElementById('stu-freq').value,
+                stuValidity: document.getElementById('stu-validity').value, stuRecs: document.getElementById('stu-recs').value,
                 health: Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value),
                 workouts: appState.builderWorkouts
             };
@@ -819,16 +728,14 @@
             document.getElementById('global-loader').classList.remove('hidden');
             try {
                 if(appState.currentDocId) {
-                    await setDoc(doc(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'workouts', appState.currentDocId), payload);
-                    // Atualiza cache local
+                    await setDoc(doc(db, 'users', appState.currentUser.uid, 'workouts', appState.currentDocId), payload);
                     const idx = appState.cloudHistory.findIndex(h => h.id === appState.currentDocId);
                     if(idx > -1) appState.cloudHistory[idx] = { id: appState.currentDocId, ...payload };
                 } else {
-                    const docRef = await addDoc(collection(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'workouts'), payload);
+                    const docRef = await addDoc(collection(db, 'users', appState.currentUser.uid, 'workouts'), payload);
                     appState.currentDocId = docRef.id;
                     appState.cloudHistory.push({ id: docRef.id, ...payload });
                 }
-                
                 generatePrintHTML(payload);
             } catch(e) { alert("Erro ao salvar na nuvem: " + e.message); }
             finally { document.getElementById('global-loader').classList.add('hidden'); renderHistory(); }
@@ -839,66 +746,38 @@
             if(!member) return;
             const unitName = appState.units.find(u => u.id === member.unitId)?.name || '';
             const isPEF = member.role === 'PEF';
-            
-            let imcStr = "-";
-            if(data.stuWeight && data.stuHeight) imcStr = (data.stuWeight / (data.stuHeight * data.stuHeight)).toFixed(1);
-            
+            let imcStr = "-"; if(data.stuWeight && data.stuHeight) imcStr = (data.stuWeight / (data.stuHeight * data.stuHeight)).toFixed(1);
             const objTxt = objData[data.stuObjective] || "";
             const hDict = isPEF ? healthPEF : healthTE;
 
-            let legalText = isPEF ? 
-                `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA<br>Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º estabelece que compete ao profissional coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados.` : 
-                `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO<br>Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil. A atuação possui finalidade orientativa e não substitui avaliação médica. Em casos de doenças ou lesões, recomenda-se avaliação prévia por profissional habilitado. O treinamento respeita limites individuais dentro da atuação técnica e esportiva permitida por lei.`;
+            let legalText = isPEF ? `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA<br>Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º estabelece que compete ao profissional coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados.` : `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO<br>Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil. A atuação possui finalidade orientativa e não substitui avaliação médica. Em casos de doenças ou lesões, recomenda-se avaliação prévia por profissional habilitado. O treinamento respeita limites individuais dentro da atuação técnica e esportiva permitida por lei.`;
 
-            const printArea = document.getElementById('print-area');
             let html = `
                 <div class="print-header">
-                    <div>
-                        <h1 class="print-title">Planilha de Treinamento - ${data.stuObjective}</h1>
-                        <div style="font-size:9px; margin-top:2px;">Unidade: ${unitName}</div>
-                    </div>
-                    <div class="prof-info">
-                        Prescrição feita por: ${member.name} (${isPEF ? 'Prof. Educação Física' : 'Treinador Esportivo'})<br>
-                        ${isPEF ? `CREF: ${member.cref} - UF: ${member.state}` : `CPF: ${member.cpf}`}
-                    </div>
+                    <div><h1 class="print-title">Planilha de Treinamento - ${data.stuObjective}</h1><div style="font-size:9px; margin-top:2px;">Unidade: ${unitName}</div></div>
+                    <div class="prof-info">Prescrição feita por: ${member.name} (${isPEF ? 'Prof. Educação Física' : 'Treinador Esportivo'})<br>${isPEF ? `CREF: ${member.cref} - UF: ${member.state}` : `CPF: ${member.cpf}`}</div>
                 </div>
-
                 <div class="print-grid">
-                    <div><strong>Aluno:</strong> ${data.stuName}</div>
-                    <div><strong>Idade:</strong> ${data.stuAge||'-'}</div>
-                    <div><strong>Gênero:</strong> ${data.stuGender}</div>
-                    <div><strong>Peso:</strong> ${data.stuWeight||'-'}kg</div>
-                    <div><strong>Altura:</strong> ${data.stuHeight||'-'}m</div>
-                    <div><strong>IMC:</strong> ${imcStr}</div>
-                    <div><strong>Nível:</strong> ${data.stuLevel}</div>
-                    <div><strong>Frequência:</strong> ${data.stuFreq}</div>
+                    <div><strong>Aluno:</strong> ${data.stuName}</div><div><strong>Idade:</strong> ${data.stuAge||'-'}</div><div><strong>Gênero:</strong> ${data.stuGender}</div>
+                    <div><strong>Peso:</strong> ${data.stuWeight||'-'}kg</div><div><strong>Altura:</strong> ${data.stuHeight||'-'}m</div><div><strong>IMC:</strong> ${imcStr}</div>
+                    <div><strong>Objetivo:</strong> ${data.stuObjective}</div><div><strong>Nível:</strong> ${data.stuLevel}</div><div><strong>Frequência:</strong> ${data.stuFreq}</div>
                     <div><strong>Validade:</strong> ${data.stuValidity}</div>
-                </div>
-            `;
+                </div>`;
 
             if(objTxt || data.health.length > 0) {
                 html += `<div class="print-guidelines"><h4>Diretrizes de Perfil</h4><ul>`;
                 if(objTxt) html += `<li><strong>Objetivo (${data.stuObjective}):</strong> ${objTxt}</li>`;
-                data.health.forEach(h => {
-                    const cleanH = h.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu, '').trim();
-                    if(hDict[h]) html += `<li><strong>Saúde (${cleanH}):</strong> ${hDict[h]}</li>`;
-                });
+                data.health.forEach(h => { const cleanH = h.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu, '').trim(); if(hDict[h]) html += `<li><strong>Saúde (${cleanH}):</strong> ${hDict[h]}</li>`; });
                 html += `</ul></div>`;
             }
 
             data.workouts.forEach(w => {
-                html += `<div class="print-workout"><h3>${w.title}</h3><table>
-                    <thead><tr><th style="width:35%">Exercício</th><th style="width:10%; text-align:center;">Séries</th><th style="width:10%; text-align:center;">Reps</th><th style="width:15%">Técnica</th><th style="width:30%">Observações</th></tr></thead><tbody>`;
-                
+                html += `<div class="print-workout"><h3>${w.title}</h3><table><thead><tr><th style="width:35%">Exercício</th><th style="width:10%; text-align:center;">Séries</th><th style="width:10%; text-align:center;">Reps</th><th style="width:15%">Técnica</th><th style="width:30%">Observações</th></tr></thead><tbody>`;
                 if(w.exercises.length === 0) html += `<tr><td colspan="5" style="text-align:center;">Vazio</td></tr>`;
                 else {
                     w.exercises.forEach(ex => {
                         const imgHtml = ex.image ? `<img src="${ex.image}" class="ex-img-print">` : ``;
-                        html += `<tr>
-                            <td>${imgHtml}<strong>${ex.name}</strong></td>
-                            <td style="text-align:center;">${ex.sets}</td><td style="text-align:center;">${ex.reps}</td>
-                            <td>${ex.technique !== 'Nenhuma' ? ex.technique : '-'}</td><td>${ex.obs || '-'}</td>
-                        </tr>`;
+                        html += `<tr><td>${imgHtml}<strong>${ex.name}</strong></td><td style="text-align:center;">${ex.sets}</td><td style="text-align:center;">${ex.reps}</td><td>${ex.technique !== 'Nenhuma' ? ex.technique : '-'}</td><td>${ex.obs || '-'}</td></tr>`;
                     });
                 }
                 html += `</tbody></table></div>`;
@@ -908,190 +787,119 @@
             if(data.stuRecs) html += `<strong>Recomendações:</strong><p style="white-space: pre-wrap; margin:2px 0 8px 0;">${data.stuRecs}</p>`;
             html += `<div class="legal-text">${legalText}</div><div style="text-align:center; margin-top:10px; font-size:7px;">Ficha gerada em ${data.dateStr} - PowFit Pro Network</div></div>`;
 
-            printArea.innerHTML = html;
+            document.getElementById('print-area').innerHTML = html;
             setTimeout(() => window.print(), 300);
         }
 
-
-        // --- NUVEM / HISTÓRICO ---
+        // --- NUVEM E RELATÓRIOS ---
         window.renderHistory = () => {
             const term = document.getElementById('search-history').value.toLowerCase();
-            const grid = document.getElementById('history-grid');
-            
-            // Ordenar mais recente primeiro
             let arr = [...appState.cloudHistory].sort((a,b) => b.timestamp - a.timestamp);
             if(term) arr = arr.filter(h => h.stuName.toLowerCase().includes(term));
-
             const now = new Date().getTime();
             
-            grid.innerHTML = arr.map(h => {
+            document.getElementById('history-grid').innerHTML = arr.map(h => {
                 const member = appState.members.find(m => m.id === h.memberId)?.name || 'Prof. Removido';
-                
-                // Checa validade (aprox)
-                let isExpired = false;
                 const days = parseInt(h.stuValidity.replace(/\D/g, '')) || 30;
-                if(now > h.timestamp + (days * 24 * 60 * 60 * 1000)) isExpired = true;
+                const isExpired = now > h.timestamp + (days * 24 * 60 * 60 * 1000);
 
-                return `
-                <div class="card p-4 rounded-xl border border-opacity-20 flex flex-col justify-between" style="border-color: var(--border-color)">
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-bold text-lg leading-tight truncate" title="${h.stuName}">${h.stuName}</h3>
-                            ${isExpired ? `<span class="bg-red-500 bg-opacity-20 text-red-500 text-[10px] font-bold px-2 py-0.5 rounded border border-red-500 border-opacity-30">VENCIDA</span>` : ''}
-                        </div>
-                        <p class="text-xs opacity-70 mb-1"><i class="fas fa-user-tie"></i> Resp: ${member}</p>
-                        <p class="text-xs opacity-70 mb-3"><i class="fas fa-calendar-alt"></i> Emissão: ${h.dateStr}</p>
-                    </div>
-                    <div class="flex gap-2 mt-auto">
-                        <button onclick="loadFromCloud('${h.id}')" class="btn-primary flex-1 py-1.5 rounded text-xs font-bold shadow"><i class="fas fa-download mr-1"></i> Carregar</button>
-                        <button onclick="deleteFromCloud('${h.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs transition"><i class="fas fa-trash"></i></button>
-                    </div>
+                return `<div class="card p-4 rounded-xl border border-opacity-20 flex flex-col justify-between" style="border-color: var(--border-color)">
+                    <div><div class="flex justify-between items-start mb-2"><h3 class="font-bold text-lg leading-tight truncate" title="${h.stuName}">${h.stuName}</h3>${isExpired ? `<span class="bg-red-500 bg-opacity-20 text-red-500 text-[10px] font-bold px-2 py-0.5 rounded border border-red-500 border-opacity-30">VENCIDA</span>` : ''}</div>
+                    <p class="text-xs opacity-70 mb-1"><i class="fas fa-user-tie"></i> Resp: ${member}</p><p class="text-xs opacity-70 mb-3"><i class="fas fa-calendar-alt"></i> Emissão: ${h.dateStr}</p></div>
+                    <div class="flex gap-2 mt-auto"><button onclick="loadFromCloud('${h.id}')" class="btn-primary flex-1 py-1.5 rounded text-xs font-bold shadow"><i class="fas fa-download mr-1"></i> Carregar</button>
+                    <button onclick="deleteFromCloud('${h.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs transition"><i class="fas fa-trash"></i></button></div>
                 </div>`;
             }).join('');
         };
 
         window.loadFromCloud = (id) => {
-            const h = appState.cloudHistory.find(d => d.id === id);
-            if(!h) return;
+            const h = appState.cloudHistory.find(d => d.id === id); if(!h) return;
+            appState.currentDocId = h.id; document.getElementById('active-member').value = h.memberId; window.onMemberChange();
             
-            appState.currentDocId = h.id;
-            document.getElementById('active-member').value = h.memberId;
-            window.onMemberChange(); // atualiza checks e textos
+            ['stu-name','stu-age','stu-weight','stu-height','stu-gender','stu-level','stu-objective','stu-freq','stu-validity','stu-recs'].forEach(field => {
+                let v = h[field.replace('stu-','stu')]; 
+                if(field === 'stu-gender' && !v) v = 'Masculino';
+                if(field === 'stu-level' && !v) v = 'Iniciante';
+                if(field === 'stu-objective' && !v) v = 'Emagrecimento';
+                if(field === 'stu-freq' && !v) v = '3 dias';
+                if(field === 'stu-validity' && !v) v = '30 dias';
+                document.getElementById(field).value = v || '';
+            });
             
-            document.getElementById('stu-name').value = h.stuName || '';
-            document.getElementById('stu-age').value = h.stuAge || '';
-            document.getElementById('stu-weight').value = h.stuWeight || '';
-            document.getElementById('stu-height').value = h.stuHeight || '';
-            document.getElementById('stu-gender').value = h.stuGender || 'Masculino';
-            document.getElementById('stu-level').value = h.stuLevel || 'Iniciante';
-            document.getElementById('stu-objective').value = h.stuObjective || 'Emagrecimento';
-            document.getElementById('stu-freq').value = h.stuFreq || '3 dias';
-            document.getElementById('stu-validity').value = h.stuValidity || '30 dias';
-            document.getElementById('stu-recs').value = h.stuRecs || '';
-            
-            window.changeTheme();
-            window.calcIMC();
-
+            window.changeTheme(); window.calcIMC();
             document.querySelectorAll('.health-cb').forEach(cb => cb.checked = (h.health || []).includes(cb.value));
-
-            appState.builderWorkouts = h.workouts || [];
-            renderBuilderWorkouts();
-            switchTab('builder');
+            appState.builderWorkouts = h.workouts || []; renderBuilderWorkouts(); switchTab('builder'); window.scrollTo({top:0, behavior:'smooth'});
         };
 
         window.deleteFromCloud = async (id) => {
             if(!confirm("Excluir definitivamente da nuvem?")) return;
             document.getElementById('global-loader').classList.remove('hidden');
             try {
-                await deleteDoc(doc(db, 'artifacts', 'powfitpro', 'users', appState.currentUser.uid, 'workouts', id));
+                await deleteDoc(doc(db, 'users', appState.currentUser.uid, 'workouts', id));
                 appState.cloudHistory = appState.cloudHistory.filter(h => h.id !== id);
                 if(appState.currentDocId === id) appState.currentDocId = null;
                 renderHistory();
-            } catch(e) { alert("Erro ao deletar."); }
-            finally { document.getElementById('global-loader').classList.add('hidden'); }
+            } catch(e) { alert("Erro ao deletar."); } finally { document.getElementById('global-loader').classList.add('hidden'); }
         };
 
-        // --- RELATÓRIOS ---
         function populateReportSelects() {
-            const m = document.getElementById('report-month');
-            const y = document.getElementById('report-year');
             const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
-            m.innerHTML = months.map((name, i) => `<option value="${i}">${name}</option>`).join('');
-            m.value = new Date().getMonth();
-            
+            document.getElementById('report-month').innerHTML = months.map((name, i) => `<option value="${i}">${name}</option>`).join('');
+            document.getElementById('report-month').value = new Date().getMonth();
             const curYear = new Date().getFullYear();
-            y.innerHTML = `<option value="${curYear}">${curYear}</option><option value="${curYear-1}">${curYear-1}</option>`;
+            document.getElementById('report-year').innerHTML = `<option value="${curYear}">${curYear}</option><option value="${curYear-1}">${curYear-1}</option>`;
         }
 
         window.generateReport = () => {
             const m = parseInt(document.getElementById('report-month').value);
             const y = parseInt(document.getElementById('report-year').value);
-            
-            // Filtrar history
-            const filtered = appState.cloudHistory.filter(h => {
-                const d = new Date(h.timestamp);
-                return d.getMonth() === m && d.getFullYear() === y;
-            });
+            const filtered = appState.cloudHistory.filter(h => { const d = new Date(h.timestamp); return d.getMonth() === m && d.getFullYear() === y; });
 
-            // Agrupar
-            let reportData = {}; // { unitId: { total: 0, members: { memberId: count } } }
-            appState.units.forEach(u => reportData[u.id] = { name: u.name, total: 0, members: {} });
-            
-            // Lidar com sem unidade
+            let reportData = {}; appState.units.forEach(u => reportData[u.id] = { name: u.name, total: 0, members: {} });
             reportData['none'] = { name: 'Sem Unidade', total: 0, members: {} };
 
             filtered.forEach(h => {
                 const member = appState.members.find(mem => mem.id === h.memberId);
                 const uId = member ? (member.unitId || 'none') : 'none';
                 const mName = member ? member.name : 'Membro Excluído';
-                
                 if(!reportData[uId]) reportData[uId] = { name: 'Desconhecida', total: 0, members: {} };
-                
                 reportData[uId].total++;
                 if(!reportData[uId].members[mName]) reportData[uId].members[mName] = 0;
                 reportData[uId].members[mName]++;
             });
 
-            let globalTotal = 0;
-            let html = '';
-            
+            let globalTotal = 0; let html = '';
             for(const [uId, uData] of Object.entries(reportData)) {
                 if(uData.total === 0) continue;
                 globalTotal += uData.total;
-                
                 let membersHtml = '';
-                for(const [mName, count] of Object.entries(uData.members)) {
-                    membersHtml += `<div class="flex justify-between py-1 text-sm border-b border-opacity-10" style="border-color: var(--border-color)"><span>${mName}</span><span class="font-bold">${count} fichas</span></div>`;
-                }
-                
-                html += `
-                <div class="mb-6 bg-white bg-opacity-5 p-4 rounded-lg">
-                    <h3 class="font-bold text-primary mb-2">${uData.name} (Total: ${uData.total})</h3>
-                    <div class="pl-4">${membersHtml}</div>
-                </div>`;
+                for(const [mName, count] of Object.entries(uData.members)) membersHtml += `<div class="flex justify-between py-1 text-sm border-b border-opacity-10" style="border-color: var(--border-color)"><span>${mName}</span><span class="font-bold">${count} fichas</span></div>`;
+                html += `<div class="mb-6 bg-white bg-opacity-5 p-4 rounded-lg"><h3 class="font-bold text-primary mb-2">${uData.name} (Total: ${uData.total})</h3><div class="pl-4">${membersHtml}</div></div>`;
             }
 
-            if(globalTotal === 0) html = `<p class="text-center opacity-50">Nenhuma ficha registrada neste mês.</p>`;
-            else html = `<div class="text-xl font-bold mb-4 text-center">TOTAL GERAL: ${globalTotal} Fichas</div>` + html;
-
-            document.getElementById('report-content').innerHTML = html;
+            document.getElementById('report-content').innerHTML = globalTotal === 0 ? `<p class="text-center opacity-50">Nenhuma ficha registrada neste mês.</p>` : `<div class="text-xl font-bold mb-4 text-center">TOTAL GERAL: ${globalTotal} Fichas</div>` + html;
         };
 
         window.printReport = () => {
             const content = document.getElementById('report-content').innerHTML;
-            const printArea = document.getElementById('print-area');
             const mText = document.getElementById('report-month').options[document.getElementById('report-month').selectedIndex].text;
             const yText = document.getElementById('report-year').value;
-            
-            // Reaproveitar a lógica gerada com estilos de impressão
-            let html = `
-                <div class="report-title">Relatório de Produtividade da Rede - ${mText}/${yText}</div>
-            `;
-            
-            // Adaptar o content do dashboard para o formato de impressao
-            const div = document.createElement('div');
-            div.innerHTML = content;
-            
+            let html = `<div class="report-title">Relatório de Produtividade da Rede - ${mText}/${yText}</div>`;
+            const div = document.createElement('div'); div.innerHTML = content;
             const units = div.querySelectorAll('.mb-6');
-            if(units.length === 0) {
-                 html += `<p style="text-align:center;">Nenhum dado encontrado para o período.</p>`;
-            } else {
+            if(units.length === 0) { html += `<p style="text-align:center;">Nenhum dado encontrado para o período.</p>`; } 
+            else {
                 html += `<div style="text-align:center; font-weight:bold; font-size:14px; margin-bottom: 10px; border-bottom: 2px solid #000; padding-bottom: 5px;">${div.querySelector('.text-xl').innerText}</div>`;
-                
                 units.forEach(u => {
                     const title = u.querySelector('h3').innerText;
                     let mList = '';
-                    u.querySelectorAll('.flex').forEach(row => {
-                        mList += `<div class="report-member"><span>${row.children[0].innerText}</span><span>${row.children[1].innerText}</span></div>`;
-                    });
+                    u.querySelectorAll('.flex').forEach(row => { mList += `<div class="report-member"><span>${row.children[0].innerText}</span><span>${row.children[1].innerText}</span></div>`; });
                     html += `<div class="report-unit"><h3>${title}</h3>${mList}</div>`;
                 });
             }
-
-            printArea.innerHTML = html;
+            document.getElementById('print-area').innerHTML = html;
             setTimeout(() => window.print(), 100);
         };
-
     </script>
 </body>
 </html>
