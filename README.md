@@ -364,7 +364,7 @@
         // --- DADOS ESTÁTICOS ---
         const healthPEF = { "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.", "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.", "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico. Combinar musculação e cardio moderado.", "🔴 Obesidade": "Iniciar com exercícios de baixo impacto. Evolução gradual, priorizando saúde e segurança.", "⚖️ Baixo peso": "Foco em musculação para ganho de massa. Treinos moderados com alimentação adequada.", "🍬 Diabetes": "Treinos regulares moderados. Monitorar glicemia e evitar treinos em jejum.", "❤️ Hipertensão": "Treinos moderados, evitar prender a respiração. Priorizar controle da intensidade.", "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação e intensidade leve a moderada.", "💔 Problemas cardíacos": "Treinos leves com liberação médica. Monitorar frequência cardíaca.", "🦴 Problemas articulares": "Evitar impacto. Priorizar exercícios controlados e máquinas.", "🫁 Problemas respiratórios": "Treinos leves a moderados com progressão gradual. Atenção à respiração.", "⚠️ Lesões": "Adaptar exercícios. Evitar dor e focar na recuperação.", "🤰 Gestante": "Treinos leves a moderados, sem impacto ou risco. Foco em mobilidade e bem-estar.", "🤱 Lactante": "Treinar normalmente com atenção à hidratação e energia.", "👴 Idoso": "Foco em força, equilíbrio e mobilidade. Intensidade moderada com segurança." };
         const healthTE = { "🟢 Saudável": "Manter treinos regulares de 3–5x por semana, combinando musculação e atividades cardiovasculares. A constância e boa alimentação contribuem para resultados.", "⚪ Sedentário": "Início gradual, treinos leves, foco na adaptação. Prioridade é desenvolver constância e execução correta.", "🟡 Sobrepeso": "A musculação associada ao cardio contribui para condicionamento. Progressão deve respeitar individualidade.", "🔴 Obesidade": "Iniciar com menor impacto e progressão gradual. Segurança, mobilidade e constância são prioridades.", "⚖️ Baixo peso": "Musculação auxilia no ganho de massa. Priorizar evolução progressiva e recuperação muscular.", "🍬 Diabetes": "Acompanhamento médico regular. Em casos de mal-estar ou alteração de glicemia, interromper e buscar orientação.", "❤️ Hipertensão": "Acompanhamento médico. Evitar prender a respiração (Manobra de Valsalva) e controlar a intensidade.", "🔵 Hipotensão": "Evitar mudanças bruscas de posição. Manter boa hidratação e respeitar intensidade adequada.", "💔 Problemas cardíacos": "Prática apenas com liberação e acompanhamento médico. Respeitar limites e controlar intensidade.", "🦴 Problemas articulares": "Menor impacto e maior controle de movimento são indicados. Acompanhamento ajuda na segurança.", "🫁 Problemas respiratórios": "Progressão gradual respeitando a capacidade. Interromper em caso de falta de ar excessiva.", "⚠️ Lesões": "Adaptação respeitando limitação e evitando dor. Seguir orientação profissional antes da prática.", "🤰 Gestante": "Liberação médica. Foco na segurança, mobilidade e bem-estar, evitando impacto e risco.", "🤱 Lactante": "Atividade normal, respeitando recuperação, hidratação e alimentação.", "👴 Idoso": "Musculação contribui para força e autonomia. Respeitar limitações com intensidade moderada e segurança." };
-        const objectiveData = { "Emagrecimento": "Foco em déficit calórico com treinos mistos de força (manter massa magra) e aeróbicos (maior gasto).", "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.", "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.", "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.", "Resistência": "Séries mais longas, cadência controlada e aprimoramento da capacidade muscular.", "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.", "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.", "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar." };
+        const objectiveData = { "Emagrecimento": "Foco em déficit calórico com treinos mistos de força (manter massa magra) e aeróbicos (maior gasto).", "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.", "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.", "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.", "Resistência": "Séries mais longas, cadência controlada e aprimpos da capacidade muscular.", "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.", "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.", "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar." };
         const baseCategories = {
             "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
             "🦍 COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Curvada na Polia", "Remada Cavalinho (T-Bar)", "Remada Unilateral", "Remada no Cross", "Serrote", "Facepull (puxada de cima para baixo)"],
@@ -565,6 +565,7 @@
             
             document.getElementById('editor-active-member-info').innerText = `Profissional: ${window.AppState.activeMember.name} (${window.AppState.activeMember.role})`;
             
+            // Setup Health Options based on Role
             const dict = window.AppState.activeMember.role === 'PEF' ? healthPEF : healthTE;
             document.getElementById('health-container').innerHTML = Object.keys(dict).map(opt => `
                 <label class="flex items-start space-x-2 cursor-pointer p-1 rounded hover:bg-black hover:bg-opacity-10 border border-transparent hover:border-gray-500 hover:border-opacity-20">
@@ -572,6 +573,7 @@
                     <span class="font-medium">${opt}</span>
                 </label>`).join('');
 
+            // Reset form
             document.getElementById('stu-name').value = '';
             document.getElementById('stu-age').value = '';
             document.getElementById('stu-weight').value = '';
@@ -579,7 +581,7 @@
             document.getElementById('stu-recs').value = '';
             window.AppState.currentFichaId = null;
             window.AppState.workouts = [];
-            window.addWorkout();
+            window.addWorkout(); // Add default Monday
             window.calculateIMC();
             showScreen('screen-editor');
         };
@@ -588,22 +590,22 @@
             if(confirm("Sair sem salvar?")) showScreen('screen-dashboard');
         };
 
-        // --- CÁLCULO DE IMC COM CLASSIFICAÇÃO ATUALIZADA ---
+        // --- CÁLCULO DE IMC COM A CLASSIFICAÇÃO CORRETA ---
         window.calculateIMC = () => {
             const w = parseFloat(document.getElementById('stu-weight').value);
             const h = parseFloat(document.getElementById('stu-height').value);
             const display = document.getElementById('imc-display');
             if (w > 0 && h > 0) {
                 const imc = (w / (h * h)).toFixed(1);
-                let classif = "";
-                if (imc < 18.5) classif = "Abaixo do peso";
-                else if (imc < 25) classif = "Peso normal";
-                else if (imc < 30) classif = "Sobrepeso";
-                else if (imc < 35) classif = "Obesidade Grau I";
-                else if (imc < 40) classif = "Obesidade Grau II";
-                else classif = "Obesidade Grau III";
+                let cls = "";
+                if (imc < 18.5) cls = "Abaixo do peso";
+                else if (imc < 25) cls = "Peso normal";
+                else if (imc < 30) cls = "Sobrepeso";
+                else if (imc < 35) cls = "Obesidade Grau I";
+                else if (imc < 40) cls = "Obesidade Grau II";
+                else cls = "Obesidade Grau III";
                 
-                display.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-2 py-0.5 rounded font-bold text-[10px] border border-primary border-opacity-30">IMC: ${imc} (${classif})</span>`;
+                display.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-3 py-1 rounded-full text-[10px] font-bold border border-primary border-opacity-30">IMC: ${imc} (${cls})</span>`;
             } else {
                 display.innerHTML = '';
             }
@@ -751,7 +753,7 @@
                 const target = window.AppState.customExercises.find(c => c.name === name && c.category === window.AppState.activeCategory);
                 if(target) {
                     await deleteDoc(doc(db, `${getBasePath()}/custom_exercises`, target.id));
-                    renderModalExercises(); 
+                    renderModalExercises(); // Realtime will handle the array update, but we force render to be snappy
                 }
             }
         };
@@ -805,7 +807,7 @@
 
         window.renderHistoryList = () => {
             const unitFilter = document.getElementById('hist-filter-unit').value;
-            let list = window.AppState.workoutsHistory.sort((a,b) => b.timestamp - a.timestamp); 
+            let list = window.AppState.workoutsHistory.sort((a,b) => b.timestamp - a.timestamp); // Mais novos primeiro
             if(unitFilter !== 'ALL') list = list.filter(w => w.unitId === unitFilter);
 
             const container = document.getElementById('history-list');
@@ -952,7 +954,7 @@
             setTimeout(() => document.getElementById('print-report-area').classList.remove('active-print'), 1000);
         };
 
-        // --- IMPRESSÃO DA FICHA COM CÁLCULO E CLASSIFICAÇÃO DE IMC CORRIGIDOS ---
+        // --- IMPRESSÃO DA FICHA (COM IMC CORRIGIDO) ---
         window.saveAndPrint = async () => {
             const saved = await saveToCloud();
             if(!saved) return;
@@ -961,21 +963,22 @@
             const isPEF = window.AppState.activeMember.role === 'PEF';
             const healthSourceDict = isPEF ? healthPEF : healthTE;
             
+            // Lógica de cálculo do IMC corrigida para a impressão
             let imcStr = "-"; 
             const w = parseFloat(d.stuWeight); 
             const h = parseFloat(d.stuHeight);
             
-            // Corrige o IMC para ser impresso com classificação correta no PDF
             if (w > 0 && h > 0) {
-                const imcVal = (w / (h * h)).toFixed(1);
-                let classif = "";
-                if (imcVal < 18.5) classif = "Abaixo do peso";
-                else if (imcVal < 25) classif = "Peso normal";
-                else if (imcVal < 30) classif = "Sobrepeso";
-                else if (imcVal < 35) classif = "Obesidade Grau I";
-                else if (imcVal < 40) classif = "Obesidade Grau II";
-                else classif = "Obesidade Grau III";
-                imcStr = `${imcVal} (${classif})`;
+                const imc = (w / (h * h)).toFixed(1);
+                let cls = "";
+                if (imc < 18.5) cls = "Abaixo do peso";
+                else if (imc < 25) cls = "Peso normal";
+                else if (imc < 30) cls = "Sobrepeso";
+                else if (imc < 35) cls = "Obesidade Grau I";
+                else if (imc < 40) cls = "Obesidade Grau II";
+                else cls = "Obesidade Grau III";
+                
+                imcStr = `${imc} (${cls})`;
             }
 
             const objRec = objectiveData[d.stuObjective] || "";
@@ -1031,4 +1034,3 @@
     </script>
 </body>
 </html>
-
