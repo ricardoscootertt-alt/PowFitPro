@@ -2,403 +2,407 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PowFit Pro - Gestão de Franquias & Prescrição</title>
+    <title>PowFit Pro - Master Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <style>
         :root {
+            /* Tema Masculino / Dark Padrão */
             --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc; --text-muted: #94a3b8;
             --border-color: #334155; --primary: #3b82f6; --primary-hover: #2563eb;
-            --input-bg: #0f172a; --input-border: #475569; --sidebar-bg: #0b1120;
+            --input-bg: #0f172a; --input-border: #475569;
         }
-
         [data-theme="Feminino"] {
+            /* Tema Feminino / Light Moderno */
             --bg-body: #fdf2f8; --bg-card: #ffffff; --text-main: #1e293b; --text-muted: #64748b;
             --border-color: #fbcfe8; --primary: #ec4899; --primary-hover: #db2777;
-            --input-bg: #f8fafc; --input-border: #f1f5f9; --sidebar-bg: #fce7f3;
+            --input-bg: #f8fafc; --input-border: #f1f5f9;
         }
-
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); transition: all 0.3s ease; }
         .card { background-color: var(--bg-card); border: 1px solid var(--border-color); }
         .input-field { background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--text-main); }
         .input-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
-        .btn-primary { background-color: var(--primary); color: white; transition: background-color 0.2s; }
+        .btn-primary { background-color: var(--primary); color: white; transition: 0.2s; }
         .btn-primary:hover { background-color: var(--primary-hover); }
         .text-primary { color: var(--primary); }
         
-        #print-area { display: none; }
-        
-        /* Loading Overlay */
-        #loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
-        .spinner { border: 4px solid rgba(255,255,255,0.1); border-left-color: var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* Oculta áreas de impressão na tela normal */
+        #print-area, #print-report-area { display: none; }
 
-        /* Estilo Planilha (A4) */
+        /* Estilos de Impressão Profissional (Estilo Planilha) */
         @media print {
-            body { background: white !important; color: black !important; margin: 0; padding: 0; }
-            #app-root, .no-print, #loading-overlay { display: none !important; }
-            #print-area { display: block !important; padding: 10mm 15mm; font-family: 'Arial', sans-serif; font-size: 10px; }
-            @page { size: A4; margin: 0; }
+            body { background: white !important; color: black !important; margin: 0; padding: 0; font-family: 'Arial', sans-serif; }
+            #app-container, .modal, .no-print { display: none !important; }
             
-            .print-header { border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
-            .print-title { font-size: 18px; font-weight: bold; margin: 0; text-transform: uppercase; text-align: center; }
-            .prof-info { font-size: 11px; margin-top: 5px; text-align: center; font-weight: bold; }
-            
-            .print-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 15px; border: 1px solid #000; padding: 8px; }
-            .print-grid div { font-size: 10.5px; }
-            
-            .print-guidelines { border: 1px solid #000; padding: 8px; margin-bottom: 15px; font-size: 9px; }
-            .print-guidelines h4 { margin: 0 0 4px 0; font-size: 10px; text-transform: uppercase; background: #eee; padding: 3px; border-bottom: 1px solid #ccc; }
-            .print-guidelines ul { margin: 0; padding-left: 15px; }
-            
-            .print-workout { margin-bottom: 15px; page-break-inside: avoid; }
-            .print-workout h3 { background: #e0e0e0; border: 1px solid #000; border-bottom: none; padding: 4px 8px; margin: 0; font-size: 12px; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 0; border: 1px solid #000; }
-            th, td { border: 1px solid #000; padding: 4px; text-align: left; font-size: 9.5px; }
-            th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; }
-            
-            .print-footer-section { margin-top: 15px; border: 1px solid #000; padding: 8px; page-break-inside: avoid; }
-            .legal-text { font-size: 7.5px; color: #000; text-align: justify; margin-top: 5px; font-style: italic; border-top: 1px dashed #ccc; padding-top: 5px; }
+            /* Impressão Ficha de Treino */
+            #print-area.active-print { display: block !important; padding: 10mm; font-size: 10px; }
+            #print-area .print-header { border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; text-align: center; }
+            #print-area .print-title { font-size: 18px; font-weight: bold; text-transform: uppercase; margin:0; }
+            #print-area .prof-info { font-size: 11px; margin-top: 4px; font-weight: bold; }
+            #print-area .print-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; border: 1px solid #000; padding: 6px; margin-bottom: 12px; }
+            #print-area .print-grid div { font-size: 10px; }
+            #print-area .print-guidelines { border: 1px solid #000; padding: 6px; margin-bottom: 12px; font-size: 9px; }
+            #print-area .print-guidelines h4 { margin: 0 0 4px 0; font-size: 10px; text-transform: uppercase; background: #eee; padding: 3px; }
+            #print-area .print-guidelines ul { margin: 0; padding-left: 15px; }
+            #print-area .print-workout { margin-bottom: 15px; page-break-inside: avoid; }
+            #print-area .print-workout h3 { background: #e0e0e0; border: 1px solid #000; border-bottom: none; padding: 4px; margin: 0; font-size: 11px; text-transform: uppercase; -webkit-print-color-adjust: exact; }
+            #print-area table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 0; }
+            #print-area th, #print-area td { border: 1px solid #000; padding: 4px; text-align: left; font-size: 9px; }
+            #print-area th { background-color: #f0f0f0; font-weight: bold; -webkit-print-color-adjust: exact; text-transform: uppercase; }
+            #print-area .print-footer-section { border: 1px solid #000; padding: 6px; font-size: 8px; page-break-inside: avoid; margin-top: 10px;}
+            #print-area .legal-text { font-size: 7.5px; color: #222; text-align: justify; margin-top: 4px; font-style: italic; }
+
+            /* Impressão Relatório */
+            #print-report-area.active-print { display: block !important; padding: 10mm; font-size: 12px; }
+            #print-report-area h1 { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; }
+            #print-report-area table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            #print-report-area th, #print-report-area td { border: 1px solid #000; padding: 8px; text-align: left; }
+            #print-report-area th { background: #eee; -webkit-print-color-adjust: exact; }
         }
-        
+
+        /* Modals & Overlays */
+        .modal { z-index: 100; }
+        .hidden { display: none !important; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
     </style>
 </head>
-<body>
+<body data-theme="Masculino">
 
-    <!-- LOADING OVERLAY -->
-    <div id="loading-overlay">
-        <div class="spinner mb-4"></div>
-        <p class="text-white text-sm font-medium tracking-widest" id="loading-text">INICIALIZANDO SISTEMA...</p>
+    <!-- Loading Splash / Auth State -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black z-[200] flex flex-col items-center justify-center text-white">
+        <i class="fas fa-circle-notch fa-spin text-5xl text-blue-500 mb-4"></i>
+        <h2 class="text-xl font-bold">Conectando ao PowFit Pro...</h2>
+        <p class="text-sm opacity-60">Sincronizando nuvem</p>
     </div>
 
-    <!-- MAIN APP WRAPPER -->
-    <div id="app-root" class="flex h-screen overflow-hidden hidden">
-        
-        <!-- SIDEBAR -->
-        <aside class="w-64 flex-shrink-0 border-r flex flex-col transition-colors z-20" style="background-color: var(--sidebar-bg); border-color: var(--border-color);">
-            <div class="p-6 border-b border-opacity-20 flex items-center gap-3" style="border-color: var(--border-color);">
-                <i class="fas fa-dumbbell text-2xl text-primary"></i>
-                <span class="font-bold text-xl tracking-tight">PowFit <span class="text-primary">Pro</span></span>
+    <!-- Custom Confirm Modal -->
+    <div id="custom-confirm" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden z-[150] flex items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-600 rounded-xl max-w-sm w-full p-6 text-white shadow-2xl">
+            <h3 id="confirm-title" class="text-lg font-bold mb-2">Confirmação</h3>
+            <p id="confirm-msg" class="text-sm text-gray-300 mb-6">Tem certeza que deseja continuar?</p>
+            <div class="flex justify-end gap-3">
+                <button id="confirm-btn-no" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-500 transition text-sm font-medium">Não</button>
+                <button id="confirm-btn-yes" class="px-4 py-2 rounded bg-red-600 hover:bg-red-500 transition text-sm font-medium">Sim</button>
             </div>
-            
-            <nav class="flex-1 overflow-y-auto p-4 space-y-2">
-                <button onclick="navigate('dashboard')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition text-left hover:bg-black hover:bg-opacity-10" id="nav-dashboard">
-                    <i class="fas fa-chart-pie w-5"></i> Dashboard / Rede
-                </button>
-                <button onclick="navigate('members')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition text-left hover:bg-black hover:bg-opacity-10" id="nav-members">
-                    <i class="fas fa-users w-5"></i> Equipe (Membros)
-                </button>
-                <button onclick="navigate('builder')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition text-left hover:bg-black hover:bg-opacity-10" id="nav-builder">
-                    <i class="fas fa-clipboard-list w-5"></i> Montar Ficha
-                </button>
-                <button onclick="navigate('history')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition text-left hover:bg-black hover:bg-opacity-10" id="nav-history">
-                    <i class="fas fa-history w-5"></i> Histórico na Nuvem
-                </button>
-                <button onclick="navigate('custom-exercises')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition text-left hover:bg-black hover:bg-opacity-10" id="nav-custom-exercises">
-                    <i class="fas fa-plus-square w-5"></i> Exercícios Custom.
-                </button>
-            </nav>
+        </div>
+    </div>
 
-            <div class="p-4 border-t border-opacity-20 text-xs" style="border-color: var(--border-color);">
-                <div class="flex items-center gap-2 mb-3">
-                    <img id="user-avatar" src="" class="w-8 h-8 rounded-full bg-gray-600 hidden" alt="Avatar">
-                    <div class="flex-1 truncate">
-                        <p class="font-bold truncate" id="user-name-display">Usuário</p>
-                        <p class="opacity-60 truncate text-[10px]" id="user-email-display">email@email.com</p>
-                    </div>
-                </div>
-                <button onclick="appLogout()" class="w-full py-2 rounded border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition font-medium">
-                    <i class="fas fa-sign-out-alt"></i> Sair
-                </button>
-            </div>
-        </aside>
+    <!-- Notificações Toast -->
+    <div id="toast-container" class="fixed top-4 right-4 z-[160] flex flex-col gap-2 pointer-events-none"></div>
 
-        <!-- MAIN CONTENT AREA -->
-        <main class="flex-1 flex flex-col h-screen overflow-y-auto relative">
-            
-            <!-- VIEW: LOGIN -->
-            <div id="view-login" class="view-section hidden flex-1 flex items-center justify-center p-6">
-                <div class="card p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
-                    <i class="fas fa-dumbbell text-5xl text-primary mb-4"></i>
-                    <h2 class="text-2xl font-bold mb-2">Bem-vindo ao PowFit Pro</h2>
-                    <p class="text-sm opacity-70 mb-8">Plataforma Master de Gestão de Prescrição para Redes e Franquias.</p>
-                    <button onclick="appLogin()" class="w-full bg-white text-gray-800 hover:bg-gray-100 font-bold py-3 px-4 rounded-lg shadow border border-gray-300 flex items-center justify-center gap-3 transition">
-                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
-                        Entrar com Google
-                    </button>
-                    <p class="mt-6 text-[10px] opacity-50">Seus dados e de sua rede serão salvos na nuvem de forma segura.</p>
+    <!-- NAVEGAÇÃO PRINCIPAL -->
+    <nav class="border-b border-opacity-20" style="border-color: var(--border-color); background-color: var(--bg-card);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-dumbbell text-2xl text-primary"></i>
+                    <span class="font-bold text-lg tracking-tight">PowFit Pro</span>
                 </div>
-            </div>
-
-            <!-- VIEW: DASHBOARD (REDE & UNIDADES) -->
-            <div id="view-dashboard" class="view-section hidden p-6 lg:p-10 space-y-6">
-                <div>
-                    <h2 class="text-2xl font-bold"><i class="fas fa-building text-primary mr-2"></i> Gestão da Rede</h2>
-                    <p class="text-sm opacity-70">Cadastre e gerencie as unidades da sua franquia.</p>
+                <div class="hidden md:flex items-center space-x-1 overflow-x-auto">
+                    <button onclick="nav('nova-ficha')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-black hover:bg-opacity-10 text-primary">Nova Ficha</button>
+                    <button onclick="nav('rede')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-black hover:bg-opacity-10 opacity-70">Rede & Equipe</button>
+                    <button onclick="nav('historico')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-black hover:bg-opacity-10 opacity-70">Histórico</button>
+                    <button onclick="nav('relatorios')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-black hover:bg-opacity-10 opacity-70">Relatórios</button>
+                    <button onclick="nav('exercicios')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-black hover:bg-opacity-10 opacity-70">Meus Exercícios</button>
                 </div>
-                
-                <div class="card p-5 rounded-xl">
-                    <h3 class="font-semibold mb-3">Adicionar Nova Unidade</h3>
-                    <div class="flex gap-3">
-                        <input type="text" id="new-unit-name" class="input-field flex-1 rounded-lg px-3 py-2 text-sm" placeholder="Nome da Unidade (Ex: Unidade Centro)">
-                        <button onclick="addUnit()" class="btn-primary px-6 py-2 rounded-lg font-medium text-sm">Adicionar</button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="units-list">
-                    <!-- Unidades JS -->
-                </div>
-            </div>
-
-            <!-- VIEW: EQUIPE (MEMBROS) -->
-            <div id="view-members" class="view-section hidden p-6 lg:p-10 space-y-6">
-                <div>
-                    <h2 class="text-2xl font-bold"><i class="fas fa-users text-primary mr-2"></i> Gestão da Equipe</h2>
-                    <p class="text-sm opacity-70">Cadastre os profissionais que irão prescrever treinos.</p>
-                </div>
-
-                <div class="card p-5 rounded-xl space-y-4">
-                    <h3 class="font-semibold">Cadastrar Novo Membro</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-medium mb-1">Nome Completo</label>
-                            <input type="text" id="mem-name" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium mb-1">CPF</label>
-                            <input type="text" id="mem-cpf" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium mb-1">Unidade</label>
-                            <select id="mem-unit" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                                <!-- JS -->
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium mb-1">Categoria de Atuação</label>
-                            <select id="mem-role" onchange="toggleMemCref()" class="input-field w-full rounded-lg px-3 py-2 text-sm">
-                                <option value="PEF">Profissional de Educação Física (PEF)</option>
-                                <option value="TE">Treinador Esportivo (TE)</option>
-                            </select>
-                        </div>
-                        <div id="mem-cref-container">
-                            <label class="block text-xs font-medium mb-1">CREF</label>
-                            <input type="text" id="mem-cref" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Ex: 000000">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium mb-1">Estado (UF)</label>
-                            <input type="text" id="mem-state" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Ex: SP, RJ" maxlength="2">
-                        </div>
-                    </div>
-                    <button onclick="addMember()" class="btn-primary w-full py-2 rounded-lg font-medium text-sm">Salvar Membro na Rede</button>
-                </div>
-
-                <div class="space-y-3" id="members-list">
-                    <!-- Membros JS -->
-                </div>
-            </div>
-
-            <!-- VIEW: MONTAR FICHA -->
-            <div id="view-builder" class="view-section hidden p-4 sm:p-6 lg:p-8 space-y-6">
-                
-                <div class="flex justify-between items-center mb-2">
-                    <h2 class="text-2xl font-bold"><i class="fas fa-clipboard-list text-primary mr-2"></i> Criar Ficha de Treino</h2>
-                    <button onclick="saveAndPrint()" class="btn-primary px-5 py-2.5 rounded-lg font-bold shadow-lg flex items-center gap-2">
-                        <i class="fas fa-save"></i> Salvar & Imprimir
-                    </button>
-                </div>
-
-                <!-- Quem está prescrevendo? -->
-                <div class="card p-4 rounded-xl border-l-4 border-l-primary shadow-sm bg-black bg-opacity-5">
-                    <label class="block text-xs font-bold uppercase mb-2 opacity-70">Membro Responsável pela Prescrição</label>
-                    <select id="builder-member" onchange="updateBuilderHealth()" class="input-field w-full md:w-1/2 rounded-lg px-3 py-2 text-sm font-semibold">
-                        <option value="">Selecione o profissional (Cadastre na aba Equipe primeiro)</option>
-                        <!-- JS -->
+                <!-- Menu Mobile -->
+                <div class="md:hidden flex items-center">
+                    <select id="mobile-nav" onchange="nav(this.value)" class="input-field text-sm p-1 rounded">
+                        <option value="nova-ficha">Nova Ficha</option>
+                        <option value="rede">Rede & Equipe</option>
+                        <option value="historico">Histórico</option>
+                        <option value="relatorios">Relatórios</option>
+                        <option value="exercicios">Meus Exercícios</option>
                     </select>
                 </div>
+            </div>
+        </div>
+    </nav>
 
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <!-- Coluna Esq: Aluno -->
-                    <div class="lg:col-span-4 space-y-6">
-                        <div class="card rounded-xl p-5 shadow-sm">
-                            <div class="flex justify-between items-center mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
-                                <h3 class="font-semibold"><i class="fas fa-user text-primary mr-2"></i> Dados do Aluno</h3>
-                                <div id="imc-display"></div>
-                            </div>
-                            <div class="space-y-3">
-                                <div>
-                                    <label class="block text-xs mb-1">Nome Completo</label>
-                                    <input type="text" id="stu-name" class="input-field w-full rounded-lg px-3 py-1.5 text-sm">
-                                </div>
-                                <div class="grid grid-cols-3 gap-2">
-                                    <div><label class="block text-xs mb-1">Idade</label><input type="number" id="stu-age" class="input-field w-full rounded-lg px-2 py-1.5 text-sm"></div>
-                                    <div><label class="block text-xs mb-1">Peso(kg)</label><input type="number" id="stu-weight" oninput="calcIMC()" class="input-field w-full rounded-lg px-2 py-1.5 text-sm"></div>
-                                    <div><label class="block text-xs mb-1">Altura(m)</label><input type="number" id="stu-height" step="0.01" oninput="calcIMC()" class="input-field w-full rounded-lg px-2 py-1.5 text-sm"></div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label class="block text-xs mb-1">Gênero</label>
-                                        <select id="stu-gender" onchange="setTheme()" class="input-field w-full rounded-lg px-2 py-1.5 text-sm">
-                                            <option value="Masculino">Masculino</option><option value="Feminino">Feminino</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs mb-1">Nível</label>
-                                        <select id="stu-level" class="input-field w-full rounded-lg px-2 py-1.5 text-sm">
-                                            <option>Iniciante</option><option>Intermediário</option><option>Avançado</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-xs mb-1">Objetivo Principal</label>
-                                    <select id="stu-objective" class="input-field w-full rounded-lg px-3 py-1.5 text-sm">
-                                        <option>Emagrecimento</option><option>Hipertrofia</option><option>Definição</option>
-                                        <option>Condicionamento</option><option>Resistência</option><option>Força</option>
-                                        <option>Reabilitação</option><option>Saúde geral</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs mb-1">Frequência Semanal</label>
-                                    <select id="stu-freq" class="input-field w-full rounded-lg px-3 py-1.5 text-sm">
-                                        <option>3 dias</option><option>5 dias</option><option>6 dias</option><option>Personalizado</option>
-                                    </select>
-                                </div>
-                            </div>
+    <!-- CONTAINER DA APLICAÇÃO -->
+    <div id="app-container" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- ========================================== -->
+        <!-- VIEW: NOVA FICHA                           -->
+        <!-- ========================================== -->
+        <div id="view-nova-ficha" class="app-view">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold"><i class="fas fa-clipboard-check text-primary mr-2"></i> Criar Ficha de Treino</h2>
+                <button onclick="saveAndPrintWorkout()" class="btn-primary px-6 py-2 rounded-lg font-bold shadow-lg flex items-center gap-2">
+                    <i class="fas fa-save"></i> <i class="fas fa-print"></i> Salvar e Imprimir
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                <!-- Coluna Esquerda: Configs -->
+                <div class="xl:col-span-4 space-y-4">
+                    
+                    <!-- Profissional Selecionado -->
+                    <div class="card rounded-xl p-4 shadow-sm">
+                        <label class="block text-sm font-bold mb-2 text-primary">Profissional Responsável (Membro)</label>
+                        <select id="wf-member" onchange="onMemberSelectChange()" class="input-field w-full rounded-lg px-3 py-2 text-sm font-medium">
+                            <option value="">-- Selecione o Treinador --</option>
+                            <!-- Povoado via JS -->
+                        </select>
+                        <p id="wf-member-info" class="text-xs mt-2 opacity-70 italic"></p>
+                    </div>
+
+                    <!-- Dados do Aluno -->
+                    <div class="card rounded-xl p-4 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold">Dados do Aluno</h3>
+                            <div id="imc-display"></div>
                         </div>
-
-                        <!-- Estado de Saúde -->
-                        <div class="card rounded-xl p-4 shadow-sm">
-                            <h3 class="font-semibold mb-1"><i class="fas fa-heartbeat text-primary mr-2"></i> Estado de Saúde</h3>
-                            <p class="text-[10px] opacity-70 mb-3">Diretrizes automáticas baseadas na categoria do membro selecionado.</p>
-                            <div class="grid grid-cols-2 gap-1.5 text-[11px]" id="health-container">
-                                <!-- JS -->
+                        <div class="space-y-3">
+                            <input type="text" id="stu-name" class="input-field w-full rounded px-3 py-1.5 text-sm" placeholder="Nome do aluno">
+                            <div class="grid grid-cols-3 gap-2">
+                                <input type="number" id="stu-age" class="input-field w-full rounded px-2 py-1.5 text-sm" placeholder="Idade">
+                                <input type="number" id="stu-weight" oninput="calculateIMC()" class="input-field w-full rounded px-2 py-1.5 text-sm" placeholder="Peso(kg)">
+                                <input type="number" id="stu-height" step="0.01" oninput="calculateIMC()" class="input-field w-full rounded px-2 py-1.5 text-sm" placeholder="Alt(m)">
                             </div>
-                        </div>
-
-                        <!-- Validade e Recomendações -->
-                        <div class="card rounded-xl p-4 shadow-sm space-y-3">
-                            <div>
-                                <label class="block text-xs mb-1">Validade da Ficha</label>
-                                <select id="stu-validity" class="input-field w-full rounded px-2 py-1.5 text-sm">
-                                    <option>15 dias</option><option selected>30 dias</option><option>60 dias</option><option>90 dias</option>
+                            <div class="grid grid-cols-2 gap-2">
+                                <select id="stu-gender" onchange="changeTheme()" class="input-field w-full rounded px-2 py-1.5 text-sm">
+                                    <option value="Masculino">Masculino</option><option value="Feminino">Feminino</option>
+                                </select>
+                                <select id="stu-level" class="input-field w-full rounded px-2 py-1.5 text-sm">
+                                    <option>Iniciante</option><option>Intermediário</option><option>Avançado</option>
                                 </select>
                             </div>
-                            <div>
-                                <label class="block text-xs mb-1">Recomendações Manuais</label>
-                                <textarea id="stu-recs" rows="3" class="input-field w-full rounded px-2 py-1.5 text-sm" placeholder="Hidratação, descanso, cuidados..."></textarea>
-                            </div>
+                            <select id="stu-objective" onchange="updateObjectiveText()" class="input-field w-full rounded px-2 py-1.5 text-sm">
+                                <option value="Emagrecimento">Emagrecimento</option><option value="Hipertrofia">Hipertrofia</option>
+                                <option value="Definição">Definição</option><option value="Condicionamento">Condicionamento</option>
+                                <option value="Resistência">Resistência</option><option value="Força">Força</option>
+                                <option value="Reabilitação">Reabilitação</option><option value="Saúde geral">Saúde geral</option>
+                            </select>
+                            <p id="obj-text" class="text-[10px] opacity-70 leading-tight"></p>
+                            <select id="stu-freq" class="input-field w-full rounded px-2 py-1.5 text-sm">
+                                <option>3 dias</option><option>5 dias</option><option>6 dias</option><option>Personalizado</option>
+                            </select>
+                            <select id="stu-validity" class="input-field w-full rounded px-2 py-1.5 text-sm">
+                                <option value="15">Validade: 15 dias</option>
+                                <option value="30" selected>Validade: 30 dias</option>
+                                <option value="60">Validade: 60 dias</option>
+                                <option value="90">Validade: 90 dias</option>
+                            </select>
                         </div>
                     </div>
 
-                    <!-- Coluna Dir: Construtor -->
-                    <div class="lg:col-span-8 space-y-4">
-                        <div class="flex flex-col sm:flex-row justify-between items-center bg-opacity-10 p-3 rounded-xl card border-dashed border-2 gap-3">
-                            <div>
-                                <h3 class="text-lg font-bold">Dias de Treino</h3>
-                                <p class="text-[11px] opacity-70">Adicione os dias e preencha livremente.</p>
-                            </div>
-                            <button onclick="addDay()" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium w-full sm:w-auto">
-                                + Adicionar Dia
-                            </button>
+                    <!-- Estado de Saúde -->
+                    <div class="card rounded-xl p-4 shadow-sm">
+                        <h3 class="font-bold mb-2 text-sm">Estado de Saúde</h3>
+                        <p class="text-[10px] opacity-70 mb-2">Diretrizes automáticas baseadas na categoria do profissional logado.</p>
+                        <div class="grid grid-cols-2 gap-1 text-[11px]" id="health-container">
+                            <!-- JS popula -->
                         </div>
-                        <div id="builder-days" class="space-y-4">
-                            <!-- Dias JS -->
-                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita: Treinos -->
+                <div class="xl:col-span-8 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-lg">Montagem dos Treinos</h3>
+                        <button onclick="addWorkoutDay()" class="btn-primary px-3 py-1.5 rounded text-sm font-medium"><i class="fas fa-plus"></i> Adicionar Dia</button>
+                    </div>
+                    
+                    <div id="workout-days-container" class="space-y-4">
+                        <!-- JS popula -->
+                    </div>
+
+                    <div class="card rounded-xl p-4 shadow-sm mt-4">
+                        <h3 class="font-bold text-sm mb-2">Recomendações Manuais Livres</h3>
+                        <textarea id="stu-recs" rows="2" class="input-field w-full rounded px-3 py-2 text-sm" placeholder="Hidratação, descanso..."></textarea>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- VIEW: HISTÓRICO NA NUVEM -->
-            <div id="view-history" class="view-section hidden p-6 lg:p-10 flex flex-col h-full">
-                <div class="flex justify-between items-end mb-6">
-                    <div>
-                        <h2 class="text-2xl font-bold"><i class="fas fa-cloud text-primary mr-2"></i> Histórico & Relatórios</h2>
-                        <p class="text-sm opacity-70">Fichas salvas na nuvem da sua rede.</p>
+        <!-- ========================================== -->
+        <!-- VIEW: REDE E EQUIPE                        -->
+        <!-- ========================================== -->
+        <div id="view-rede" class="app-view hidden">
+            <h2 class="text-xl font-bold mb-6"><i class="fas fa-network-wired text-primary mr-2"></i> Gestão de Franquias e Equipe</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Redes -->
+                <div class="card p-4 rounded-xl">
+                    <h3 class="font-bold mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">1. Redes</h3>
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="new-network-name" class="input-field w-full rounded px-2 py-1 text-sm" placeholder="Nome da Rede">
+                        <button onclick="createNetwork()" class="btn-primary px-3 rounded"><i class="fas fa-plus"></i></button>
                     </div>
-                    <button onclick="printReport()" class="bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-600 transition">
-                        <i class="fas fa-print"></i> Relatório Mensal
-                    </button>
+                    <div id="network-list" class="space-y-2 text-sm"></div>
                 </div>
-                
-                <div class="card p-4 rounded-xl mb-4 flex gap-4 overflow-x-auto">
-                    <select id="filter-unit" class="input-field rounded px-3 py-1.5 text-sm min-w-[150px]" onchange="renderHistory()">
-                        <option value="">Todas as Unidades</option>
-                    </select>
-                    <select id="filter-member" class="input-field rounded px-3 py-1.5 text-sm min-w-[150px]" onchange="renderHistory()">
-                        <option value="">Todos os Membros</option>
-                    </select>
-                    <select id="filter-month" class="input-field rounded px-3 py-1.5 text-sm min-w-[150px]" onchange="renderHistory()">
-                        <option value="">Todos os Meses</option>
+
+                <!-- Unidades -->
+                <div class="card p-4 rounded-xl">
+                    <h3 class="font-bold mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">2. Unidades</h3>
+                    <select id="sel-network-for-unit" class="input-field w-full rounded px-2 py-1 text-sm mb-2"><option value="">- Selecione a Rede -</option></select>
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="new-unit-name" class="input-field w-full rounded px-2 py-1 text-sm" placeholder="Nome da Unidade">
+                        <button onclick="createUnit()" class="btn-primary px-3 rounded"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <div id="unit-list" class="space-y-2 text-sm"></div>
+                </div>
+
+                <!-- Membros -->
+                <div class="card p-4 rounded-xl">
+                    <h3 class="font-bold mb-4 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">3. Membros (Equipe)</h3>
+                    <select id="sel-unit-for-member" class="input-field w-full rounded px-2 py-1 text-sm mb-2"><option value="">- Selecione a Unidade -</option></select>
+                    
+                    <div class="space-y-2 mb-4 bg-black bg-opacity-10 p-3 rounded">
+                        <input type="text" id="new-mem-name" class="input-field w-full rounded px-2 py-1 text-sm" placeholder="Nome Completo">
+                        <input type="text" id="new-mem-cpf" class="input-field w-full rounded px-2 py-1 text-sm" placeholder="CPF">
+                        <input type="text" id="new-mem-state" class="input-field w-full rounded px-2 py-1 text-sm" placeholder="Estado (UF)">
+                        <select id="new-mem-cat" onchange="toggleCrefField()" class="input-field w-full rounded px-2 py-1 text-sm">
+                            <option value="PEF">Profissional de Educação Física (PEF)</option>
+                            <option value="TE">Treinador Esportivo (TE)</option>
+                        </select>
+                        <input type="text" id="new-mem-cref" class="input-field w-full rounded px-2 py-1 text-sm" placeholder="Número do CREF">
+                        <button onclick="createMember()" class="btn-primary w-full py-1.5 rounded text-sm font-bold mt-2">Adicionar Membro</button>
+                    </div>
+                    <div id="member-list" class="space-y-2 text-sm"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW: HISTÓRICO                            -->
+        <!-- ========================================== -->
+        <div id="view-historico" class="app-view hidden">
+            <h2 class="text-xl font-bold mb-6"><i class="fas fa-cloud text-primary mr-2"></i> Histórico na Nuvem</h2>
+            <div class="card rounded-xl p-4 overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="border-b" style="border-color: var(--border-color)">
+                            <th class="p-2">Data</th>
+                            <th class="p-2">Aluno</th>
+                            <th class="p-2">Profissional</th>
+                            <th class="p-2">Unidade</th>
+                            <th class="p-2">Status</th>
+                            <th class="p-2">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-tbody">
+                        <!-- JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW: RELATÓRIOS                           -->
+        <!-- ========================================== -->
+        <div id="view-relatorios" class="app-view hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold"><i class="fas fa-chart-bar text-primary mr-2"></i> Relatório de Produtividade</h2>
+                <button onclick="printReport()" class="btn-primary px-4 py-2 rounded shadow font-medium"><i class="fas fa-print"></i> Imprimir Relatório</button>
+            </div>
+            
+            <div class="card rounded-xl p-4 mb-6 flex gap-4 items-end">
+                <div>
+                    <label class="block text-xs mb-1 opacity-70">Mês</label>
+                    <select id="report-month" class="input-field rounded px-3 py-1.5 text-sm">
                         <option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option>
                         <option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option>
                         <option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option>
                         <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
                     </select>
                 </div>
-
-                <div class="flex-1 overflow-y-auto space-y-2 pr-2" id="history-list">
-                    <!-- Fichas JS -->
+                <div>
+                    <label class="block text-xs mb-1 opacity-70">Ano</label>
+                    <input type="number" id="report-year" class="input-field rounded px-3 py-1.5 text-sm w-24" value="2026">
                 </div>
+                <div>
+                    <label class="block text-xs mb-1 opacity-70">Filtrar por Unidade</label>
+                    <select id="report-unit" class="input-field rounded px-3 py-1.5 text-sm">
+                        <option value="ALL">Todas as Unidades</option>
+                        <!-- JS -->
+                    </select>
+                </div>
+                <button onclick="generateReport()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-1.5 rounded transition font-medium">Gerar</button>
             </div>
 
-            <!-- VIEW: EXERCÍCIOS CUSTOMIZADOS -->
-            <div id="view-custom-exercises" class="view-section hidden p-6 lg:p-10">
-                <h2 class="text-2xl font-bold mb-2"><i class="fas fa-plus-square text-primary mr-2"></i> Banco Personalizado</h2>
-                <p class="text-sm opacity-70 mb-6">Adicione exercícios únicos para a sua rede. Eles aparecerão no final da lista da categoria selecionada.</p>
+            <div class="card rounded-xl p-4 overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="border-b" style="border-color: var(--border-color)">
+                            <th class="p-2">Unidade</th>
+                            <th class="p-2">Membro (Profissional)</th>
+                            <th class="p-2 text-center">Total de Fichas Emitidas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="report-tbody">
+                        <tr><td colspan="3" class="text-center opacity-50 p-4">Selecione os filtros e clique em Gerar</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW: EXERCÍCIOS                           -->
+        <!-- ========================================== -->
+        <div id="view-exercicios" class="app-view hidden">
+            <h2 class="text-xl font-bold mb-6"><i class="fas fa-dumbbell text-primary mr-2"></i> Banco de Exercícios Customizados</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card rounded-xl p-4">
+                    <h3 class="font-bold mb-3">Adicionar Novo Exercício à Nuvem</h3>
+                    <select id="custom-ex-cat" class="input-field w-full rounded px-3 py-2 text-sm mb-3">
+                        <option value="🔥 PEITO">🔥 PEITO</option><option value="🦍 COSTAS">🦍 COSTAS</option>
+                        <option value="🦵 PERNAS">🦵 PERNAS</option><option value="💪 BRAÇOS">💪 BRAÇOS</option>
+                        <option value="🪨 OMBROS">🪨 OMBROS</option><option value="🧠 ABDÔMEN">🧠 ABDÔMEN</option>
+                        <option value="🫀 CARDIO">🫀 CARDIO</option>
+                    </select>
+                    <input type="text" id="custom-ex-name" class="input-field w-full rounded px-3 py-2 text-sm mb-3" placeholder="Nome do Exercício">
+                    <button onclick="addCustomExercise()" class="btn-primary w-full py-2 rounded font-bold">Salvar no Banco</button>
+                </div>
                 
-                <div class="card p-5 rounded-xl mb-6">
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <select id="custom-cat" class="input-field rounded-lg px-3 py-2 text-sm w-full sm:w-1/3">
-                            <option value="🔥 PEITO">🔥 PEITO</option><option value="🦍 COSTAS">🦍 COSTAS</option>
-                            <option value="🦵 PERNAS">🦵 PERNAS</option><option value="💪 BRAÇOS">💪 BRAÇOS</option>
-                            <option value="🪨 OMBROS">🪨 OMBROS</option><option value="🧠 ABDÔMEN">🧠 ABDÔMEN</option>
-                            <option value="🫀 CARDIO">🫀 CARDIO</option>
-                        </select>
-                        <input type="text" id="custom-name" class="input-field rounded-lg px-3 py-2 text-sm flex-1" placeholder="Nome do Exercício">
-                        <button onclick="addCustomExercise()" class="btn-primary px-6 py-2 rounded-lg font-medium text-sm">Salvar Exercício</button>
+                <div class="card rounded-xl p-4">
+                    <h3 class="font-bold mb-3">Meus Exercícios Customizados</h3>
+                    <div id="custom-ex-list" class="space-y-2 text-sm max-h-64 overflow-y-auto">
+                        <!-- JS -->
                     </div>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="custom-ex-list">
-                    <!-- Exercicios Custom JS -->
-                </div>
             </div>
+        </div>
 
-        </main>
-    </div>
+    </div> <!-- Fim App Container -->
 
-    <!-- MODAL DE EXERCÍCIOS PARA O BUILDER -->
-    <div id="modal-exercises" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-2 sm:p-4">
-        <div class="card w-full max-w-5xl rounded-xl flex flex-col h-[90vh]">
+    <!-- MODAL ESCOLHER EXERCÍCIO -->
+    <div id="exercise-modal" class="modal fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm hidden flex items-center justify-center p-2">
+        <div class="card w-full max-w-5xl rounded-xl shadow-2xl flex flex-col h-[90vh]">
             <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
-                <h3 class="text-lg font-bold">Adicionar Exercício</h3>
-                <button onclick="closeExModal()" class="text-gray-400 hover:text-red-500 text-2xl leading-none">&times;</button>
+                <h3 class="text-lg font-bold">Selecione os Exercícios</h3>
+                <button onclick="closeExerciseModal()" class="text-gray-400 hover:text-red-500 text-2xl leading-none">&times;</button>
             </div>
             <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
-                <div class="w-full md:w-1/4 border-r overflow-y-auto p-2 space-y-1" style="border-color: var(--border-color)" id="modal-cat-list"></div>
-                <div class="w-full md:w-3/4 overflow-y-auto p-3 bg-black bg-opacity-5" id="modal-ex-items"></div>
+                <div class="w-full md:w-1/4 border-r overflow-y-auto p-2" style="border-color: var(--border-color)" id="modal-categories"></div>
+                <div class="w-full md:w-3/4 overflow-y-auto p-3 bg-black bg-opacity-10" id="modal-exercises"></div>
             </div>
         </div>
     </div>
 
-    <!-- ÁREA DE IMPRESSÃO (Oculta) -->
+    <!-- ========================================== -->
+    <!-- ÁREA DE IMPRESSÃO - FICHA                  -->
+    <!-- ========================================== -->
     <div id="print-area"></div>
+    
+    <!-- ========================================== -->
+    <!-- ÁREA DE IMPRESSÃO - RELATÓRIO              -->
+    <!-- ========================================== -->
+    <div id="print-report-area"></div>
 
-
-    <!-- ==================== LÓGICA JAVASCRIPT ==================== -->
+    <!-- FIREBASE & LÓGICA DO APP -->
     <script type="module">
-        // 1. IMPORTAÇÕES FIREBASE (Módulos CDN)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDocs, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // 2. CONFIGURAÇÃO FIREBASE (Fornecida no prompt)
-        const firebaseConfig = {
+        // Firebase Setup
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "AIzaSyD-iuERHA_x1f69smJXh7b8wTLO1zTadIU",
             authDomain: "powfitpro-d8577.firebaseapp.com",
             projectId: "powfitpro-d8577",
@@ -406,13 +410,15 @@
             messagingSenderId: "651381183985",
             appId: "1:651381183985:web:9a425692372a9d67d9e050"
         };
-
+        
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'powfit-pro-master';
+        let currentUser = null;
 
-        // 3. DADOS ESTÁTICOS / REGRAS DE NEGÓCIO
-        const healthDataPEF = {
+        // Dicionários de Dados Fixos
+        const healthPEF = {
             "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.",
             "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.",
             "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico. Combinar musculação e cardio moderado.",
@@ -430,22 +436,22 @@
             "👴 Idoso": "Foco em força, equilíbrio e mobilidade. Intensidade moderada com segurança."
         };
 
-        const healthDataTE = {
+        const healthTE = {
             "🟢 Saudável": "Manter treinos regulares de 3–5x por semana, combinando musculação e atividades cardiovasculares. A constância, descanso adequado e boa alimentação contribuem para melhores resultados.",
             "⚪ Sedentário": "O início deve ser gradual, com treinos leves e foco na adaptação do corpo. A prioridade é desenvolver constância, aprender a execução correta e evitar excesso de carga.",
             "🟡 Sobrepeso": "A prática regular de musculação associada ao cardio pode contribuir para melhora do condicionamento físico e composição corporal. A progressão deve respeitar a individualidade e o nível de adaptação.",
             "🔴 Obesidade": "É recomendado iniciar com exercícios de menor impacto e progressão gradual. A segurança, mobilidade e constância são prioridades durante o processo.",
             "⚖️ Baixo peso": "A musculação pode auxiliar no ganho de massa muscular quando associada a alimentação adequada e descanso. O treino deve priorizar evolução progressiva e recuperação muscular.",
-            "🍬 Diabetes": "Pessoas com diabetes devem manter acompanhamento médico regular. A musculação pode auxiliar na rotina física quando liberada por profissional de saúde. Em casos de tontura, mal-estar ou alteração de glicemia, o treino deve ser interrompido e o aluno deve procurar orientação médica.",
-            "❤️ Hipertensão": "Pessoas com hipertensão devem manter acompanhamento médico regular e respeitar as orientações profissionais. Evitar prender a respiração e controlar a intensidade dos exercícios.",
+            "🍬 Diabetes": "Pessoas com diabetes devem manter acompanhamento médico regular antes e durante a prática de exercícios. A musculação pode auxiliar na rotina de atividade física quando liberada por profissional de saúde. Em casos de tontura, mal-estar ou alteração de glicemia, o treino deve ser interrompido e o aluno deve procurar orientação médica.",
+            "❤️ Hipertensão": "Pessoas com hipertensão devem manter acompanhamento médico regular e respeitar as orientações profissionais. Durante o treino, é importante evitar prender a respiração e controlar a intensidade dos exercícios.",
             "🔵 Hipotensão": "Pessoas com hipotensão devem evitar mudanças bruscas de posição durante o treino. Manter boa hidratação e respeitar a intensidade adequada ajuda a reduzir episódios de mal-estar.",
-            "💔 Problemas cardíacos": "A prática de exercícios deve ocorrer apenas com liberação e acompanhamento médico. O treino deve respeitar limites individuais, com controle de intensidade.",
-            "🦴 Problemas articulares": "Exercícios com menor impacto e maior controle de movimento costumam ser mais indicados. O acompanhamento profissional ajuda na segurança.",
-            "🫁 Problemas respiratórios": "A progressão do treino deve ser gradual e respeitar a capacidade respiratória individual. Em caso de falta de ar excessiva, interromper.",
-            "⚠️ Lesões": "A adaptação dos exercícios deve respeitar a limitação existente e evitar dor. Seguir orientação profissional adequada antes da prática.",
-            "🤰 Gestante": "A prática deve ocorrer com liberação médica e acompanhamento adequado. Foco deve ser segurança, mobilidade e bem-estar, evitando impacto e risco.",
-            "🤱 Lactante": "A atividade física pode ser mantida normalmente, respeitando a recuperação, hidratação e alimentação adequada.",
-            "👴 Idoso": "A musculação pode contribuir para força, equilíbrio e mobilidade. Respeitar limitações individuais, intensidade moderada e segurança."
+            "💔 Problemas cardíacos": "A prática de exercícios deve ocorrer apenas com liberação e acompanhamento médico. O treino deve respeitar limites individuais, com controle de intensidade e atenção aos sinais do corpo.",
+            "🦴 Problemas articulares": "Exercícios com menor impacto e maior controle de movimento costumam ser mais indicados. O acompanhamento profissional e a adaptação dos exercícios ajudam na segurança durante o treino.",
+            "🫁 Problemas respiratórios": "A progressão do treino deve ser gradual e respeitar a capacidade respiratória individual. Em caso de falta de ar excessiva ou desconforto, o exercício deve ser interrompido.",
+            "⚠️ Lesões": "A adaptação dos exercícios deve respeitar a limitação existente e evitar dor durante a execução. Em situações de lesão, é importante seguir orientação profissional adequada antes da prática.",
+            "🤰 Gestante": "A prática de exercícios deve ocorrer com liberação médica e acompanhamento adequado. O foco deve ser segurança, mobilidade e bem-estar, evitando impacto excessivo e situações de risco.",
+            "🤱 Lactante": "A atividade física pode ser mantida normalmente, respeitando a recuperação individual e mantendo boa hidratação e alimentação adequada.",
+            "👴 Idoso": "A musculação pode contribuir para força, equilíbrio, mobilidade e autonomia. O treino deve respeitar limitações individuais, com intensidade moderada e foco na segurança."
         };
 
         const objectiveData = {
@@ -470,395 +476,455 @@
         };
 
         const techniques = ["Nenhuma", "Drop set", "Bi-set", "Tri-set", "Série gigante", "Rest-pause", "FST-7", "Pré-exaustão", "Pós-exaustão", "Negativa", "Isometria", "Parciais", "Pirâmide"];
-        const daysSequence = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"];
+        const daysOrder = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"];
 
-        // 4. ESTADO GLOBAL DA APLICAÇÃO
-        let appState = {
-            user: null,
-            units: [],
-            members: [],
-            history: [],
-            customExercises: [],
-            
-            // Estado do construtor
-            currentFichaId: null,
-            builderDays: [],
-            modalActiveDayIdx: null,
-            modalActiveCat: "🔥 PEITO"
+        // Estado Global
+        const state = {
+            networks: [], units: [], members: [],
+            customExercises: [], workouts: [],
+            currentFichaId: null, // se estamos editando
+            workoutDays: [],
+            activeModalDayIdx: null,
+            activeCategory: "🔥 PEITO"
         };
 
-        // 5. FUNÇÕES BASE (Auth e DB)
-        function showLoading(text = "CARREGANDO...") {
-            document.getElementById('loading-text').innerText = text;
-            document.getElementById('loading-overlay').classList.remove('hidden');
+        // --- FUNÇÕES UTILITÁRIAS ---
+        window.showToast = (msg, type = 'success') => {
+            const toast = document.createElement('div');
+            const color = type === 'success' ? 'bg-green-600' : 'bg-red-600';
+            toast.className = `${color} text-white px-4 py-2 rounded shadow-lg text-sm transition-opacity duration-300`;
+            toast.textContent = msg;
+            document.getElementById('toast-container').appendChild(toast);
+            setTimeout(() => toast.classList.add('opacity-0'), 2500);
+            setTimeout(() => toast.remove(), 2800);
+        };
+
+        window.showConfirm = (title, message) => {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('custom-confirm');
+                document.getElementById('confirm-title').textContent = title;
+                document.getElementById('confirm-msg').textContent = message;
+                modal.classList.remove('hidden');
+                
+                const btnYes = document.getElementById('confirm-btn-yes');
+                const btnNo = document.getElementById('confirm-btn-no');
+                
+                const cleanup = () => {
+                    modal.classList.add('hidden');
+                    btnYes.replaceWith(btnYes.cloneNode(true));
+                    btnNo.replaceWith(btnNo.cloneNode(true));
+                };
+
+                btnYes.addEventListener('click', () => { cleanup(); resolve(true); }, {once: true});
+                btnNo.addEventListener('click', () => { cleanup(); resolve(false); }, {once: true});
+            });
+        };
+
+        const getBasePath = () => `artifacts/${appId}/users/${currentUser.uid}`;
+
+        // --- INICIALIZAÇÃO E AUTH FIREBASE ---
+        async function initAuth() {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
         }
-        function hideLoading() { document.getElementById('loading-overlay').classList.add('hidden'); }
-        
-        // Expõe funções pro HTML
-        window.appLogin = async () => {
-            showLoading("CONECTANDO AO GOOGLE...");
-            try {
-                const provider = new GoogleAuthProvider();
-                await signInWithPopup(auth, provider);
-            } catch (error) {
-                hideLoading();
-                alert("Erro ao logar. Se estiver em um visualizador restrito, abra esta página em uma nova guia. Detalhe: " + error.message);
-            }
-        };
 
-        window.appLogout = async () => {
-            if(confirm("Deseja realmente sair?")) {
-                showLoading("SAINDO...");
-                await signOut(auth);
-            }
-        };
-
-        window.navigate = (viewId) => {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('text-primary', 'bg-black', 'bg-opacity-20'));
-            
-            document.getElementById('view-' + viewId).classList.remove('hidden');
-            if(document.getElementById('nav-' + viewId)) {
-                document.getElementById('nav-' + viewId).classList.add('text-primary', 'bg-black', 'bg-opacity-20');
-            }
-            if(viewId === 'history') renderHistory();
-            if(viewId === 'builder') populateBuilderMembers();
-        };
-
-        // LISTENER DE AUTH
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                appState.user = user;
-                document.getElementById('user-name-display').innerText = user.displayName || 'Gestor da Rede';
-                document.getElementById('user-email-display').innerText = user.email;
-                if(user.photoURL) {
-                    document.getElementById('user-avatar').src = user.photoURL;
-                    document.getElementById('user-avatar').classList.remove('hidden');
-                }
-                
-                document.getElementById('app-root').classList.remove('hidden');
-                document.getElementById('view-login').classList.add('hidden');
-                
-                showLoading("CARREGANDO DADOS DA REDE...");
-                await fetchAllData();
-                navigate('dashboard');
-                hideLoading();
-            } else {
-                appState.user = null;
-                document.getElementById('app-root').classList.add('hidden');
-                document.getElementById('view-login').classList.remove('hidden');
-                document.getElementById('view-login').classList.add('flex');
-                hideLoading();
+                currentUser = user;
+                await loadAllData();
+                document.getElementById('loading-overlay').classList.add('hidden');
+                updateObjectiveText();
+                window.addWorkoutDay(); // Começa com um dia vazio
             }
         });
 
-        // FETCH ALL DATA (Simple queries due to rules)
-        async function fetchAllData() {
-            if(!appState.user) return;
-            const uid = appState.user.uid;
-            
+        // Bootstrap App
+        window.onload = () => {
+            initAuth().catch(e => {
+                console.error("Auth erro:", e);
+                showToast("Erro de autenticação", "error");
+            });
+            document.getElementById('report-month').value = String(new Date().getMonth() + 1).padStart(2, '0');
+            document.getElementById('report-year').value = new Date().getFullYear();
+        };
+
+        // --- DATA LAYER (FIREBASE) ---
+        async function loadAllData() {
+            const base = getBasePath();
             try {
+                // Fetch Networks
+                const netSnap = await getDocs(collection(db, base, 'networks'));
+                state.networks = netSnap.docs.map(d => ({id: d.id, ...d.data()}));
                 // Fetch Units
-                const unitsSnap = await getDocs(collection(db, `users/${uid}/units`));
-                appState.units = unitsSnap.docs.map(d => ({id: d.id, ...d.data()}));
-                
+                const uniSnap = await getDocs(collection(db, base, 'units'));
+                state.units = uniSnap.docs.map(d => ({id: d.id, ...d.data()}));
                 // Fetch Members
-                const memSnap = await getDocs(collection(db, `users/${uid}/members`));
-                appState.members = memSnap.docs.map(d => ({id: d.id, ...d.data()}));
-
-                // Fetch History (Fichas)
-                const histSnap = await getDocs(collection(db, `users/${uid}/fichas`));
-                appState.history = histSnap.docs.map(d => ({id: d.id, ...d.data()}));
-
+                const memSnap = await getDocs(collection(db, base, 'members'));
+                state.members = memSnap.docs.map(d => ({id: d.id, ...d.data()}));
                 // Fetch Custom Exercises
-                const exSnap = await getDocs(collection(db, `users/${uid}/custom_exercises`));
-                appState.customExercises = exSnap.docs.map(d => ({id: d.id, ...d.data()}));
+                const exSnap = await getDocs(collection(db, base, 'customExercises'));
+                state.customExercises = exSnap.docs.map(d => ({id: d.id, ...d.data()}));
+                // Fetch Workouts
+                const workSnap = await getDocs(collection(db, base, 'workouts'));
+                state.workouts = workSnap.docs.map(d => ({id: d.id, ...d.data()}));
 
-                renderUnits();
-                renderMembers();
-                renderCustomEx();
-            } catch (e) {
-                console.error("Erro ao buscar dados:", e);
-                alert("Erro ao buscar dados do servidor.");
-            }
+                renderNetworkManagement();
+                renderFichaMemberSelect();
+                renderCustomExercisesList();
+                renderHistory();
+            } catch (e) { console.error(e); showToast("Erro ao carregar dados.", "error"); }
         }
 
-        // 6. GESTÃO DE REDE / UNIDADES
-        window.addUnit = async () => {
-            const name = document.getElementById('new-unit-name').value.trim();
-            if(!name) return alert('Preencha o nome da unidade');
-            showLoading("SALVANDO...");
-            try {
-                const docRef = await addDoc(collection(db, `users/${appState.user.uid}/units`), { name });
-                appState.units.push({id: docRef.id, name});
-                document.getElementById('new-unit-name').value = '';
-                renderUnits();
-                renderMembers(); // refresh dropdowns
-            } catch(e) { alert("Erro ao salvar unidade."); }
-            hideLoading();
-        };
-
-        window.deleteUnit = async (id) => {
-            if(!confirm("Atenção: Excluir a unidade não exclui os membros atrelados a ela, mas eles ficarão sem unidade. Continuar?")) return;
-            showLoading("EXCLUINDO...");
-            try {
-                await deleteDoc(doc(db, `users/${appState.user.uid}/units`, id));
-                appState.units = appState.units.filter(u => u.id !== id);
-                renderUnits();
-            } catch(e) { alert("Erro ao excluir."); }
-            hideLoading();
-        }
-
-        function renderUnits() {
-            const container = document.getElementById('units-list');
-            if(appState.units.length === 0) {
-                container.innerHTML = `<div class="col-span-full opacity-50 text-sm">Nenhuma unidade cadastrada.</div>`;
-                return;
-            }
-            container.innerHTML = appState.units.map(u => {
-                const memCount = appState.members.filter(m => m.unitId === u.id).length;
-                return `
-                <div class="card p-4 rounded-xl flex justify-between items-center">
-                    <div><h4 class="font-bold">${u.name}</h4><p class="text-xs opacity-60">${memCount} Membros na equipe</p></div>
-                    <button onclick="deleteUnit('${u.id}')" class="text-red-500 hover:bg-red-500 hover:text-white p-2 rounded transition"><i class="fas fa-trash"></i></button>
-                </div>`
-            }).join('');
-
-            // Atualiza dropdown de cadastro de membro
-            const memUnitSel = document.getElementById('mem-unit');
-            if(memUnitSel) {
-                memUnitSel.innerHTML = appState.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
-            }
-        }
-
-        // 7. GESTÃO DE EQUIPE (MEMBROS)
-        window.toggleMemCref = () => {
-            const role = document.getElementById('mem-role').value;
-            document.getElementById('mem-cref-container').style.display = role === 'TE' ? 'none' : 'block';
-        };
-
-        window.addMember = async () => {
-            const name = document.getElementById('mem-name').value.trim();
-            const cpf = document.getElementById('mem-cpf').value.trim();
-            const unitId = document.getElementById('mem-unit').value;
-            const role = document.getElementById('mem-role').value;
-            const cref = document.getElementById('mem-cref').value.trim();
-            const stateUf = document.getElementById('mem-state').value.trim().toUpperCase();
-
-            if(!name || !unitId || !stateUf) return alert('Preencha Nome, Unidade e Estado.');
-            if(role === 'PEF' && !cref) return alert('CREF é obrigatório para PEF.');
-
-            showLoading("SALVANDO MEMBRO...");
-            const data = { name, cpf, unitId, role, cref: role === 'TE' ? '' : cref, state: stateUf };
-            try {
-                const docRef = await addDoc(collection(db, `users/${appState.user.uid}/members`), data);
-                appState.members.push({id: docRef.id, ...data});
-                document.getElementById('mem-name').value = '';
-                document.getElementById('mem-cpf').value = '';
-                document.getElementById('mem-cref').value = '';
-                renderMembers();
-                renderUnits(); // refresh contagem
-            } catch(e) { alert("Erro ao salvar membro."); }
-            hideLoading();
-        };
-
-        window.deleteMember = async (id) => {
-            if(!confirm("Excluir este membro da equipe? O histórico de fichas dele será mantido na nuvem.")) return;
-            showLoading("EXCLUINDO...");
-            try {
-                await deleteDoc(doc(db, `users/${appState.user.uid}/members`, id));
-                appState.members = appState.members.filter(m => m.id !== id);
-                renderMembers();
-                renderUnits();
-            } catch(e) { alert("Erro ao excluir."); }
-            hideLoading();
-        }
-
-        function renderMembers() {
-            const container = document.getElementById('members-list');
-            if(appState.members.length === 0) {
-                container.innerHTML = `<div class="opacity-50 text-sm">Nenhum membro cadastrado.</div>`;
-                return;
-            }
-            container.innerHTML = appState.members.map(m => {
-                const u = appState.units.find(un => un.id === m.unitId);
-                const unitName = u ? u.name : 'Unidade Excluída';
-                const roleBadge = m.role === 'PEF' ? 'PEF (Ed. Física)' : 'TE (Treinador)';
-                return `
-                <div class="card p-4 rounded-xl flex justify-between items-center border-l-4 border-l-primary">
-                    <div>
-                        <h4 class="font-bold">${m.name} <span class="text-[10px] bg-primary bg-opacity-20 text-primary px-2 py-0.5 rounded ml-2">${roleBadge}</span></h4>
-                        <p class="text-xs opacity-60">Unidade: ${unitName} | UF: ${m.state} ${m.role === 'PEF' ? '| CREF: '+m.cref : ''}</p>
-                    </div>
-                    <button onclick="deleteMember('${m.id}')" class="text-red-500 hover:bg-red-500 hover:text-white p-2 rounded transition"><i class="fas fa-trash"></i></button>
-                </div>`
-            }).join('');
-        }
-
-        // 8. BUILDER (MONTAR FICHA)
-        function populateBuilderMembers() {
-            const sel = document.getElementById('builder-member');
-            sel.innerHTML = `<option value="">Selecione o membro...</option>` + 
-                appState.members.map(m => {
-                    const u = appState.units.find(un => un.id === m.unitId);
-                    return `<option value="${m.id}">${m.name} (${u ? u.name : 'Sem unidade'})</option>`;
-                }).join('');
+        // --- NAVEGAÇÃO E UI ---
+        window.nav = (viewId) => {
+            document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('text-primary');
+                b.classList.add('opacity-70');
+            });
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
             
-            // Auto add 1st day if empty
-            if(appState.builderDays.length === 0) addDay();
+            // Ativa botão topo
+            const btns = Array.from(document.querySelectorAll('.nav-btn'));
+            const activeBtn = btns.find(b => b.getAttribute('onclick') === `nav('${viewId}')`);
+            if(activeBtn) {
+                activeBtn.classList.remove('opacity-70');
+                activeBtn.classList.add('text-primary');
+            }
+            document.getElementById('mobile-nav').value = viewId;
+
+            if(viewId === 'relatorios') populateReportUnits();
+        };
+
+        window.changeTheme = () => {
+            document.body.setAttribute('data-theme', document.getElementById('stu-gender').value);
+        };
+
+        window.calculateIMC = () => {
+            const w = parseFloat(document.getElementById('stu-weight').value);
+            const h = parseFloat(document.getElementById('stu-height').value);
+            const disp = document.getElementById('imc-display');
+            if (w > 0 && h > 0) {
+                const imc = (w / (h * h)).toFixed(1);
+                let cls = "";
+                if (imc < 18.5) cls = "Abaixo do peso";
+                else if (imc < 25) cls = "Peso normal";
+                else if (imc < 30) cls = "Sobrepeso";
+                else if (imc < 35) cls = "Obesidade Grau I";
+                else if (imc < 40) cls = "Obesidade Grau II";
+                else cls = "Obesidade Grau III";
+                disp.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-3 py-1 rounded-full text-[10px] font-bold border border-primary border-opacity-30">IMC: ${imc} (${cls})</span>`;
+            } else { disp.innerHTML = ''; }
+        };
+
+        window.updateObjectiveText = () => {
+            const obj = document.getElementById('stu-objective').value;
+            document.getElementById('obj-text').textContent = objectiveData[obj] || '';
+        };
+
+        // --- GESTÃO DE REDE, UNIDADE E MEMBROS ---
+        window.createNetwork = async () => {
+            const name = document.getElementById('new-network-name').value.trim();
+            if(!name) return;
+            try {
+                const docRef = await addDoc(collection(db, getBasePath(), 'networks'), { name, createdAt: Date.now() });
+                state.networks.push({ id: docRef.id, name });
+                document.getElementById('new-network-name').value = '';
+                showToast("Rede criada!");
+                renderNetworkManagement();
+            } catch(e) { showToast("Erro", "error"); }
+        };
+
+        window.createUnit = async () => {
+            const netId = document.getElementById('sel-network-for-unit').value;
+            const name = document.getElementById('new-unit-name').value.trim();
+            if(!netId || !name) return showToast("Selecione rede e digite nome", "error");
+            try {
+                const docRef = await addDoc(collection(db, getBasePath(), 'units'), { name, networkId: netId, createdAt: Date.now() });
+                state.units.push({ id: docRef.id, name, networkId: netId });
+                document.getElementById('new-unit-name').value = '';
+                showToast("Unidade criada!");
+                renderNetworkManagement();
+                renderFichaMemberSelect();
+            } catch(e) { showToast("Erro", "error"); }
+        };
+
+        window.toggleCrefField = () => {
+            const cat = document.getElementById('new-mem-cat').value;
+            document.getElementById('new-mem-cref').style.display = cat === 'TE' ? 'none' : 'block';
+        };
+
+        window.createMember = async () => {
+            const unitId = document.getElementById('sel-unit-for-member').value;
+            const name = document.getElementById('new-mem-name').value.trim();
+            const cpf = document.getElementById('new-mem-cpf').value.trim();
+            const stateUf = document.getElementById('new-mem-state').value.trim();
+            const cat = document.getElementById('new-mem-cat').value;
+            const cref = document.getElementById('new-mem-cref').value.trim();
+
+            if(!unitId || !name || !cpf || !stateUf) return showToast("Preencha todos os campos", "error");
+            if(cat === 'PEF' && !cref) return showToast("CREF é obrigatório para PEF", "error");
+
+            const memObj = { unitId, name, cpf, state: stateUf, category: cat, cref: cat === 'PEF' ? cref : '', createdAt: Date.now() };
+            try {
+                const docRef = await addDoc(collection(db, getBasePath(), 'members'), memObj);
+                state.members.push({ id: docRef.id, ...memObj });
+                document.getElementById('new-mem-name').value = '';
+                document.getElementById('new-mem-cpf').value = '';
+                showToast("Membro cadastrado!");
+                renderNetworkManagement();
+                renderFichaMemberSelect();
+            } catch(e) { showToast("Erro", "error"); }
+        };
+
+        window.deleteEntity = async (type, id) => {
+            if(!(await showConfirm("Excluir", "Tem certeza? Isso apagará este item permanentemente da nuvem."))) return;
+            try {
+                await deleteDoc(doc(db, getBasePath(), type, id));
+                state[type] = state[type].filter(i => i.id !== id);
+                renderNetworkManagement();
+                renderFichaMemberSelect();
+                showToast("Excluído!");
+            } catch(e) { showToast("Erro", "error"); }
+        };
+
+        function renderNetworkManagement() {
+            // Networks
+            document.getElementById('network-list').innerHTML = state.networks.map(n => `
+                <div class="flex justify-between items-center p-2 bg-black bg-opacity-10 rounded">
+                    <span>${n.name}</span>
+                    <button onclick="deleteEntity('networks', '${n.id}')" class="text-red-500 hover:text-white hover:bg-red-500 p-1 rounded"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+
+            // Units list & select
+            document.getElementById('sel-network-for-unit').innerHTML = `<option value="">- Selecione a Rede -</option>` + state.networks.map(n => `<option value="${n.id}">${n.name}</option>`).join('');
+            
+            document.getElementById('unit-list').innerHTML = state.units.map(u => {
+                const netName = state.networks.find(n => n.id === u.networkId)?.name || 'Rede Órfã';
+                return `<div class="flex justify-between items-center p-2 bg-black bg-opacity-10 rounded">
+                    <div><span class="font-bold">${u.name}</span> <span class="text-[10px] opacity-60">(${netName})</span></div>
+                    <button onclick="deleteEntity('units', '${u.id}')" class="text-red-500 hover:text-white hover:bg-red-500 p-1 rounded"><i class="fas fa-trash"></i></button>
+                </div>`
+            }).join('');
+
+            // Members list & select
+            document.getElementById('sel-unit-for-member').innerHTML = `<option value="">- Selecione a Unidade -</option>` + state.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+            
+            document.getElementById('member-list').innerHTML = state.members.map(m => {
+                const uName = state.units.find(u => u.id === m.unitId)?.name || '';
+                return `<div class="flex justify-between items-center p-2 bg-black bg-opacity-10 rounded">
+                    <div>
+                        <div class="font-bold">${m.name} <span class="text-primary text-[10px] bg-primary bg-opacity-20 px-1 rounded">${m.category}</span></div>
+                        <div class="text-[10px] opacity-70">${uName} - CPF: ${m.cpf}</div>
+                    </div>
+                    <button onclick="deleteEntity('members', '${m.id}')" class="text-red-500 hover:text-white hover:bg-red-500 p-1 rounded"><i class="fas fa-trash"></i></button>
+                </div>`
+            }).join('');
         }
 
-        window.updateBuilderHealth = () => {
-            const memId = document.getElementById('builder-member').value;
-            const mem = appState.members.find(m => m.id === memId);
-            const container = document.getElementById('health-container');
-            if(!mem) {
-                container.innerHTML = '<span class="opacity-50 col-span-2">Selecione o membro para ver as diretrizes.</span>';
+        // --- FICHA DE TREINO LOGIC ---
+        function renderFichaMemberSelect() {
+            const sel = document.getElementById('wf-member');
+            sel.innerHTML = `<option value="">-- Selecione o Treinador --</option>`;
+            
+            // Group by unit
+            state.units.forEach(u => {
+                const mems = state.members.filter(m => m.unitId === u.id);
+                if(mems.length > 0) {
+                    const group = document.createElement('optgroup');
+                    group.label = `Unidade: ${u.name}`;
+                    mems.forEach(m => {
+                        const opt = document.createElement('option');
+                        opt.value = m.id;
+                        opt.textContent = `${m.name} (${m.category})`;
+                        group.appendChild(opt);
+                    });
+                    sel.appendChild(group);
+                }
+            });
+        }
+
+        window.onMemberSelectChange = () => {
+            const memId = document.getElementById('wf-member').value;
+            const infoP = document.getElementById('wf-member-info');
+            const healthCont = document.getElementById('health-container');
+            
+            if(!memId) {
+                infoP.textContent = '';
+                healthCont.innerHTML = '<span class="opacity-50 italic">Selecione o treinador primeiro.</span>';
                 return;
             }
-            const dataObj = mem.role === 'PEF' ? healthDataPEF : healthDataTE;
-            container.innerHTML = Object.keys(dataObj).map(opt => `
-                <label class="flex items-center space-x-1.5 cursor-pointer hover:bg-black hover:bg-opacity-10 p-1 rounded transition">
-                    <input type="checkbox" value="${opt}" class="health-cb rounded text-primary focus:ring-primary w-3 h-3 border-gray-500">
-                    <span class="truncate" title="${opt}">${opt}</span>
+            
+            const mem = state.members.find(m => m.id === memId);
+            infoP.textContent = mem.category === 'PEF' ? `CREF: ${mem.cref} - UF: ${mem.state}` : `Treinador Esportivo - UF: ${mem.state}`;
+            
+            // Render Health Checkboxes
+            const dict = mem.category === 'PEF' ? healthPEF : healthTE;
+            healthCont.innerHTML = Object.keys(dict).map(opt => `
+                <label class="flex items-start space-x-1 cursor-pointer">
+                    <input type="checkbox" value="${opt}" class="health-cb mt-1 rounded border-gray-400 text-primary w-3 h-3">
+                    <span>${opt}</span>
                 </label>
             `).join('');
         };
 
-        window.calcIMC = () => {
-            const w = parseFloat(document.getElementById('stu-weight').value);
-            const h = parseFloat(document.getElementById('stu-height').value);
-            const display = document.getElementById('imc-display');
-            if (w > 0 && h > 0) {
-                const imc = (w / (h * h)).toFixed(1);
-                let classif = "";
-                if (imc < 18.5) classif = "Abaixo do peso";
-                else if (imc < 25) classif = "Peso normal";
-                else if (imc < 30) classif = "Sobrepeso";
-                else if (imc < 35) classif = "Obesidade I";
-                else if (imc < 40) classif = "Obesidade II";
-                else classif = "Obesidade III";
-                display.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-2 py-0.5 rounded text-[10px] font-bold">IMC: ${imc} (${classif})</span>`;
-            } else { display.innerHTML = ''; }
+        // --- WORKOUT BUILDER ---
+        window.addWorkoutDay = () => {
+            const currentDays = state.workoutDays.length;
+            const nextName = currentDays < 7 ? `TREINO ${daysOrder[currentDays]}` : `NOVO TREINO ${currentDays+1}`;
+            state.workoutDays.push({ id: generateId(), title: nextName, exercises: [] });
+            renderWorkoutDays();
         };
 
-        window.setTheme = () => { document.body.setAttribute('data-theme', document.getElementById('stu-gender').value); };
+        window.deleteDay = (idx) => {
+            state.workoutDays.splice(idx, 1);
+            renderWorkoutDays();
+        }
 
-        window.addDay = () => {
-            const c = appState.builderDays.length;
-            const title = c < 7 ? `TREINO ${daysSequence[c]}` : `NOVO TREINO ${c+1}`;
-            appState.builderDays.push({ title, exercises: [] });
-            renderBuilderDays();
-        };
+        window.updateDayTitle = (idx, val) => { state.workoutDays[idx].title = val; };
 
-        window.removeDay = (idx) => {
-            if(confirm('Excluir dia de treino?')) {
-                appState.builderDays.splice(idx, 1);
-                renderBuilderDays();
-            }
-        };
-
-        window.updateDayTitle = (idx, val) => { appState.builderDays[idx].title = val; };
-
-        function renderBuilderDays() {
-            const container = document.getElementById('builder-days');
-            container.innerHTML = appState.builderDays.map((day, dIdx) => {
-                let exHtml = day.exercises.length === 0 ? `<div class="p-3 text-center text-xs opacity-50">Vazio</div>` :
-                    day.exercises.map((ex, eIdx) => `
-                        <div class="flex items-center gap-2 p-2 border-b last:border-0 border-opacity-20 text-xs" style="border-color: var(--border-color);">
-                            <div class="flex-1 min-w-0">
-                                <p class="text-[9px] opacity-60 uppercase truncate">${ex.category}</p>
-                                <p class="font-medium truncate">${ex.name}</p>
-                            </div>
-                            <input type="text" value="${ex.sets}" onchange="appState.builderDays[${dIdx}].exercises[${eIdx}].sets=this.value" class="input-field w-10 text-center rounded p-1" placeholder="S">
-                            <span class="opacity-50">x</span>
-                            <input type="text" value="${ex.reps}" onchange="appState.builderDays[${dIdx}].exercises[${eIdx}].reps=this.value" class="input-field w-12 text-center rounded p-1" placeholder="R">
-                            <select onchange="appState.builderDays[${dIdx}].exercises[${eIdx}].technique=this.value" class="input-field w-20 rounded p-1 text-[10px]">
-                                ${techniques.map(t => `<option ${ex.technique===t?'selected':''}>${t}</option>`).join('')}
-                            </select>
-                            <input type="text" value="${ex.obs}" onchange="appState.builderDays[${dIdx}].exercises[${eIdx}].obs=this.value" class="input-field w-24 rounded p-1 hidden sm:block" placeholder="Obs">
-                            <button onclick="appState.builderDays[${dIdx}].exercises.splice(${eIdx},1); renderBuilderDays();" class="text-red-500 px-2"><i class="fas fa-trash"></i></button>
+        function renderWorkoutDays() {
+            const cont = document.getElementById('workout-days-container');
+            cont.innerHTML = state.workoutDays.map((day, dIdx) => {
+                let exHtml = day.exercises.length === 0 ? `<div class="text-center p-3 opacity-50 text-xs">Sem exercícios</div>` : 
+                day.exercises.map((ex, eIdx) => `
+                    <div class="flex flex-col sm:flex-row gap-2 p-2 items-center border-b border-opacity-20" style="border-color: var(--border-color)">
+                        <div class="hidden sm:flex flex-col gap-1">
+                            <button onclick="moveEx(${dIdx}, ${eIdx}, -1)" class="text-[10px] opacity-70 hover:opacity-100"><i class="fas fa-chevron-up"></i></button>
+                            <button onclick="moveEx(${dIdx}, ${eIdx}, 1)" class="text-[10px] opacity-70 hover:opacity-100"><i class="fas fa-chevron-down"></i></button>
                         </div>
-                    `).join('');
+                        <div class="flex-1 w-full sm:w-auto">
+                            <div class="text-[9px] opacity-60">${ex.category}</div>
+                            <div class="text-xs font-bold">${ex.name}</div>
+                        </div>
+                        <div class="flex gap-1 w-full sm:w-auto">
+                            <input type="text" value="${ex.sets}" onchange="updateEx(${dIdx}, ${eIdx}, 'sets', this.value)" class="input-field w-12 rounded px-1 py-1 text-xs text-center" placeholder="Séries">
+                            <input type="text" value="${ex.reps}" onchange="updateEx(${dIdx}, ${eIdx}, 'reps', this.value)" class="input-field w-16 rounded px-1 py-1 text-xs text-center" placeholder="Reps">
+                            <select onchange="updateEx(${dIdx}, ${eIdx}, 'technique', this.value)" class="input-field w-24 rounded px-1 py-1 text-[10px]">
+                                ${techniques.map(t => `<option value="${t}" ${ex.technique === t ? 'selected':''}>${t}</option>`).join('')}
+                            </select>
+                            <input type="text" value="${ex.obs}" onchange="updateEx(${dIdx}, ${eIdx}, 'obs', this.value)" class="input-field flex-1 sm:w-32 rounded px-1 py-1 text-xs" placeholder="Obs">
+                            <button onclick="delEx(${dIdx}, ${eIdx})" class="text-red-500 hover:text-white hover:bg-red-500 px-2 rounded"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `).join('');
 
                 return `
                 <div class="card rounded-xl overflow-hidden shadow-sm">
-                    <div class="bg-black bg-opacity-10 p-2 flex justify-between items-center border-b" style="border-color: var(--border-color)">
-                        <input type="text" value="${day.title}" onchange="updateDayTitle(${dIdx}, this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 px-2 py-1 rounded">
-                        <button onclick="removeDay(${dIdx})" class="text-red-500 hover:bg-red-500 hover:text-white px-2 py-1 rounded text-xs transition"><i class="fas fa-trash"></i> Excluir</button>
+                    <div class="p-2 border-b bg-black bg-opacity-10 flex justify-between items-center" style="border-color: var(--border-color)">
+                        <input type="text" value="${day.title}" onchange="updateDayTitle(${dIdx}, this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 px-1">
+                        <button onclick="deleteDay(${dIdx})" class="text-xs text-red-500 p-1 hover:bg-red-500 hover:text-white rounded transition"><i class="fas fa-trash"></i></button>
                     </div>
-                    <div>${exHtml}</div>
+                    <div class="p-1">${exHtml}</div>
                     <div class="p-2 border-t" style="border-color: var(--border-color)">
-                        <button onclick="openExModal(${dIdx})" class="w-full text-primary hover:bg-primary hover:bg-opacity-10 py-1.5 rounded text-xs font-bold transition">+ Adicionar Exercício</button>
+                        <button onclick="openExerciseModal(${dIdx})" class="w-full text-primary py-1 rounded text-xs font-bold hover:bg-primary hover:bg-opacity-10">
+                            + ADICIONAR EXERCÍCIO
+                        </button>
                     </div>
-                </div>`;
+                </div>
+                `
             }).join('');
         }
 
-        // 9. MODAL DE EXERCÍCIOS
-        window.openExModal = (dIdx) => {
-            appState.modalActiveDayIdx = dIdx;
-            document.getElementById('modal-exercises').classList.remove('hidden');
-            renderExCategories();
-            renderExItems();
+        window.moveEx = (dIdx, eIdx, dir) => {
+            const arr = state.workoutDays[dIdx].exercises;
+            if(eIdx + dir < 0 || eIdx + dir >= arr.length) return;
+            const temp = arr[eIdx];
+            arr[eIdx] = arr[eIdx + dir];
+            arr[eIdx + dir] = temp;
+            renderWorkoutDays();
         };
-        window.closeExModal = () => { document.getElementById('modal-exercises').classList.add('hidden'); };
+        window.updateEx = (dIdx, eIdx, f, v) => { state.workoutDays[dIdx].exercises[eIdx][f] = v; };
+        window.delEx = (dIdx, eIdx) => { state.workoutDays[dIdx].exercises.splice(eIdx, 1); renderWorkoutDays(); };
+
+        // --- EXERCÍCIOS MODAL & CUSTOM DB ---
+        function getMergedCategories() {
+            let merged = JSON.parse(JSON.stringify(defaultCategories));
+            state.customExercises.forEach(cx => {
+                if(!merged[cx.category]) merged[cx.category] = [];
+                merged[cx.category].push(cx.name);
+            });
+            return merged;
+        }
+
+        window.openExerciseModal = (dIdx) => {
+            state.activeModalDayIdx = dIdx;
+            document.getElementById('exercise-modal').classList.remove('hidden');
+            renderModalCats();
+            renderModalExs();
+        };
+        window.closeExerciseModal = () => { document.getElementById('exercise-modal').classList.add('hidden'); };
+
+        function renderModalCats() {
+            const merged = getMergedCategories();
+            document.getElementById('modal-categories').innerHTML = Object.keys(merged).map(cat => `
+                <button onclick="setModalCat('${cat}')" class="w-full text-left px-2 py-2 rounded text-xs font-bold ${state.activeCategory === cat ? 'bg-primary text-white' : 'hover:bg-white hover:bg-opacity-10'}">${cat}</button>
+            `).join('');
+        }
+        window.setModalCat = (c) => { state.activeCategory = c; renderModalCats(); renderModalExs(); };
         
-        function renderExCategories() {
-            const list = document.getElementById('modal-cat-list');
-            list.innerHTML = Object.keys(defaultCategories).map(cat => `
-                <button onclick="appState.modalActiveCat='${cat}'; renderExCategories(); renderExItems();" class="w-full text-left px-2 py-2 rounded text-xs font-medium ${appState.modalActiveCat === cat ? 'bg-primary text-white' : 'hover:bg-black hover:bg-opacity-10'}">${cat}</button>
+        function renderModalExs() {
+            const merged = getMergedCategories();
+            const exs = merged[state.activeCategory] || [];
+            document.getElementById('modal-exercises').innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">` + exs.map(ex => {
+                const isCardio = state.activeCategory === "🫀 CARDIO";
+                return `<button onclick="addExToDay('${ex}', ${isCardio})" class="card p-2 rounded text-left text-xs font-medium border hover:border-primary transition group flex justify-between items-center">
+                    ${ex} <i class="fas fa-plus text-primary opacity-0 group-hover:opacity-100"></i>
+                </button>`;
+            }).join('') + `</div>`;
+        }
+        window.addExToDay = (name, isCardio) => {
+            state.workoutDays[state.activeModalDayIdx].exercises.push({
+                category: state.activeCategory, name: name,
+                sets: isCardio ? '1' : '3', reps: isCardio ? '-' : '10 a 12',
+                technique: 'Nenhuma', obs: ''
+            });
+            renderWorkoutDays();
+            showToast("Adicionado", "success");
+        };
+
+        window.addCustomExercise = async () => {
+            const cat = document.getElementById('custom-ex-cat').value;
+            const name = document.getElementById('custom-ex-name').value.trim();
+            if(!name) return;
+            try {
+                const docRef = await addDoc(collection(db, getBasePath(), 'customExercises'), { category: cat, name: name });
+                state.customExercises.push({ id: docRef.id, category: cat, name: name });
+                document.getElementById('custom-ex-name').value = '';
+                showToast("Exercício Salvo!");
+                renderCustomExercisesList();
+            } catch(e) { showToast("Erro", "error"); }
+        };
+
+        function renderCustomExercisesList() {
+            document.getElementById('custom-ex-list').innerHTML = state.customExercises.map(ex => `
+                <div class="flex justify-between items-center p-2 border-b border-opacity-20" style="border-color: var(--border-color)">
+                    <div><span class="text-[9px] opacity-70">${ex.category}</span><br>${ex.name}</div>
+                    <button onclick="deleteEntity('customExercises', '${ex.id}')" class="text-red-500 hover:text-white hover:bg-red-500 p-1 rounded"><i class="fas fa-trash"></i></button>
+                </div>
             `).join('');
         }
 
-        function renderExItems() {
-            const container = document.getElementById('modal-ex-items');
-            const cat = appState.modalActiveCat;
-            // Merge defaults and customs
-            const defaults = defaultCategories[cat] || [];
-            const customs = appState.customExercises.filter(c => c.category === cat).map(c => c.name);
-            const all = [...defaults, ...customs];
-
-            container.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">` + 
-                all.map(ex => {
-                    const isCardio = cat === "🫀 CARDIO";
-                    return `<button onclick="addExToDay('${ex}', ${isCardio})" class="card p-2 rounded text-left text-xs font-medium hover:border-primary transition flex justify-between group">
-                        <span>${ex}</span> <i class="fas fa-plus opacity-0 group-hover:opacity-100 text-primary"></i>
-                    </button>`
-                }).join('') + `</div>`;
-        }
-
-        window.addExToDay = (name, isCardio) => {
-            if(appState.modalActiveDayIdx !== null) {
-                appState.builderDays[appState.modalActiveDayIdx].exercises.push({
-                    category: appState.modalActiveCat,
-                    name: name,
-                    sets: isCardio ? '1' : '3',
-                    reps: isCardio ? '-' : '10 a 12',
-                    technique: 'Nenhuma',
-                    obs: ''
-                });
-                renderBuilderDays();
-                // Visual feedback
-                const container = document.getElementById('modal-ex-items');
-                container.style.opacity = '0.5';
-                setTimeout(() => container.style.opacity = '1', 100);
-            }
-        };
-
-        // 10. SALVAR E IMPRIMIR FICHA
-        window.saveAndPrint = async () => {
-            const memId = document.getElementById('builder-member').value;
-            if(!memId) return alert('Selecione o Membro Responsável no topo.');
-            const stuName = document.getElementById('stu-name').value.trim();
-            if(!stuName) return alert('Digite o nome do aluno.');
-
-            showLoading("SALVANDO NA NUVEM...");
+        // --- SALVAR & IMPRIMIR ---
+        window.saveAndPrintWorkout = async () => {
+            const memId = document.getElementById('wf-member').value;
+            if(!memId) return showToast("Selecione um Profissional (Membro)!", "error");
             
-            // Construir payload
-            const payload = {
+            const mem = state.members.find(m => m.id === memId);
+            const wId = state.currentFichaId || generateId();
+            
+            const data = {
                 memberId: memId,
-                studentName: stuName,
+                unitId: mem.unitId,
+                profName: mem.name,
+                profCat: mem.category,
+                profCref: mem.cref,
+                profState: mem.state,
+                studentName: document.getElementById('stu-name').value || 'Sem Nome',
                 stuAge: document.getElementById('stu-age').value,
                 stuWeight: document.getElementById('stu-weight').value,
                 stuHeight: document.getElementById('stu-height').value,
@@ -866,295 +932,212 @@
                 stuLevel: document.getElementById('stu-level').value,
                 stuObjective: document.getElementById('stu-objective').value,
                 stuFreq: document.getElementById('stu-freq').value,
-                stuValidity: document.getElementById('stu-validity').value,
-                stuRecs: document.getElementById('stu-recs').value,
+                stuValidity: parseInt(document.getElementById('stu-validity').value),
+                recs: document.getElementById('stu-recs').value,
                 health: Array.from(document.querySelectorAll('.health-cb:checked')).map(cb => cb.value),
-                days: appState.builderDays,
-                timestamp: new Date().toISOString()
+                days: state.workoutDays,
+                createdAt: state.currentFichaId ? state.workouts.find(w=>w.id===wId).createdAt : Date.now()
             };
 
+            // Save to Firebase
             try {
-                if(appState.currentFichaId) {
-                    await updateDoc(doc(db, `users/${appState.user.uid}/fichas`, appState.currentFichaId), payload);
-                    const idx = appState.history.findIndex(h => h.id === appState.currentFichaId);
-                    if(idx>=0) appState.history[idx] = {id: appState.currentFichaId, ...payload};
-                } else {
-                    const docRef = await addDoc(collection(db, `users/${appState.user.uid}/fichas`), payload);
-                    appState.currentFichaId = docRef.id;
-                    appState.history.push({id: docRef.id, ...payload});
-                }
-                executePrint(payload);
-            } catch(e) {
-                console.error(e);
-                alert("Erro ao salvar no banco.");
-            }
-            hideLoading();
+                await setDoc(doc(db, getBasePath(), 'workouts', wId), data);
+                if(!state.currentFichaId) { state.workouts.push({id: wId, ...data}); state.currentFichaId = wId; }
+                else { const idx = state.workouts.findIndex(w=>w.id===wId); state.workouts[idx] = {id: wId, ...data}; }
+                showToast("Ficha salva na nuvem!");
+                renderHistory();
+                execPrint(data);
+            } catch(e) { console.error(e); showToast("Erro ao salvar", "error"); }
         };
 
-        function executePrint(data) {
-            const mem = appState.members.find(m => m.id === data.memberId);
-            const unit = appState.units.find(u => u.id === mem.unitId);
-            
+        function execPrint(d) {
             let imcStr = "-";
-            const w = parseFloat(data.stuWeight); const h = parseFloat(data.stuHeight);
+            const w = parseFloat(d.stuWeight); const h = parseFloat(d.stuHeight);
             if(w>0 && h>0) imcStr = (w / (h * h)).toFixed(1);
 
-            const isPEF = mem.role === 'PEF';
-            const healthSourceDict = isPEF ? healthDataPEF : healthDataTE;
-            const objRecommendation = objectiveData[data.stuObjective] || "";
-
+            const isPEF = d.profCat === 'PEF';
             const profLabel = isPEF ? 'Profissional de Educação Física' : 'Treinador Esportivo';
-            const crefText = isPEF ? `CREF: ${mem.cref} - Estado: ${mem.state}` : `Atuação Técnica e Esportiva - ${mem.state}`;
-            
-            const legalTextPEF = `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA: Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º estabelece que compete ao profissional coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos.`;
-            const legalTextTE = `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO: Conforme a Lei nº 14.597/2023, Art. 75, a profissão de treinador esportivo é reconhecida, com atuação de caráter técnico voltada à preparação de treinos. A atuação possui finalidade orientativa e não substitui avaliação médica. Em casos de doenças ou lesões, recomenda-se avaliação prévia. As recomendações possuem caráter informativo e orientativo.`;
+            const crefText = isPEF ? `CREF: ${d.profCref} - UF: ${d.profState}` : `UF: ${d.profState}`;
+            const healthSource = isPEF ? healthPEF : healthTE;
+            const objText = objectiveData[d.stuObjective] || "";
+
+            const legalPEF = `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA
+Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º da mesma lei estabelece que compete ao profissional de Educação Física coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados nas áreas de atividades físicas e do desporto.`;
+
+            const legalTE = `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO
+Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil, com atuação de caráter técnico e esportivo voltada à preparação, supervisão, orientação e acompanhamento de treinos físicos e esportivos. A atuação possui finalidade orientativa e não substitui avaliação médica, diagnóstico clínico, prescrição medicamentosa ou acompanhamento de profissionais da saúde. Em casos de doenças, lesões, gestação, limitações físicas, uso de medicações ou qualquer condição específica de saúde, recomenda-se avaliação prévia por profissional habilitado antes do início ou continuidade da prática de exercícios. O treinamento proposto respeita os limites individuais, priorizando segurança, execução correta e evolução progressiva, dentro da atuação técnica e esportiva permitida por lei. As recomendações desta ficha possuem caráter informativo e orientativo, voltadas ao treinamento esportivo e prática de musculação.`;
 
             let html = `
                 <div class="print-header">
-                    <h1 class="print-title">Planilha de Treinamento - ${data.stuObjective}</h1>
-                    <div class="prof-info">
-                        Prescrição por: ${mem.name} (${profLabel})<br>
-                        ${crefText} | Unidade: ${unit ? unit.name : ''}
-                    </div>
+                    <h1 class="print-title">Planilha de Treinamento - ${d.stuObjective}</h1>
+                    <div class="prof-info">Prescrição feita por: ${d.profName} (${profLabel})<br>${crefText}</div>
                 </div>
-
                 <div class="print-grid">
-                    <div><strong>Aluno:</strong> ${data.studentName}</div>
-                    <div><strong>Idade:</strong> ${data.stuAge || '-'} anos</div>
-                    <div><strong>Gênero:</strong> ${data.stuGender}</div>
-                    <div><strong>Peso:</strong> ${data.stuWeight || '-'} kg</div>
-                    <div><strong>Altura:</strong> ${data.stuHeight || '-'} m</div>
-                    <div><strong>IMC:</strong> ${imcStr}</div>
-                    <div><strong>Nível:</strong> ${data.stuLevel}</div>
-                    <div><strong>Frequência:</strong> ${data.stuFreq}</div>
-                    <div><strong>Validade:</strong> ${data.stuValidity}</div>
+                    <div><strong>Aluno(a):</strong> ${d.studentName}</div>
+                    <div><strong>Idade:</strong> ${d.stuAge||'-'} | <strong>Gênero:</strong> ${d.stuGender}</div>
+                    <div><strong>Peso:</strong> ${d.stuWeight||'-'}kg | <strong>Alt:</strong> ${d.stuHeight||'-'}m | <strong>IMC:</strong> ${imcStr}</div>
+                    <div><strong>Nível:</strong> ${d.stuLevel}</div>
+                    <div><strong>Frequência:</strong> ${d.stuFreq}</div>
+                    <div><strong>Validade:</strong> ${d.stuValidity} dias</div>
                 </div>
             `;
 
-            if (objRecommendation || data.health.length > 0) {
-                html += `<div class="print-guidelines"><h4>Diretrizes de Perfil</h4><ul>`;
-                if(objRecommendation) html += `<li><strong>Objetivo (${data.stuObjective}):</strong> ${objRecommendation}</li>`;
-                data.health.forEach(k => {
-                    if(healthSourceDict[k]) html += `<li><strong>Saúde (${k.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu, '').trim()}):</strong> ${healthSourceDict[k]}</li>`;
+            if (objText || d.health.length > 0) {
+                html += `<div class="print-guidelines"><h4>Diretrizes Automáticas de Perfil</h4><ul>`;
+                if(objText) html += `<li><strong>Objetivo (${d.stuObjective}):</strong> ${objText}</li>`;
+                d.health.forEach(k => {
+                    if(healthSource[k]) {
+                        const clean = k.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu, '').trim();
+                        html += `<li><strong>Saúde (${clean}):</strong> ${healthSource[k]}</li>`;
+                    }
                 });
                 html += `</ul></div>`;
             }
 
-            data.days.forEach(day => {
+            d.days.forEach(day => {
                 html += `<div class="print-workout"><h3>${day.title}</h3><table><thead><tr>
-                            <th style="width:35%">Exercício</th><th style="width:8%;text-align:center;">Séries</th>
-                            <th style="width:12%;text-align:center;">Reps</th><th style="width:15%">Técnica</th><th style="width:30%">Obs</th>
-                         </tr></thead><tbody>`;
-                if (day.exercises.length === 0) {
-                    html += `<tr><td colspan="5" style="text-align:center;font-style:italic;">Sem exercícios</td></tr>`;
-                } else {
+                    <th style="width:35%">Exercício</th><th style="width:10%;text-align:center">Séries</th><th style="width:15%;text-align:center">Reps</th><th style="width:15%">Técnica</th><th style="width:25%">Observações</th>
+                </tr></thead><tbody>`;
+                if(day.exercises.length === 0) html += `<tr><td colspan="5" style="text-align:center">Sem exercícios</td></tr>`;
+                else {
                     day.exercises.forEach(ex => {
-                        html += `<tr><td><strong>${ex.name}</strong></td><td style="text-align:center;">${ex.sets}</td>
-                                 <td style="text-align:center;">${ex.reps}</td><td>${ex.technique!=='Nenhuma'?ex.technique:'-'}</td><td>${ex.obs||'-'}</td></tr>`;
+                        html += `<tr><td><strong>${ex.name}</strong></td><td style="text-align:center">${ex.sets}</td><td style="text-align:center">${ex.reps}</td><td>${ex.technique==='Nenhuma'?'-':ex.technique}</td><td>${ex.obs||'-'}</td></tr>`;
                     });
                 }
                 html += `</tbody></table></div>`;
             });
 
             html += `<div class="print-footer-section">`;
-            if(data.stuRecs.trim()) html += `<strong>Recomendações Específicas:</strong><br><p style="white-space: pre-wrap; margin: 3px 0 10px 0;">${data.stuRecs}</p>`;
-            html += `<div class="legal-text">${isPEF ? legalTextPEF : legalTextTE}</div>
-                     <div style="text-align:center; margin-top: 10px; font-size: 7px; color: #666;">Gerado por PowFit Pro Master em ${new Date().toLocaleDateString('pt-BR')}</div>
-                     </div>`;
+            if(d.recs.trim()) html += `<strong>Recomendações Manuais:</strong><p style="white-space:pre-wrap; margin:3px 0 10px 0;">${d.recs}</p>`;
+            html += `<div class="legal-text">${isPEF ? legalPEF : legalTE}</div>
+                <div style="text-align:center; margin-top:10px; font-size:7px;">Gerado em ${new Date().toLocaleDateString('pt-BR')} - PowFit Pro Master</div>
+            </div>`;
 
             document.getElementById('print-area').innerHTML = html;
-            setTimeout(() => { window.print(); }, 400);
+            document.getElementById('print-area').classList.add('active-print');
+            document.getElementById('print-report-area').classList.remove('active-print');
+            setTimeout(() => { window.print(); }, 300);
         }
 
-        // 11. HISTÓRICO E RELATÓRIOS (NUVEM)
-        window.renderHistory = () => {
-            const fUnit = document.getElementById('filter-unit').value;
-            const fMem = document.getElementById('filter-member').value;
-            const fMonth = document.getElementById('filter-month').value;
+        // --- HISTÓRICO ---
+        function renderHistory() {
+            const tbody = document.getElementById('history-tbody');
+            const now = Date.now();
+            const sorted = [...state.workouts].sort((a,b) => b.createdAt - a.createdAt);
 
-            // Update dropdowns se vazio
-            if(document.getElementById('filter-unit').options.length === 1) {
-                document.getElementById('filter-unit').innerHTML += appState.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
-                document.getElementById('filter-member').innerHTML += appState.members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
-            }
+            tbody.innerHTML = sorted.map(w => {
+                const dateObj = new Date(w.createdAt);
+                const expDate = w.createdAt + (w.stuValidity * 24 * 60 * 60 * 1000);
+                const isExp = now > expDate;
+                const statusHtml = isExp ? `<span class="bg-red-500 bg-opacity-20 text-red-500 px-2 py-1 rounded text-[10px] font-bold">EXPIRADA</span>` : `<span class="bg-green-500 bg-opacity-20 text-green-500 px-2 py-1 rounded text-[10px] font-bold">VÁLIDA</span>`;
+                const uName = state.units.find(u=>u.id===w.unitId)?.name || 'N/A';
 
-            let filtered = [...appState.history];
+                return `<tr class="border-b border-opacity-10" style="border-color:var(--border-color)">
+                    <td class="p-2">${dateObj.toLocaleDateString('pt-BR')}</td>
+                    <td class="p-2 font-bold">${w.studentName}</td>
+                    <td class="p-2">${w.profName} <span class="text-[9px] opacity-70">(${w.profCat})</span></td>
+                    <td class="p-2 text-xs">${uName}</td>
+                    <td class="p-2">${statusHtml}</td>
+                    <td class="p-2 flex gap-1">
+                        <button onclick="loadWorkout('${w.id}')" class="btn-primary px-2 py-1 rounded text-xs">Carregar</button>
+                        <button onclick="deleteEntity('workouts', '${w.id}')" class="bg-red-500 text-white px-2 py-1 rounded text-xs"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
 
-            if(fUnit || fMem) {
-                filtered = filtered.filter(h => {
-                    const mem = appState.members.find(m => m.id === h.memberId);
-                    if(!mem) return false;
-                    if(fUnit && mem.unitId !== fUnit) return false;
-                    if(fMem && h.memberId !== fMem) return false;
-                    return true;
-                });
-            }
+        window.loadWorkout = (id) => {
+            const w = state.workouts.find(x => x.id === id);
+            if(!w) return;
+            state.currentFichaId = w.id;
+            
+            document.getElementById('wf-member').value = w.memberId;
+            window.onMemberSelectChange();
 
-            if(fMonth) {
-                filtered = filtered.filter(h => {
-                    if(!h.timestamp) return false;
-                    const m = new Date(h.timestamp).getMonth() + 1;
-                    return m.toString().padStart(2, '0') === fMonth;
-                });
-            }
+            document.getElementById('stu-name').value = w.studentName;
+            document.getElementById('stu-age').value = w.stuAge;
+            document.getElementById('stu-weight').value = w.stuWeight;
+            document.getElementById('stu-height').value = w.stuHeight;
+            document.getElementById('stu-gender').value = w.stuGender;
+            document.getElementById('stu-level').value = w.stuLevel;
+            document.getElementById('stu-objective').value = w.stuObjective;
+            document.getElementById('stu-freq').value = w.stuFreq;
+            document.getElementById('stu-validity').value = w.stuValidity;
+            document.getElementById('stu-recs').value = w.recs;
+            
+            window.changeTheme();
+            window.calculateIMC();
+            window.updateObjectiveText();
 
-            // Ordernar decrescente
-            filtered.sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
+            document.querySelectorAll('.health-cb').forEach(cb => { cb.checked = (w.health || []).includes(cb.value); });
+            
+            state.workoutDays = JSON.parse(JSON.stringify(w.days));
+            renderWorkoutDays();
+            nav('nova-ficha');
+            showToast("Ficha carregada");
+        };
 
-            const list = document.getElementById('history-list');
-            if(filtered.length === 0) {
-                list.innerHTML = `<div class="text-center opacity-50 py-10">Nenhuma ficha encontrada.</div>`;
+        // --- RELATÓRIOS DE PRODUTIVIDADE ---
+        function populateReportUnits() {
+            document.getElementById('report-unit').innerHTML = `<option value="ALL">Todas as Unidades</option>` + state.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+        }
+
+        window.generateReport = () => {
+            const m = document.getElementById('report-month').value;
+            const y = document.getElementById('report-year').value;
+            const uId = document.getElementById('report-unit').value;
+            
+            let filtered = state.workouts.filter(w => {
+                const d = new Date(w.createdAt);
+                const monthMatch = String(d.getMonth() + 1).padStart(2,'0') === m;
+                const yearMatch = String(d.getFullYear()) === y;
+                const unitMatch = uId === 'ALL' || w.unitId === uId;
+                return monthMatch && yearMatch && unitMatch;
+            });
+
+            // Count per member
+            const counts = {};
+            filtered.forEach(w => {
+                const key = `${w.unitId}_${w.memberId}`;
+                if(!counts[key]) counts[key] = { unitId: w.unitId, memId: w.memberId, profName: w.profName, count: 0 };
+                counts[key].count++;
+            });
+
+            const tbody = document.getElementById('report-tbody');
+            const sortedKeys = Object.keys(counts).sort((a,b) => counts[b].count - counts[a].count);
+            
+            if(sortedKeys.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center opacity-50 p-4">Nenhuma ficha encontrada neste período.</td></tr>`;
                 return;
             }
 
-            const now = new Date();
-            list.innerHTML = filtered.map(h => {
-                const mem = appState.members.find(m => m.id === h.memberId);
-                const memName = mem ? mem.name : 'Excluído';
-                
-                // Validação de data
-                let statusBadge = `<span class="bg-green-500 bg-opacity-20 text-green-400 text-[10px] px-2 py-0.5 rounded font-bold">ATIVA</span>`;
-                if(h.timestamp && h.stuValidity) {
-                    const created = new Date(h.timestamp);
-                    const daysValid = parseInt(h.stuValidity); // "30 dias" -> 30
-                    const expires = new Date(created);
-                    expires.setDate(expires.getDate() + daysValid);
-                    if(now > expires) {
-                        statusBadge = `<span class="bg-red-500 bg-opacity-20 text-red-400 text-[10px] px-2 py-0.5 rounded font-bold">VENCIDA</span>`;
-                    }
-                }
-
-                return `
-                <div class="card p-3 rounded-lg flex justify-between items-center border border-opacity-20">
-                    <div class="min-w-0 flex-1">
-                        <div class="font-bold flex items-center gap-2 truncate">${h.studentName} ${statusBadge}</div>
-                        <div class="text-[10px] opacity-70 truncate">Criada por: ${memName} | ${new Date(h.timestamp).toLocaleDateString('pt-BR')}</div>
-                    </div>
-                    <div class="flex gap-2 ml-4">
-                        <button onclick="loadFicha('${h.id}')" class="btn-primary px-3 py-1.5 rounded text-xs font-semibold">EDITAR</button>
-                    </div>
-                </div>`
+            tbody.innerHTML = sortedKeys.map(k => {
+                const c = counts[k];
+                const uName = state.units.find(u=>u.id===c.unitId)?.name || 'N/A';
+                return `<tr class="border-b border-opacity-10" style="border-color:var(--border-color)">
+                    <td class="p-2">${uName}</td>
+                    <td class="p-2 font-bold">${c.profName}</td>
+                    <td class="p-2 text-center text-lg font-bold text-primary">${c.count}</td>
+                </tr>`;
             }).join('');
         };
 
-        window.loadFicha = (id) => {
-            const h = appState.history.find(x => x.id === id);
-            if(!h) return;
-            appState.currentFichaId = id;
-            
-            document.getElementById('builder-member').value = h.memberId || '';
-            updateBuilderHealth();
-
-            document.getElementById('stu-name').value = h.studentName || '';
-            document.getElementById('stu-age').value = h.stuAge || '';
-            document.getElementById('stu-weight').value = h.stuWeight || '';
-            document.getElementById('stu-height').value = h.stuHeight || '';
-            document.getElementById('stu-gender').value = h.stuGender || 'Masculino';
-            document.getElementById('stu-level').value = h.stuLevel || 'Iniciante';
-            document.getElementById('stu-objective').value = h.stuObjective || 'Emagrecimento';
-            document.getElementById('stu-freq').value = h.stuFreq || '3 dias';
-            document.getElementById('stu-validity').value = h.stuValidity || '30 dias';
-            document.getElementById('stu-recs').value = h.stuRecs || '';
-            
-            setTheme();
-            calcIMC();
-
-            document.querySelectorAll('.health-cb').forEach(cb => {
-                cb.checked = (h.health || []).includes(cb.value);
-            });
-
-            appState.builderDays = h.days || [];
-            renderBuilderDays();
-            navigate('builder');
-        };
-
         window.printReport = () => {
-            // Relatório de produtividade (conta fichas da visualização atual)
-            const fUnit = document.getElementById('filter-unit').value;
-            const fMonth = document.getElementById('filter-month').value;
-            
-            let filtered = [...appState.history];
-            if(fMonth) {
-                filtered = filtered.filter(h => {
-                    if(!h.timestamp) return false;
-                    return (new Date(h.timestamp).getMonth() + 1).toString().padStart(2, '0') === fMonth;
-                });
-            }
-
-            // Agrupar por Membro
-            let counts = {};
-            filtered.forEach(h => {
-                counts[h.memberId] = (counts[h.memberId] || 0) + 1;
-            });
-
-            // Filtro de unidade para exibição
-            let membersToShow = appState.members;
-            if(fUnit) membersToShow = membersToShow.filter(m => m.unitId === fUnit);
-
-            let html = `
-                <div class="print-header">
-                    <h1 class="print-title">Relatório de Produtividade - ${fMonth ? 'Mês '+fMonth : 'Geral'}</h1>
-                    <div class="prof-info">Rede PowFit | Unidade: ${fUnit ? appState.units.find(u=>u.id===fUnit)?.name : 'Todas'}</div>
-                </div>
+            const m = document.getElementById('report-month').options[document.getElementById('report-month').selectedIndex].text;
+            const y = document.getElementById('report-year').value;
+            const html = `
+                <h1>Relatório de Produtividade Mensal - ${m}/${y}</h1>
                 <table>
-                    <thead><tr><th>Profissional</th><th>Unidade</th><th>Fichas Criadas</th></tr></thead>
-                    <tbody>
+                    <thead><tr><th>Unidade</th><th>Profissional</th><th style="text-align:center;">Fichas Emitidas</th></tr></thead>
+                    <tbody>${document.getElementById('report-tbody').innerHTML}</tbody>
+                </table>
+                <p style="text-align:right; font-size:10px; margin-top:20px;">PowFit Pro Master Dashboard</p>
             `;
-            let total = 0;
-            membersToShow.forEach(m => {
-                const c = counts[m.id] || 0;
-                total += c;
-                html += `<tr><td>${m.name}</td><td>${appState.units.find(u=>u.id===m.unitId)?.name||''}</td><td style="text-align:center">${c}</td></tr>`;
-            });
-            html += `<tr><td colspan="2" style="text-align:right"><strong>TOTAL</strong></td><td style="text-align:center"><strong>${total}</strong></td></tr></tbody></table>`;
-            
-            document.getElementById('print-area').innerHTML = html;
-            setTimeout(() => { window.print(); }, 200);
+            document.getElementById('print-report-area').innerHTML = html;
+            document.getElementById('print-area').classList.remove('active-print');
+            document.getElementById('print-report-area').classList.add('active-print');
+            setTimeout(() => window.print(), 300);
         };
-
-        // 12. EXERCÍCIOS CUSTOMIZADOS
-        window.addCustomExercise = async () => {
-            const category = document.getElementById('custom-cat').value;
-            const name = document.getElementById('custom-name').value.trim();
-            if(!name) return;
-
-            showLoading("SALVANDO...");
-            try {
-                const docRef = await addDoc(collection(db, `users/${appState.user.uid}/custom_exercises`), { category, name });
-                appState.customExercises.push({ id: docRef.id, category, name });
-                document.getElementById('custom-name').value = '';
-                renderCustomEx();
-            } catch(e) { alert("Erro ao salvar."); }
-            hideLoading();
-        };
-
-        window.deleteCustomExercise = async (id) => {
-            if(!confirm("Excluir este exercício do seu banco?")) return;
-            showLoading("EXCLUINDO...");
-            try {
-                await deleteDoc(doc(db, `users/${appState.user.uid}/custom_exercises`, id));
-                appState.customExercises = appState.customExercises.filter(c => c.id !== id);
-                renderCustomEx();
-            } catch(e) { alert("Erro ao excluir."); }
-            hideLoading();
-        };
-
-        function renderCustomEx() {
-            const container = document.getElementById('custom-ex-list');
-            if(appState.customExercises.length === 0) {
-                container.innerHTML = `<div class="col-span-full opacity-50 text-sm">Nenhum exercício customizado.</div>`;
-                return;
-            }
-            container.innerHTML = appState.customExercises.map(c => `
-                <div class="card p-3 rounded-lg flex justify-between items-center text-sm border-l-2 border-l-primary">
-                    <div class="truncate pr-2">
-                        <span class="text-[9px] opacity-60 block">${c.category}</span>
-                        <strong>${c.name}</strong>
-                    </div>
-                    <button onclick="deleteCustomExercise('${c.id}')" class="text-red-500 hover:text-red-300 transition"><i class="fas fa-trash"></i></button>
-                </div>
-            `).join('');
-        }
 
     </script>
 </body>
