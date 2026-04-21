@@ -35,7 +35,8 @@
 
         /* Estilização Estrita de Impressão (Planilha A4) */
         @media print {
-            body { background: white !important; color: black !important; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+            /* Garante que o Tailwind não corta a página em branco */
+            html, body { height: auto !important; min-height: auto !important; overflow: visible !important; display: block !important; background: white !important; color: black !important; margin: 0; padding: 0; font-family: Arial, sans-serif; }
             .screen, .no-print, .modal-backdrop { display: none !important; }
             
             /* FICHA DE TREINO */
@@ -376,16 +377,23 @@
         };
         const getBasePath = () => `artifacts/${appId}/users/${window.PowFit.userId}`;
 
+        // --- EVENTO DE LIMPEZA DE IMPRESSÃO ---
+        // Aqui resolve o problema da folha em branco, limpando o estilo só depois do preview fechar
+        window.addEventListener('afterprint', () => {
+            document.getElementById('print-area').classList.remove('active-print');
+            document.getElementById('print-report-area').classList.remove('active-print');
+        });
+
         // --- CONSTANTES ---
         const healthPEF = { "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.", "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.", "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico. Combinar musculação e cardio moderado.", "🔴 Obesidade": "Iniciar com exercícios de baixo impacto. Evolução gradual, priorizando saúde e segurança.", "⚖️ Baixo peso": "Foco em musculação para ganho de massa. Treinos moderados com alimentação adequada.", "🍬 Diabetes": "Treinos regulares moderados. Monitorar glicemia e evitar treinos em jejum.", "❤️ Hipertensão": "Treinos moderados, evitar prender a respiração. Priorizar controle da intensidade.", "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação e intensidade leve a moderada.", "💔 Problemas cardíacos": "Treinos leves com liberação médica. Monitorar frequência cardíaca.", "🦴 Problemas articulares": "Evitar impacto. Priorizar exercícios controlados e máquinas.", "🫁 Problemas respiratórios": "Treinos leves a moderados com progressão gradual. Atenção à respiração.", "⚠️ Lesões": "Adaptar exercícios. Evitar dor e focar na recuperação.", "🤰 Gestante": "Treinos leves a moderados, sem impacto ou risco. Foco em mobilidade e bem-estar.", "🤱 Lactante": "Treinar normalmente com atenção à hidratação e energia.", "👴 Idoso": "Foco em força, equilíbrio e mobilidade. Intensidade moderada com segurança." };
         const healthTE = { "🟢 Saudável": "Manter treinos regulares de 3–5x por semana, combinando musculação e atividades cardiovasculares. A constância, descanso adequado e boa alimentação contribuem para melhores resultados.", "⚪ Sedentário": "O início deve ser gradual, com treinos leves e foco na adaptação do corpo. A prioridade é desenvolver constância, aprender a execução correta e evitar excesso de carga.", "🟡 Sobrepeso": "A prática regular de musculação associada ao cardio pode contribuir para melhora do condicionamento físico e composição corporal. A progressão deve respeitar a individualidade e o nível de adaptação.", "🔴 Obesidade": "É recomendado iniciar com exercícios de menor impacto e progressão gradual. A segurança, mobilidade e constância são prioridades durante o processo.", "⚖️ Baixo peso": "A musculação pode auxiliar no ganho de massa muscular quando associada a alimentação adequada e descanso. O treino deve priorizar evolução progressiva e recuperação muscular.", "🍬 Diabetes": "Pessoas com diabetes devem manter acompanhamento médico regular antes e durante a prática de exercícios. A musculação pode auxiliar na rotina de atividade física quando liberada por profissional de saúde. Em casos de tontura, mal-estar ou alteração de glicemia, o treino deve ser interrompido e o aluno deve procurar orientação médica.", "❤️ Hipertensão": "Pessoas com hipertensão devem manter acompanhamento médico regular e respeitar as orientações profissionais. Durante o treino, é importante evitar prender a respiração e controlar a intensidade dos exercícios.", "🔵 Hipotensão": "Pessoas com hipotensão devem evitar mudanças bruscas de posição durante o treino. Manter boa hidratação e respeitar a intensidade adequada ajuda a reduzir episódios de mal-estar.", "💔 Problemas cardíacos": "A prática de exercícios deve ocorrer apenas com liberação e acompanhamento médico. O treino deve respeitar limites individuais, com controle de intensidade e atenção aos sinais do corpo.", "🦴 Problemas articulares": "Exercícios com menor impacto e maior controle de movimento costumam ser mais indicados. O acompanhamento profissional e a adaptação dos exercícios ajudam na segurança durante o treino.", "🫁 Problemas respiratórios": "A progressão do treino deve ser gradual e respeitar a capacidade respiratória individual. Em caso de falta de ar excessiva ou desconforto, o exercício deve ser interrompido.", "⚠️ Lesões": "A adaptação dos exercícios deve respeitar a limitação existente e evitar dor durante a execução. Em situações de lesão, é importante seguir orientação profissional adequada antes da prática.", "🤰 Gestante": "A prática de exercícios deve ocorrer com liberação médica e acompanhamento adequado. O foco deve ser segurança, mobilidade e bem-estar, evitando impacto excessivo e situações de risco.", "🤱 Lactante": "A atividade física pode ser mantida normalmente, respeitando a recuperação individual e mantendo boa hidratação e alimentação adequada.", "👴 Idoso": "A musculação pode contribuir para força, equilíbrio, mobilidade e autonomia. O treino deve respeitar limitações individuais, com intensidade moderada e foco na segurança." };
         const objectivesDesc = { "Emagrecimento": "Foco em déficit calórico com treinos mistos de força (manter massa magra) e aeróbicos (maior gasto).", "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.", "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.", "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.", "Resistência": "Séries mais longas, cadência controlada e aprimoramento da capacidade muscular.", "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.", "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.", "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar." };
         const baseCategories = {
             "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
-            "🦍 COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Cavalinho (T-Bar)", "Serrote", "Facepull (puxada de cima para baixo)"],
-            "🦵 PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento no Smith", "Agachamento com passada lateral", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Coice", "Cachorrinho", "Cadeira Extensora", "Adução", "Abdução", "Abdução Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha Livre", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
+            "🦍 COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Curvada na Polia", "Remada Cavalinho (T-Bar)", "Remada Unilateral", "Remada no Cross", "Serrote", "Facepull (puxada de cima para baixo)"],
+            "🦵 PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento no Smith", "Agachamento com barra", "Agachamento com passada lateral", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Coice", "Cachorrinho", "Cadeira Extensora", "Adução", "Abdução", "Abdução Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha Livre", "Panturrilha em Pé (Máquina)", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
             "💪 BRAÇOS": ["(Bíceps) Rosca Direta", "(Bíceps) Rosca Alternada", "(Bíceps) Rosca 21", "(Bíceps) Rosca Scott Barra W", "(Bíceps) Rosca Scott Unilateral", "(Bíceps) Rosca Scott com Halteres", "(Bíceps) Rosca Martelo", "(Bíceps) Rosca Cross", "(Bíceps) Rosca Inversa", "(Bíceps) Rosca 45°", "(Tríceps) Pulley Unilateral", "(Tríceps) Pulley Barra", "(Tríceps) Pulley Corda", "(Tríceps) Pulley Pegada Inversa", "(Tríceps) Francês na Corda", "(Tríceps) Francês com Halter", "(Tríceps) Francês Unilateral", "(Tríceps) Cruzado Polia Dupla", "(Tríceps) Coice Unilateral", "(Tríceps) Arremesso", "(Tríceps) Testa", "(Tríceps) Mergulho no Banco"],
-            "🪨 OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral Unilateral Cross", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta", "Encolhimento (Trapézio)"],
+            "🪨 OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral na Polia", "Elevação Lateral Unilateral Cross", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta", "Encolhimento (Trapézio)"],
             "🧠 ABDÔMEN": ["Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", "Isometria na parede"],
             "🫀 CARDIO": ["Bicicleta 10 Minutos", "Bicicleta 15 Minutos", "Bicicleta 20 Minutos", "Esteira 10 Minutos", "Esteira 15 Minutos", "Esteira 20 Minutos", "Pular Corda"]
         };
@@ -629,7 +637,7 @@
                 const imcNum = parseFloat(imcVal);
                 let cls = "";
                 
-                // Classificação rigorosa enviada
+                // Classificação rigorosa 
                 if (imcNum < 18.5) cls = "Abaixo do peso";
                 else if (imcNum >= 18.5 && imcNum <= 24.9) cls = "Peso normal";
                 else if (imcNum >= 25.0 && imcNum <= 29.9) cls = "Sobrepeso";
@@ -732,7 +740,7 @@
             const base = baseCategories[cat] || [];
             const cust = window.PowFit.customExercises.filter(x => x.category === cat);
             
-            let html = base.map(ex => `<div onclick="addEx('${ex}')" class="card p-2 rounded text-xs font-medium cursor-pointer hover:border-primary transition group"><span>${ex}</span> <i class="fas fa-plus text-primary opacity-0 group-hover:opacity-100 float-right mt-0.5"></i></div>`).join('');
+            let html = base.map(ex => `<div onclick="addEx('${ex}')" class="card p-2 rounded text-xs font-medium cursor-pointer hover:border-primary transition group flex justify-between items-center"><span>${ex}</span> <i class="fas fa-plus text-primary opacity-0 group-hover:opacity-100 float-right"></i></div>`).join('');
             
             html += cust.map(c => `<div class="card p-2 rounded text-xs font-medium border-indigo-600 border-opacity-50 hover:border-indigo-500 cursor-pointer flex justify-between items-center group" onclick="addEx('${c.name}')">
                 <span>${c.name} <i class="fas fa-cloud text-indigo-400 text-[10px]"></i></span>
@@ -784,7 +792,7 @@
         };
 
         window.saveAndPrint = async () => {
-            setLoading("Salvando Ficha na Nuvem...", true);
+            setLoading("Gerando Impressão e Salvando Nuvem...", true);
             try {
                 const payload = getPayload();
                 if(window.PowFit.currentFichaId) await updateDoc(doc(db, `${getBasePath()}/history`, window.PowFit.currentFichaId), payload);
@@ -794,7 +802,7 @@
                 const d = payload;
                 const isPEF = window.PowFit.activeMember.role === 'PEF';
                 
-                // Repetindo lógica IMC para garantir que sai na impressão
+                // Cálculo de IMC para visualização de impressão
                 let imcStr = "-"; 
                 const w = parseFloat(d.stuWeight); const h = parseFloat(d.stuHeight);
                 if(w > 0 && h > 0) {
@@ -859,9 +867,7 @@
                 
                 setLoading(false);
                 window.print();
-                setTimeout(() => document.getElementById('print-area').classList.remove('active-print'), 1000);
-
-            } catch(e) { console.error(e); customAlert("Erro", "Falha ao salvar a ficha."); setLoading(false); }
+            } catch(e) { console.error(e); customAlert("Erro", "Falha ao processar a impressão."); setLoading(false); }
         };
 
         // --- HISTÓRICO NUVEM E RELATÓRIOS ---
@@ -887,7 +893,7 @@
                 return `
                 <div class="card p-3 rounded flex justify-between items-center border border-gray-600 border-opacity-30">
                     <div>
-                        <div class="font-bold text-sm">${w.studentName} ${isExp?'<span class="bg-red-500 text-white px-1 py-0.5 text-[9px] rounded font-bold">VENCIDA</span>':''}</div>
+                        <div class="font-bold text-sm">${w.studentName} ${isExp?'<span class="bg-red-500 text-white px-1 py-0.5 text-[9px] rounded font-bold ml-2">VENCIDA</span>':''}</div>
                         <div class="text-[10px] opacity-70">Em: ${new Date(w.timestamp).toLocaleDateString()} | Por: ${memName}</div>
                     </div>
                     <div class="flex gap-2">
@@ -918,7 +924,7 @@
             const hDict = window.PowFit.activeMember.role === 'PEF' ? healthPEF : healthTE;
             document.getElementById('health-container').innerHTML = Object.keys(hDict).map(opt => `
                 <label class="flex items-start space-x-2 cursor-pointer p-1 rounded hover:bg-black hover:bg-opacity-10">
-                    <input type="checkbox" value="${opt}" ${(w.health||[]).includes(opt)?'checked':''} class="health-cb mt-0.5 rounded text-primary w-3.5 h-3.5">
+                    <input type="checkbox" value="${opt}" ${(w.health||[]).includes(opt)?'checked':''} class="health-cb mt-0.5 rounded border-gray-400 text-primary w-3 h-3">
                     <span class="font-medium">${opt}</span>
                 </label>`).join('');
 
@@ -926,7 +932,7 @@
             renderWorkouts(); closeCloudHistory();
         };
 
-        window.delHistory = async (id) => { if(await customConfirm("Excluir Ficha", "Deletar permanentemente da nuvem?")) await deleteDoc(doc(db, `${getBasePath()}/history`, id)); renderHistoryList(); };
+        window.delHistory = async (id) => { if(await customConfirm("Excluir Ficha", "Deletar permanentemente da nuvem?")) await deleteDoc(doc(db, `${getBasePath()}/history`, id)); };
 
         // --- RELATÓRIOS ---
         window.openReportModal = () => {
@@ -969,7 +975,6 @@
                 ${document.getElementById('report-content').innerHTML}`;
             document.getElementById('print-report-area').classList.add('active-print');
             window.print();
-            setTimeout(() => document.getElementById('print-report-area').classList.remove('active-print'), 1000);
         };
     </script>
 </body>
