@@ -329,8 +329,6 @@
         import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, deleteDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- CONFIGURAÇÃO FIREBASE ---
-        // A regra do ambiente diz para usar a config provida, mas o usuário forneceu a dele.
-        // Vamos tentar usar a do ambiente (Canvas) primeiro, se não existir, usa a do usuário.
         let firebaseConfig = {
             apiKey: "AIzaSyD-iuERHA_x1f69smJXh7b8wTLO1zTadIU",
             authDomain: "powfitpro-d8577.firebaseapp.com",
@@ -361,7 +359,6 @@
             activeCategory: "🔥 PEITO"
         };
 
-        // Regra restrita de caminhos Firebase:
         const getBasePath = () => `artifacts/${appId}/users/${window.AppState.userId}`;
 
         // --- DADOS ESTÁTICOS ---
@@ -390,11 +387,9 @@
         window.handleGoogleLogin = async () => {
             showLoading("Iniciando Login...");
             try {
-                // Tenta autenticação nativa do ambiente (Prioridade para Canvas)
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
-                    // Fallback para Google Auth real se estiver fora do canvas e permitir popup
                     try {
                         const provider = new GoogleAuthProvider();
                         await signInWithPopup(auth, provider);
@@ -424,7 +419,6 @@
                 window.AppState.userId = null;
                 showScreen('screen-login');
                 hideLoading();
-                // Requirement Rule 3: Must auto-auth in sandboxes
                 if(window.location.hostname.includes('googleusercontent') || window.location.hostname.includes('sandbox')) {
                     handleGoogleLogin();
                 }
@@ -440,30 +434,25 @@
 
             const basePath = getBasePath();
             
-            // Networks
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/networks`), snap => {
                 window.AppState.networks = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 renderNetworks();
             }, e => console.error("Net error", e)));
 
-            // Units
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/units`), snap => {
                 window.AppState.units = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 renderUnits(); updateFilters();
             }, e => console.error("Unit error", e)));
 
-            // Members
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/members`), snap => {
                 window.AppState.members = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 renderMembers();
             }, e => console.error("Mem error", e)));
 
-            // Workouts History
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/workouts`), snap => {
                 window.AppState.workoutsHistory = snap.docs.map(d => ({id: d.id, ...d.data()}));
             }, e => console.error("Wkt error", e)));
 
-            // Custom Exercises
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/custom_exercises`), snap => {
                 window.AppState.customExercises = snap.docs.map(d => ({id: d.id, ...d.data()}));
             }, e => console.error("CEx error", e)));
@@ -576,7 +565,6 @@
             
             document.getElementById('editor-active-member-info').innerText = `Profissional: ${window.AppState.activeMember.name} (${window.AppState.activeMember.role})`;
             
-            // Setup Health Options based on Role
             const dict = window.AppState.activeMember.role === 'PEF' ? healthPEF : healthTE;
             document.getElementById('health-container').innerHTML = Object.keys(dict).map(opt => `
                 <label class="flex items-start space-x-2 cursor-pointer p-1 rounded hover:bg-black hover:bg-opacity-10 border border-transparent hover:border-gray-500 hover:border-opacity-20">
@@ -584,7 +572,6 @@
                     <span class="font-medium">${opt}</span>
                 </label>`).join('');
 
-            // Reset form
             document.getElementById('stu-name').value = '';
             document.getElementById('stu-age').value = '';
             document.getElementById('stu-weight').value = '';
@@ -592,7 +579,7 @@
             document.getElementById('stu-recs').value = '';
             window.AppState.currentFichaId = null;
             window.AppState.workouts = [];
-            window.addWorkout(); // Add default Monday
+            window.addWorkout(); 
             window.calculateIMC();
             showScreen('screen-editor');
         };
@@ -601,14 +588,34 @@
             if(confirm("Sair sem salvar?")) showScreen('screen-dashboard');
         };
 
+        // --- CÁLCULO AUTOMÁTICO DE IMC ATUALIZADO ---
         window.calculateIMC = () => {
             const w = parseFloat(document.getElementById('stu-weight').value);
             const h = parseFloat(document.getElementById('stu-height').value);
             const display = document.getElementById('imc-display');
             if (w > 0 && h > 0) {
-                const imc = (w / (h * h)).toFixed(1);
-                display.innerHTML = `<span class="bg-primary text-white px-2 py-0.5 rounded font-bold">IMC: ${imc}</span>`;
-            } else display.innerHTML = '';
+                const imcVal = w / (h * h);
+                const imc = imcVal.toFixed(1);
+                
+                let cls = "";
+                if (imcVal < 18.5) {
+                    cls = "Abaixo do peso";
+                } else if (imcVal < 25) { // 18.5 a 24.9
+                    cls = "Peso normal";
+                } else if (imcVal < 30) { // 25 a 29.9
+                    cls = "Sobrepeso";
+                } else if (imcVal < 35) { // 30 a 34.9
+                    cls = "Obesidade Grau I";
+                } else if (imcVal < 40) { // 35 a 39.9
+                    cls = "Obesidade Grau II";
+                } else { // >= 40
+                    cls = "Obesidade Grau III";
+                }
+                
+                display.innerHTML = `<span class="bg-primary text-white px-2 py-0.5 rounded font-bold text-[10px]">IMC: ${imc} (${cls})</span>`;
+            } else {
+                display.innerHTML = '';
+            }
         };
 
         window.changeTheme = () => document.body.setAttribute('data-theme', document.getElementById('stu-gender').value);
@@ -743,7 +750,7 @@
             if(name && window.AppState.userId) {
                 await addDoc(collection(db, `${getBasePath()}/custom_exercises`), { category: cat, name: name });
                 closeCustomExerciseModal();
-                setModalCategory(cat); // Refresh
+                setModalCategory(cat); 
             }
         };
 
@@ -753,7 +760,7 @@
                 const target = window.AppState.customExercises.find(c => c.name === name && c.category === window.AppState.activeCategory);
                 if(target) {
                     await deleteDoc(doc(db, `${getBasePath()}/custom_exercises`, target.id));
-                    renderModalExercises(); // Realtime will handle the array update, but we force render to be snappy
+                    renderModalExercises(); 
                 }
             }
         };
@@ -807,7 +814,7 @@
 
         window.renderHistoryList = () => {
             const unitFilter = document.getElementById('hist-filter-unit').value;
-            let list = window.AppState.workoutsHistory.sort((a,b) => b.timestamp - a.timestamp); // Mais novos primeiro
+            let list = window.AppState.workoutsHistory.sort((a,b) => b.timestamp - a.timestamp); 
             if(unitFilter !== 'ALL') list = list.filter(w => w.unitId === unitFilter);
 
             const container = document.getElementById('history-list');
@@ -818,7 +825,6 @@
                 const mem = window.AppState.members.find(m => m.id === w.memberId);
                 const memName = mem ? mem.name : 'Desconhecido';
                 
-                // Validade check
                 let valDays = 30;
                 if(w.stuValidity) valDays = parseInt(w.stuValidity.replace(/\D/g, '')) || 30;
                 const expirationDate = w.timestamp + (valDays * 24 * 60 * 60 * 1000);
@@ -843,12 +849,10 @@
             const w = window.AppState.workoutsHistory.find(x => x.id === id);
             if(!w) return;
             
-            // Tenta restaurar o profissional que criou
             const creator = window.AppState.members.find(m => m.id === w.memberId);
             if(creator) window.AppState.activeMember = creator;
             document.getElementById('editor-active-member-info').innerText = `Profissional: ${window.AppState.activeMember.name} (${window.AppState.activeMember.role})`;
             
-            // Popula os campos
             window.AppState.currentFichaId = w.id;
             document.getElementById('stu-name').value = w.studentName || '';
             document.getElementById('stu-age').value = w.stuAge || '';
@@ -863,7 +867,6 @@
 
             changeTheme(); calculateIMC();
 
-            // Refaz health checkboxes based on current role
             const dict = window.AppState.activeMember.role === 'PEF' ? healthPEF : healthTE;
             document.getElementById('health-container').innerHTML = Object.keys(dict).map(opt => `
                 <label class="flex items-start space-x-2 cursor-pointer p-1 rounded hover:bg-black hover:bg-opacity-10">
@@ -892,7 +895,7 @@
             if(mSelect && mSelect.options.length === 0) {
                 const d = new Date();
                 for(let i=0; i<6; i++) {
-                    const month = d.toISOString().slice(0,7); // YYYY-MM
+                    const month = d.toISOString().slice(0,7); 
                     mSelect.innerHTML += `<option value="${month}">${month}</option>`;
                     d.setMonth(d.getMonth() - 1);
                 }
@@ -909,11 +912,9 @@
             let filtered = window.AppState.workoutsHistory.filter(w => w.dateStr.startsWith(month));
             if(unitId !== 'ALL') filtered = filtered.filter(w => w.unitId === unitId);
 
-            // Group by member
             const counts = {};
             filtered.forEach(w => { counts[w.memberId] = (counts[w.memberId] || 0) + 1; });
 
-            // Sort members by count
             const sortedMembers = Object.keys(counts).map(mId => {
                 const mem = window.AppState.members.find(m => m.id === mId);
                 const unit = mem ? window.AppState.units.find(u => u.id === mem.unitId) : null;
@@ -960,7 +961,7 @@
             setTimeout(() => document.getElementById('print-report-area').classList.remove('active-print'), 1000);
         };
 
-        // --- IMPRESSÃO DA FICHA (SPREADSHEET STYLE) ---
+        // --- IMPRESSÃO DA FICHA E CLASSIFICAÇÃO DE IMC NA FOLHA ---
         window.saveAndPrint = async () => {
             const saved = await saveToCloud();
             if(!saved) return;
@@ -969,8 +970,29 @@
             const isPEF = window.AppState.activeMember.role === 'PEF';
             const healthSourceDict = isPEF ? healthPEF : healthTE;
             
-            let imcStr = "-"; const w = parseFloat(d.stuWeight); const h = parseFloat(d.stuHeight);
-            if(w>0 && h>0) imcStr = (w / (h * h)).toFixed(1);
+            let imcStr = "-"; 
+            const w = parseFloat(d.stuWeight); 
+            const h = parseFloat(d.stuHeight);
+            
+            if(w > 0 && h > 0) {
+                const imcVal = w / (h * h);
+                const imc = imcVal.toFixed(1);
+                let cls = "";
+                if (imcVal < 18.5) {
+                    cls = "Abaixo do peso";
+                } else if (imcVal < 25) {
+                    cls = "Peso normal";
+                } else if (imcVal < 30) {
+                    cls = "Sobrepeso";
+                } else if (imcVal < 35) {
+                    cls = "Obesidade Grau I";
+                } else if (imcVal < 40) {
+                    cls = "Obesidade Grau II";
+                } else {
+                    cls = "Obesidade Grau III";
+                }
+                imcStr = `${imc} (${cls})`;
+            }
 
             const objRec = objectiveData[d.stuObjective] || "";
             const profLabel = isPEF ? 'Profissional de Educação Física' : 'Treinador Esportivo';
