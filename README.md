@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -126,7 +127,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-medium mb-1">Estado (UF)</label>
-                    <input type="text" id="reg-uf" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Ex: SP, RJ">
+                    <input type="text" id="reg-uf" class="input-field w-full rounded-lg px-3 py-2 text-sm" placeholder="Ex: SP, RJ, RN">
                 </div>
                 <div>
                     <label class="block text-xs font-medium mb-1">Categoria de Atuação</label>
@@ -160,7 +161,7 @@
                     </div>
                     <div class="flex items-center gap-1 sm:gap-2 overflow-x-auto whitespace-nowrap">
                         <button onclick="switchTab('builder')" id="tab-builder" class="px-3 py-2 text-sm font-medium rounded-md bg-black bg-opacity-20 text-white transition border border-transparent"><i class="fas fa-clipboard-list sm:mr-1"></i> <span class="hidden sm:inline">Montar Ficha</span></button>
-                        <button onclick="switchTab('history')" id="tab-history" class="px-3 py-2 text-sm font-medium rounded-md opacity-70 hover:opacity-100 transition border border-transparent"><i class="fas fa-clock sm:mr-1"></i> <span class="hidden sm:inline">Nuvem (Histórico)</span></button>
+                        <button onclick="switchTab('history')" id="tab-history" class="px-3 py-2 text-sm font-medium rounded-md opacity-70 hover:opacity-100 transition border border-transparent"><i class="fas fa-cloud sm:mr-1"></i> <span class="hidden sm:inline">Nuvem (Histórico)</span></button>
                         <button onclick="switchTab('database')" id="tab-database" class="px-3 py-2 text-sm font-medium rounded-md opacity-70 hover:opacity-100 transition border border-transparent"><i class="fas fa-database sm:mr-1"></i> <span class="hidden sm:inline">Exercícios</span></button>
                         <button onclick="switchTab('admin')" id="tab-admin" class="px-3 py-2 text-sm font-medium rounded-md opacity-70 hover:opacity-100 transition border border-transparent"><i class="fas fa-network-wired sm:mr-1"></i> <span class="hidden sm:inline">Gestão de Rede</span></button>
                         <button onclick="logout()" class="px-3 py-2 text-sm font-medium rounded-md text-red-400 hover:text-red-300 ml-2" title="Sair"><i class="fas fa-sign-out-alt"></i></button>
@@ -264,8 +265,8 @@
 
                         <!-- Config -->
                         <div class="card rounded-xl p-4 shadow-sm">
-                            <h2 class="font-bold mb-2"><i class="fas fa-pen text-primary"></i> Recomendações (Opcional)</h2>
-                            <textarea id="stu-recs" rows="3" class="input-field w-full rounded px-2 py-2 text-sm" placeholder="Descanso, hidratação, intensidade..."></textarea>
+                            <h2 class="font-bold mb-2"><i class="fas fa-pen text-primary"></i> Recomendações Manuais (Opcional)</h2>
+                            <textarea id="stu-recs" rows="3" class="input-field w-full rounded px-2 py-2 text-sm" placeholder="Descanso, hidratação, intensidade, cuidados específicos..."></textarea>
                         </div>
                     </div>
 
@@ -400,9 +401,9 @@
         import { getAuth, signInWithPopup, signInWithCustomToken, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, collection, addDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // Firebase Configuração - Priorizando a do usuário fornecida no prompt, mas com compatibilidade do Canvas
+        // Firebase Configuração - Exatamente conforme as regras solicitadas (v10.8.1 e Keys fornecidas)
         const providedConfig = {
-            apiKey: "AIzaSyBWAbrGzyGdDJHbsXYKjAbF3jeULH3FVp0",
+            apiKey: "AIzaSyBWAbrGzyGdDJHbsXYKjAbF3jeULH3FVp0", // Usando a chave que foi exigida no prompt final
             authDomain: "powfitpro-582df.firebaseapp.com",
             projectId: "powfitpro-582df",
             storageBucket: "powfitpro-582df.firebasestorage.app",
@@ -417,11 +418,11 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Caminhos seguros para o Firestore (Conforme Regra do Canvas)
+        // Caminhos seguros para o Firestore (Conforme Regra do Canvas: usar /artifacts/... ou col normal)
         const getCol = (col) => typeof __app_id !== 'undefined' ? collection(db, 'artifacts', rootAppId, 'public', 'data', col) : collection(db, col);
         const getDocRef = (col, id) => typeof __app_id !== 'undefined' ? doc(db, 'artifacts', rootAppId, 'public', 'data', col, id) : doc(db, col, id);
 
-        // --- BANCO DE DADOS LOCAL (ESTÁTICO + DIRETRIZES) ---
+        // --- BANCO DE DADOS ESTRUTURAL (DIRETRIZES + EXERCÍCIOS) ---
         const HEALTH_PEF = {
             "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.",
             "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.",
@@ -463,18 +464,19 @@
             "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.",
             "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.",
             "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.",
-            "Resistência": "Séries mais longas, cadência controlada e aprimromamento da capacidade muscular.",
+            "Resistência": "Séries mais longas, cadência controlada e aprimoramento da capacidade muscular.",
             "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.",
             "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.",
             "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar."
         };
 
+        // EXATAMENTE A LISTA FORNECIDA PELO USUÁRIO NO PROMPT MASTER
         const DEFAULT_CATEGORIES = {
-            "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
-            "🦍 COSTAS": ["Puxada Alta", "Puxada Unilateral", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada na Polia", "Remada Unilateral", "Remada Cavalinho (T-Bar)", "Remada no Cross", "Serrote", "Facepull (puxada de cima para baixo)", "Encolhimento (Trapézio)"],
-            "🦵 PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento com Barra", "Agachamento no Smith", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Abdução no Cross (Glúteo Médio + Mínimo)", "Coice", "Cachorrinho", "Caranguejo", "Cadeira Extensora", "Adução", "Abdução", "Cadeira Abdutora Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha em Pé (Máquina)", "Panturrilha Livre", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
+            "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
+            "🦍 COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Curvada na Polia", "Remada Unilateral", "Remada Cavalinho (T-Bar)", "Remada no Cross", "Serrote", "Facepull (puxada de cima para baixo)", "Encolhimento (Trapézio)"],
+            "🦵 PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento com Barra", "Agachamento no Smith", "Agachamento com passada lateral", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Abdução no Cross (Glúteo Médio + Mínimo)", "Coice", "Cachorrinho", "Caranguejo", "Cadeira Extensora", "Adução", "Abdução", "Cadeira Abdutora Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha em Pé (Máquina)", "Panturrilha Livre", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
             "💪 BRAÇOS": ["(Bíceps) Rosca Direta", "(Bíceps) Rosca Alternada", "(Bíceps) Rosca 21", "(Bíceps) Rosca Scott Barra W", "(Bíceps) Rosca Scott Unilateral", "(Bíceps) Rosca Scott com Halteres", "(Bíceps) Rosca Martelo", "(Bíceps) Rosca Cross", "(Bíceps) Rosca Concentrada", "(Bíceps) Rosca Inversa", "(Bíceps) Rosca 45°", "(Tríceps) Triceps Pulley Unilateral", "(Tríceps) Tríceps Pulley Barra", "(Tríceps) Tríceps Pulley Corda", "(Tríceps) Tríceps Pulley Pegada Inversa", "(Tríceps) Tríceps Francês na Corda", "(Tríceps) Tríceps Francês com Halter", "(Tríceps) Tríceps Francês Unilateral", "(Tríceps) Tríceps Cruzado Polia Dupla", "(Tríceps) Tríceps Coice Unilateral", "(Tríceps) Tríceps Arremesso", "(Tríceps) Tríceps Testa", "(Tríceps) Mergulho no Banco"],
-            "🪨 OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral na Polia", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta"],
+            "🪨 OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral Unilateral Cross", "Elevação Lateral na Polia", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta", "Encolhimento (Trapézio)"],
             "🧠 ABDÔMEN": ["Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", "Isometria na parede", "Abdominal isometrico"],
             "🫀 CARDIO": ["Bicicleta 10 Minutos", "Bicicleta 15 Minutos", "Bicicleta 20 Minutos", "Esteira 10 Minutos", "Esteira 15 Minutos", "Esteira 20 Minutos", "Pular Corda"]
         };
@@ -492,7 +494,7 @@
             customExercises: [],
             fichas: [],
             
-            // Estado do Construtor
+            // Estado do Construtor de Fichas
             currentFichaId: null,
             workouts: [],
             activeModalWorkoutId: null,
@@ -543,6 +545,7 @@
         window.loadCloudData = async () => {
             if(!window.APP_STATE.user) return;
             try {
+                // Como não podemos usar query complexas (Regra Canvas), baixamos tudo e filtramos em memória.
                 const uSnap = await getDocs(getCol('units'));
                 window.APP_STATE.units = uSnap.docs.map(d => ({id: d.id, ...d.data()}));
                 
@@ -555,9 +558,11 @@
                 const fSnap = await getDocs(getCol('fichas'));
                 window.APP_STATE.fichas = fSnap.docs.map(d => ({id: d.id, ...d.data()}));
 
+                // Preencher Selects da UI
                 document.getElementById('db-category-select').innerHTML = Object.keys(DEFAULT_CATEGORIES).map(c=>`<option value="${c}">${c}</option>`).join('');
                 populateUnitsDropdown();
 
+                // Re-renderizar views abertas
                 if(!document.getElementById('view-history').classList.contains('hidden')) renderHistory();
                 if(!document.getElementById('view-admin').classList.contains('hidden')) renderAdmin();
                 if(!document.getElementById('view-database').classList.contains('hidden')) window.renderDBExercises();
@@ -574,7 +579,7 @@
                 
                 const unitName = window.APP_STATE.units.find(u => u.id === profile.unitId)?.name || 'Unidade Desconhecida';
                 const catLabel = profile.category === 'PEF' ? 'Prof. Ed. Física' : 'Treinador Esportivo';
-                const tag = `<span class="bg-primary text-white px-2 py-0.5 rounded text-[10px] ml-2">👤 ${profile.name} (${catLabel}) - 🏢 ${unitName}</span>`;
+                const tag = `<span class="bg-primary text-white px-2 py-0.5 rounded text-[10px] ml-2 font-bold shadow">👤 ${profile.name} (${catLabel}) - 🏢 ${unitName}</span>`;
                 document.getElementById('active-member-display').innerHTML = tag;
                 
                 initBuilder();
@@ -608,7 +613,7 @@
             const sel = document.getElementById('reg-unit');
             sel.innerHTML = `<option value="">-- Selecione sua Franquia/Unidade --</option>` + 
                 window.APP_STATE.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
-            if(window.APP_STATE.units.length === 0) sel.innerHTML = `<option value="">(Nenhuma unidade cadastrada. Crie a rede primeiro.)</option>`;
+            if(window.APP_STATE.units.length === 0) sel.innerHTML = `<option value="">(Nenhuma unidade cadastrada. Logue e crie na Gestão de Rede.)</option>`;
         }
 
         window.toggleRegCref = () => {
@@ -642,7 +647,7 @@
         };
 
         // ==========================================
-        // 1. CONSTRUTOR DE FICHA (BUILDER)
+        // 1. CONSTRUTOR DE FICHA (BUILDER MANUAL)
         // ==========================================
         function initBuilder() {
             window.APP_STATE.currentFichaId = null;
@@ -727,7 +732,7 @@
         window.renderBuilderWorkouts = () => {
             const c = document.getElementById('workouts-container');
             c.innerHTML = window.APP_STATE.workouts.map(w => {
-                const exHtml = w.exercises.length === 0 ? `<div class="text-center p-4 text-[10px] opacity-50 italic">Sem exercícios neste dia.</div>` : w.exercises.map((ex, idx) => `
+                const exHtml = w.exercises.length === 0 ? `<div class="text-center p-4 text-[10px] opacity-50 italic">Sem exercícios neste dia. (Sem automação, adicione manualmente)</div>` : w.exercises.map((ex, idx) => `
                     <div class="flex flex-col sm:flex-row gap-2 p-2 items-start sm:items-center border-b border-opacity-10 last:border-0" style="border-color: var(--border-color)">
                         <div class="flex gap-1 hidden sm:flex">
                             <button onclick="moveExercise('${w.id}',${idx},'up')" class="text-[10px] p-1 rounded hover:bg-black hover:bg-opacity-10"><i class="fas fa-chevron-up"></i></button>
@@ -744,7 +749,7 @@
                             <select onchange="updateExercise('${w.id}',${idx},'technique',this.value)" class="input-field w-24 text-[10px] px-1 py-1 rounded">
                                 ${TECHNIQUES.map(t=>`<option value="${t}" ${ex.technique===t?'selected':''}>${t}</option>`).join('')}
                             </select>
-                            <input type="text" value="${ex.obs}" onchange="updateExercise('${w.id}',${idx},'obs',this.value)" class="input-field flex-1 sm:w-32 text-xs px-2 py-1 rounded" placeholder="Observações...">
+                            <input type="text" value="${ex.obs}" onchange="updateExercise('${w.id}',${idx},'obs',this.value)" class="input-field flex-1 sm:w-32 text-xs px-2 py-1 rounded" placeholder="Observações livres...">
                             <button onclick="removeExercise('${w.id}',${idx})" class="text-red-500 hover:text-red-700 p-1"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
@@ -755,12 +760,12 @@
                     <div class="p-3 border-b bg-black bg-opacity-20 flex justify-between items-center" style="border-color: var(--border-color)">
                         <input type="text" value="${w.title}" onchange="updateWorkoutTitle('${w.id}',this.value)" class="input-field bg-transparent font-bold text-sm w-1/2 px-2 py-1 rounded uppercase">
                         <div>
-                            <button onclick="duplicateWorkout('${w.id}')" class="p-1.5 opacity-70 hover:opacity-100 transition"><i class="fas fa-copy"></i></button>
-                            <button onclick="removeWorkout('${w.id}')" class="p-1.5 text-red-500 transition"><i class="fas fa-trash"></i></button>
+                            <button onclick="duplicateWorkout('${w.id}')" class="p-1.5 opacity-70 hover:opacity-100 transition tooltip" title="Duplicar Dia"><i class="fas fa-copy"></i></button>
+                            <button onclick="removeWorkout('${w.id}')" class="p-1.5 text-red-500 transition tooltip" title="Remover Dia"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                     <div>${exHtml}</div>
-                    <button onclick="openExerciseModal('${w.id}')" class="w-full text-primary py-2 text-xs font-bold bg-black bg-opacity-10 hover:bg-opacity-30 transition border-t" style="border-color:var(--border-color)">+ ADICIONAR EXERCÍCIO</button>
+                    <button onclick="openExerciseModal('${w.id}')" class="w-full text-primary py-2 text-xs font-bold bg-black bg-opacity-10 hover:bg-opacity-30 transition border-t" style="border-color:var(--border-color)">+ ADICIONAR EXERCÍCIO MANUALLY</button>
                 </div>`;
             }).join('');
         };
@@ -784,8 +789,11 @@
         window.renderModalExercises = () => {
             const cat = window.APP_STATE.activeCategory;
             let exercisesList = [...DEFAULT_CATEGORIES[cat]];
-            const customs = window.APP_STATE.customExercises.filter(e => e.category === cat).map(e => e.name);
-            exercisesList = [...exercisesList, ...customs]; // Adiciona os customizados do usuário salvos na nuvem
+            
+            // Adiciona os exercícios customizados puxados da NUVEM pertencentes a este membro e categoria
+            const profId = window.APP_STATE.user.uid;
+            const customs = window.APP_STATE.customExercises.filter(e => e.category === cat && e.memberId === profId).map(e => e.name);
+            exercisesList = [...exercisesList, ...customs];
 
             document.getElementById('modal-exercises').innerHTML = `
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -807,18 +815,19 @@
                 w.exercises.push({ category: window.APP_STATE.activeCategory, name: name, sets: isCardio ? '1' : '3', reps: isCardio ? '-' : '10 a 12', technique: 'Nenhuma', obs: '' });
                 window.renderBuilderWorkouts();
                 
-                // Feedback visual
+                // Feedback visual rápido
                 const cont = document.getElementById('modal-exercises');
                 cont.style.opacity = '0.5'; setTimeout(() => cont.style.opacity = '1', 150);
             }
         };
 
         // ==========================================
-        // 2. HISTÓRICO, NUVEM E IMPRESSÃO
+        // 2. NUVEM / HISTÓRICO / IMPRESSÃO A4
         // ==========================================
         function renderHistory() {
             const list = document.getElementById('history-list');
             const userUnitId = window.APP_STATE.profile.unitId;
+            // Mostra as fichas de toda a Unidade
             const unitFichas = window.APP_STATE.fichas.filter(f => f.unitId === userUnitId);
             
             if(unitFichas.length === 0) { list.innerHTML = '<div class="text-xs opacity-50 p-2 col-span-3">Nenhuma ficha salva nesta Unidade.</div>'; return; }
@@ -843,8 +852,8 @@
                         </div>
                     </div>
                     <div class="flex gap-2 mt-1">
-                        <button onclick="loadFicha('${f.id}')" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg text-xs font-bold transition shadow"><i class="fas fa-edit"></i> Editar / Imprimir</button>
-                        <button onclick="deleteFicha('${f.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-xs transition shadow"><i class="fas fa-trash"></i></button>
+                        <button onclick="loadFicha('${f.id}')" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg text-xs font-bold transition shadow"><i class="fas fa-edit"></i> Editar / Re-imprimir</button>
+                        <button onclick="deleteFicha('${f.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-xs transition shadow tooltip" title="Excluir Definitivamente"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>`;
             }).join('');
@@ -877,7 +886,7 @@
         };
 
         window.deleteFicha = async (id) => {
-            if(confirm("Excluir permanentemente da nuvem? O histórico desta ficha não constará mais nos relatórios da franquia.")) {
+            if(confirm("Deseja apagar definitivamente esta ficha da NUVEM? (Isso afetará os relatórios)")) {
                 try {
                     await deleteDoc(getDocRef('fichas', id));
                     window.APP_STATE.fichas = window.APP_STATE.fichas.filter(x => x.id !== id);
@@ -888,7 +897,7 @@
         };
 
         window.saveAndPrint = async () => {
-            if(!window.APP_STATE.profile) return alert("Você precisa completar seu cadastro antes de salvar fichas na rede.");
+            if(!window.APP_STATE.profile) return alert("Complete seu cadastro primeiro.");
 
             const fData = {
                 memberId: window.APP_STATE.profile.id,
@@ -926,7 +935,7 @@
                 }
                 
                 btn.innerHTML = originalText;
-                executePrint(fData); // Monta e Imprime
+                executePrint(fData); // Monta HTML Limpo A4 e Imprime
 
             } catch(e) {
                 console.error(e);
@@ -947,6 +956,7 @@
             const objRecommendation = OBJECTIVES[d.stuObjective] || "";
             const healthSourceDict = isPEF ? HEALTH_PEF : HEALTH_TE;
 
+            // TEXTOS LEGAIS EXATAMENTE CONFORME O PROMPT (OBRIGATÓRIO)
             const legalTextPEF = `⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA<br>Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º da mesma lei estabelece que compete ao profissional de Educação Física coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados nas áreas de atividades físicas e do desporto.`;
             const legalTextTE = `⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO<br>Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil, com atuação de caráter técnico e esportivo voltada à preparação, supervisão, orientação e acompanhamento de treinos físicos e esportivos. A atuação possui finalidade orientativa e não substitui avaliação médica, diagnóstico clínico, prescrição medicamentosa ou acompanhamento de profissionais da saúde. Em casos de doenças, lesões, gestação, limitações físicas, uso de medicações ou qualquer condição específica de saúde, recomenda-se avaliação prévia por profissional habilitado antes do início ou continuidade da prática de exercícios. O treinamento proposto respeita os limites individuais, priorizando segurança, execução correta e evolução progressiva, dentro da atuação técnica e esportiva permitida por lei. As recomendações desta ficha possuem caráter informativo e orientativo, voltadas ao treinamento esportivo e prática de musculação.`;
 
@@ -955,7 +965,7 @@
             let html = `
                 <div class="print-header">
                     <h1 class="print-title">Planilha de Treinamento - ${d.stuObjective}</h1>
-                    <div class="prof-info">Prescrição feita por: ${prof.name} (${isPEF ? 'Profissional de Educação Física' : 'Treinador Esportivo'})</div>
+                    <div class="prof-info">Prescrição feita por Personal Trainer: ${prof.name}</div>
                     <div class="prof-info" style="font-weight:normal; margin-top:2px;">
                         ${isPEF ? `CREF: ${prof.cref} - Estado: ${prof.uf}` : `Estado: ${prof.uf}`} | Unidade: ${unit}
                     </div>
@@ -1009,30 +1019,31 @@
 
             printArea.innerHTML = html;
             
-            setTimeout(() => window.print(), 400);
+            setTimeout(() => window.print(), 400); // Dá um tempo pro DOM renderizar antes de chamar o dialogo
         }
 
         // ==========================================
-        // 3. BANCO DE DADOS EXERCÍCIOS (CUSTOMIZADOS)
+        // 3. BANCO DE DADOS DE EXERCÍCIOS CUSTOMIZÁVEIS
         // ==========================================
         window.renderDBExercises = () => {
             const cat = document.getElementById('db-category-select').value || "🔥 PEITO";
             const list = document.getElementById('db-exercise-list');
             
             let html = '';
-            // Nativos
+            
+            // Render Nativos (Locked)
             DEFAULT_CATEGORIES[cat].forEach(name => {
                 html += `<div class="card p-3 rounded-xl text-xs font-medium flex justify-between items-center opacity-70 border border-[var(--border-color)] shadow-sm bg-black bg-opacity-20">
                     <span>${name}</span> <i class="fas fa-lock text-[9px]" title="Nativo do Sistema"></i>
                 </div>`;
             });
             
-            // Customizados do usuário
+            // Render Customizados na Nuvem (Pertencentes ao Profissional Logado)
             const profId = window.APP_STATE.user.uid;
             window.APP_STATE.customExercises.filter(e => e.category === cat && e.memberId === profId).forEach(e => {
                 html += `<div class="card p-3 rounded-xl text-xs font-medium border-primary border flex justify-between items-center shadow-md bg-black bg-opacity-10">
                     <span>${e.name}</span> 
-                    <button onclick="deleteCustomExercise('${e.id}')" class="text-red-500 hover:text-red-400 p-1 transition"><i class="fas fa-trash"></i></button>
+                    <button onclick="deleteCustomExercise('${e.id}')" class="text-red-500 hover:text-red-400 p-1 transition tooltip" title="Apagar da Nuvem"><i class="fas fa-trash"></i></button>
                 </div>`;
             });
             list.innerHTML = html;
@@ -1046,6 +1057,7 @@
             try {
                 const memberId = window.APP_STATE.user.uid;
                 const docRef = await addDoc(getCol('custom_exercises'), { category: cat, name: name.trim(), memberId: memberId });
+                // Add ao state em memória
                 window.APP_STATE.customExercises.push({ id: docRef.id, category: cat, name: name.trim(), memberId: memberId });
                 document.getElementById('db-new-exercise').value = '';
                 window.renderDBExercises();
@@ -1053,7 +1065,7 @@
         };
 
         window.deleteCustomExercise = async (id) => {
-            if(confirm("Deseja apagar este exercício customizado da nuvem?")) {
+            if(confirm("Deseja apagar definitivamente este exercício do seu Banco de Dados na Nuvem?")) {
                 try {
                     await deleteDoc(getDocRef('custom_exercises', id));
                     window.APP_STATE.customExercises = window.APP_STATE.customExercises.filter(e => e.id !== id);
@@ -1067,13 +1079,13 @@
         // ==========================================
         function renderAdmin() {
             const list = document.getElementById('admin-units-list');
-            list.innerHTML = window.APP_STATE.units.length === 0 ? '<div class="text-xs opacity-50 p-2">Sem unidades.</div>' : '';
+            list.innerHTML = window.APP_STATE.units.length === 0 ? '<div class="text-xs opacity-50 p-2">Sem unidades na Rede.</div>' : '';
             window.APP_STATE.units.forEach(u => {
                 list.innerHTML += `
                     <div class="p-3 border border-gray-500 border-opacity-20 rounded-xl mb-2 flex justify-between items-center hover:bg-black hover:bg-opacity-20 cursor-pointer transition shadow-sm bg-black bg-opacity-10" onclick="window.selectUnitAdmin('${u.id}', '${u.name}')">
                         <span class="text-sm font-medium"><i class="fas fa-map-marker-alt text-primary mr-2"></i>${u.name}</span>
                         <div class="flex items-center gap-2">
-                            <span class="text-[9px] bg-primary text-white px-2 py-0.5 rounded-full">${window.APP_STATE.members.filter(m => m.unitId === u.id).length} Membros</span>
+                            <span class="text-[9px] bg-primary text-white px-2 py-0.5 rounded-full">${window.APP_STATE.members.filter(m => m.unitId === u.id).length} Equipe</span>
                             <i class="fas fa-chevron-right text-xs opacity-50"></i>
                         </div>
                     </div>`;
@@ -1083,10 +1095,12 @@
         window.promptAddUnit = async () => {
             const name = prompt("Nome da Nova Unidade (Franquia):");
             if(name && name.trim()) {
-                const docRef = await addDoc(getCol('units'), { name: name.trim() });
-                window.APP_STATE.units.push({ id: docRef.id, name: name.trim() });
-                renderAdmin();
-                populateUnitsDropdown(); // Update selection for those without profile
+                try {
+                    const docRef = await addDoc(getCol('units'), { name: name.trim() });
+                    window.APP_STATE.units.push({ id: docRef.id, name: name.trim() });
+                    renderAdmin();
+                    populateUnitsDropdown();
+                } catch(e) { alert("Erro ao cadastrar."); }
             }
         };
 
@@ -1094,12 +1108,12 @@
             const mList = document.getElementById('admin-members-list');
             const members = window.APP_STATE.members.filter(m => m.unitId === unitId);
             
-            if(members.length === 0) { mList.innerHTML = '<div class="text-xs opacity-50 p-2">Nenhum membro nesta unidade.</div>'; return; }
+            if(members.length === 0) { mList.innerHTML = '<div class="text-xs opacity-50 p-2">Nenhum membro logado e cadastrado nesta unidade ainda.</div>'; return; }
             
             mList.innerHTML = members.map(m => `
                 <div class="p-3 border border-gray-500 border-opacity-20 rounded-xl mb-2 bg-black bg-opacity-10 shadow-sm flex flex-col">
-                    <span class="text-sm font-bold">${m.name}</span>
-                    <span class="text-[10px] opacity-70 mt-1">${m.category === 'PEF' ? 'Profissional de Ed. Física' : 'Treinador Esportivo'} | CPF: ${m.cpf}</span>
+                    <span class="text-sm font-bold"><i class="fas fa-user-circle text-gray-400 mr-1"></i> ${m.name}</span>
+                    <span class="text-[10px] opacity-70 mt-1 uppercase tracking-wider">${m.category === 'PEF' ? 'Profissional de Ed. Física' : 'Treinador Esportivo'} | CPF: ${m.cpf}</span>
                 </div>
             `).join('');
         };
@@ -1112,8 +1126,9 @@
             
             let html = `
                 <div class="report-header">
-                    <h1 class="report-title">Relatório de Produtividade - ${rMonth}/${rYear}</h1>
-                    <p>Total de Prescrições Geradas pela Rede</p>
+                    <h1 class="report-title">Relatório de Produtividade Mensal</h1>
+                    <h2 class="report-title" style="font-size:14px; color:#555;">Mês de Referência: ${rMonth}/${rYear}</h2>
+                    <p style="font-size: 10px; margin-top:5px;">Total de Prescrições Geradas pela Equipe da Rede PowFit Pro</p>
                 </div>
             `;
 
@@ -1133,7 +1148,7 @@
                     
                     if(fichasDoMembro.length > 0) {
                         unitTotal += fichasDoMembro.length;
-                        unitTable += `<tr><td>${member.name} (${member.category})</td><td style="text-align:center">${fichasDoMembro.length}</td></tr>`;
+                        unitTable += `<tr><td>${member.name} (${member.category})</td><td style="text-align:center"><strong>${fichasDoMembro.length}</strong> fichas</td></tr>`;
                         hasData = true;
                     }
                 });
@@ -1141,9 +1156,9 @@
                 if(unitTotal > 0) {
                     html += `
                         <div class="report-unit-section">
-                            <div class="report-unit-title">📍 ${unit.name} - Total: ${unitTotal} fichas prescritas</div>
+                            <div class="report-unit-title">📍 UNIDADE: ${unit.name} - Total Unidade: ${unitTotal} fichas prescritas</div>
                             <table class="report-table">
-                                <thead><tr><th>Membro da Equipe</th><th style="width:100px; text-align:center">Qtd. Fichas</th></tr></thead>
+                                <thead><tr><th>Membro da Equipe</th><th style="width:120px; text-align:center">Produtividade</th></tr></thead>
                                 <tbody>${unitTable}</tbody>
                             </table>
                         </div>
@@ -1151,10 +1166,11 @@
                 }
             });
 
-            if(!hasData) html += '<p style="text-align:center; padding: 20px;">Nenhuma ficha registrada na rede neste mês específico.</p>';
+            if(!hasData) html += '<p style="text-align:center; padding: 20px; font-weight:bold; font-size: 14px;">Nenhuma ficha registrada em toda a rede neste mês específico.</p>';
 
             document.getElementById('report-print-area').innerHTML = html;
             
+            // Oculta a UI normal, mostra APENAS o Relatório e imprime
             const appC = document.getElementById('app-container');
             const printA = document.getElementById('print-area');
             const repA = document.getElementById('report-print-area');
