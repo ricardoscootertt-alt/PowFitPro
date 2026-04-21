@@ -329,6 +329,8 @@
         import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, deleteDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- CONFIGURAÇÃO FIREBASE ---
+        // A regra do ambiente diz para usar a config provida, mas o usuário forneceu a dele.
+        // Vamos tentar usar a do ambiente (Canvas) primeiro, se não existir, usa a do usuário.
         let firebaseConfig = {
             apiKey: "AIzaSyD-iuERHA_x1f69smJXh7b8wTLO1zTadIU",
             authDomain: "powfitpro-d8577.firebaseapp.com",
@@ -359,12 +361,13 @@
             activeCategory: "🔥 PEITO"
         };
 
+        // Regra restrita de caminhos Firebase:
         const getBasePath = () => `artifacts/${appId}/users/${window.AppState.userId}`;
 
         // --- DADOS ESTÁTICOS ---
         const healthPEF = { "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.", "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.", "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico. Combinar musculação e cardio moderado.", "🔴 Obesidade": "Iniciar com exercícios de baixo impacto. Evolução gradual, priorizando saúde e segurança.", "⚖️ Baixo peso": "Foco em musculação para ganho de massa. Treinos moderados com alimentação adequada.", "🍬 Diabetes": "Treinos regulares moderados. Monitorar glicemia e evitar treinos em jejum.", "❤️ Hipertensão": "Treinos moderados, evitar prender a respiração. Priorizar controle da intensidade.", "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação e intensidade leve a moderada.", "💔 Problemas cardíacos": "Treinos leves com liberação médica. Monitorar frequência cardíaca.", "🦴 Problemas articulares": "Evitar impacto. Priorizar exercícios controlados e máquinas.", "🫁 Problemas respiratórios": "Treinos leves a moderados com progressão gradual. Atenção à respiração.", "⚠️ Lesões": "Adaptar exercícios. Evitar dor e focar na recuperação.", "🤰 Gestante": "Treinos leves a moderados, sem impacto ou risco. Foco em mobilidade e bem-estar.", "🤱 Lactante": "Treinar normalmente com atenção à hidratação e energia.", "👴 Idoso": "Foco em força, equilíbrio e mobilidade. Intensidade moderada com segurança." };
         const healthTE = { "🟢 Saudável": "Manter treinos regulares de 3–5x por semana, combinando musculação e atividades cardiovasculares. A constância e boa alimentação contribuem para resultados.", "⚪ Sedentário": "Início gradual, treinos leves, foco na adaptação. Prioridade é desenvolver constância e execução correta.", "🟡 Sobrepeso": "A musculação associada ao cardio contribui para condicionamento. Progressão deve respeitar individualidade.", "🔴 Obesidade": "Iniciar com menor impacto e progressão gradual. Segurança, mobilidade e constância são prioridades.", "⚖️ Baixo peso": "Musculação auxilia no ganho de massa. Priorizar evolução progressiva e recuperação muscular.", "🍬 Diabetes": "Acompanhamento médico regular. Em casos de mal-estar ou alteração de glicemia, interromper e buscar orientação.", "❤️ Hipertensão": "Acompanhamento médico. Evitar prender a respiração (Manobra de Valsalva) e controlar a intensidade.", "🔵 Hipotensão": "Evitar mudanças bruscas de posição. Manter boa hidratação e respeitar intensidade adequada.", "💔 Problemas cardíacos": "Prática apenas com liberação e acompanhamento médico. Respeitar limites e controlar intensidade.", "🦴 Problemas articulares": "Menor impacto e maior controle de movimento são indicados. Acompanhamento ajuda na segurança.", "🫁 Problemas respiratórios": "Progressão gradual respeitando a capacidade. Interromper em caso de falta de ar excessiva.", "⚠️ Lesões": "Adaptação respeitando limitação e evitando dor. Seguir orientação profissional antes da prática.", "🤰 Gestante": "Liberação médica. Foco na segurança, mobilidade e bem-estar, evitando impacto e risco.", "🤱 Lactante": "Atividade normal, respeitando recuperação, hidratação e alimentação.", "👴 Idoso": "Musculação contribui para força e autonomia. Respeitar limitações com intensidade moderada e segurança." };
-        const objectiveData = { "Emagrecimento": "Foco em déficit calórico com treinos mistos de força (manter massa magra) e aeróbicos (maior gasto).", "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.", "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.", "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.", "Resistência": "Séries mais longas, cadência controlada e aprimpos da capacidade muscular.", "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.", "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.", "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar." };
+        const objectiveData = { "Emagrecimento": "Foco em déficit calórico com treinos mistos de força (manter massa magra) e aeróbicos (maior gasto).", "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.", "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.", "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.", "Resistência": "Séries mais longas, cadência controlada e aprimoramento da capacidade muscular.", "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.", "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.", "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar." };
         const baseCategories = {
             "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
             "🦍 COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Curvada na Polia", "Remada Cavalinho (T-Bar)", "Remada Unilateral", "Remada no Cross", "Serrote", "Facepull (puxada de cima para baixo)"],
@@ -387,9 +390,11 @@
         window.handleGoogleLogin = async () => {
             showLoading("Iniciando Login...");
             try {
+                // Tenta autenticação nativa do ambiente (Prioridade para Canvas)
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
+                    // Fallback para Google Auth real se estiver fora do canvas e permitir popup
                     try {
                         const provider = new GoogleAuthProvider();
                         await signInWithPopup(auth, provider);
@@ -419,6 +424,7 @@
                 window.AppState.userId = null;
                 showScreen('screen-login');
                 hideLoading();
+                // Requirement Rule 3: Must auto-auth in sandboxes
                 if(window.location.hostname.includes('googleusercontent') || window.location.hostname.includes('sandbox')) {
                     handleGoogleLogin();
                 }
@@ -434,25 +440,30 @@
 
             const basePath = getBasePath();
             
+            // Networks
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/networks`), snap => {
                 window.AppState.networks = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 renderNetworks();
             }, e => console.error("Net error", e)));
 
+            // Units
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/units`), snap => {
                 window.AppState.units = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 renderUnits(); updateFilters();
             }, e => console.error("Unit error", e)));
 
+            // Members
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/members`), snap => {
                 window.AppState.members = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 renderMembers();
             }, e => console.error("Mem error", e)));
 
+            // Workouts History
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/workouts`), snap => {
                 window.AppState.workoutsHistory = snap.docs.map(d => ({id: d.id, ...d.data()}));
             }, e => console.error("Wkt error", e)));
 
+            // Custom Exercises
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/custom_exercises`), snap => {
                 window.AppState.customExercises = snap.docs.map(d => ({id: d.id, ...d.data()}));
             }, e => console.error("CEx error", e)));
@@ -590,25 +601,14 @@
             if(confirm("Sair sem salvar?")) showScreen('screen-dashboard');
         };
 
-        // --- CÁLCULO DE IMC COM A CLASSIFICAÇÃO CORRETA ---
         window.calculateIMC = () => {
             const w = parseFloat(document.getElementById('stu-weight').value);
             const h = parseFloat(document.getElementById('stu-height').value);
             const display = document.getElementById('imc-display');
             if (w > 0 && h > 0) {
                 const imc = (w / (h * h)).toFixed(1);
-                let cls = "";
-                if (imc < 18.5) cls = "Abaixo do peso";
-                else if (imc < 25) cls = "Peso normal";
-                else if (imc < 30) cls = "Sobrepeso";
-                else if (imc < 35) cls = "Obesidade Grau I";
-                else if (imc < 40) cls = "Obesidade Grau II";
-                else cls = "Obesidade Grau III";
-                
-                display.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-3 py-1 rounded-full text-[10px] font-bold border border-primary border-opacity-30">IMC: ${imc} (${cls})</span>`;
-            } else {
-                display.innerHTML = '';
-            }
+                display.innerHTML = `<span class="bg-primary text-white px-2 py-0.5 rounded font-bold">IMC: ${imc}</span>`;
+            } else display.innerHTML = '';
         };
 
         window.changeTheme = () => document.body.setAttribute('data-theme', document.getElementById('stu-gender').value);
@@ -818,6 +818,7 @@
                 const mem = window.AppState.members.find(m => m.id === w.memberId);
                 const memName = mem ? mem.name : 'Desconhecido';
                 
+                // Validade check
                 let valDays = 30;
                 if(w.stuValidity) valDays = parseInt(w.stuValidity.replace(/\D/g, '')) || 30;
                 const expirationDate = w.timestamp + (valDays * 24 * 60 * 60 * 1000);
@@ -842,10 +843,12 @@
             const w = window.AppState.workoutsHistory.find(x => x.id === id);
             if(!w) return;
             
+            // Tenta restaurar o profissional que criou
             const creator = window.AppState.members.find(m => m.id === w.memberId);
             if(creator) window.AppState.activeMember = creator;
             document.getElementById('editor-active-member-info').innerText = `Profissional: ${window.AppState.activeMember.name} (${window.AppState.activeMember.role})`;
             
+            // Popula os campos
             window.AppState.currentFichaId = w.id;
             document.getElementById('stu-name').value = w.studentName || '';
             document.getElementById('stu-age').value = w.stuAge || '';
@@ -860,6 +863,7 @@
 
             changeTheme(); calculateIMC();
 
+            // Refaz health checkboxes based on current role
             const dict = window.AppState.activeMember.role === 'PEF' ? healthPEF : healthTE;
             document.getElementById('health-container').innerHTML = Object.keys(dict).map(opt => `
                 <label class="flex items-start space-x-2 cursor-pointer p-1 rounded hover:bg-black hover:bg-opacity-10">
@@ -888,7 +892,7 @@
             if(mSelect && mSelect.options.length === 0) {
                 const d = new Date();
                 for(let i=0; i<6; i++) {
-                    const month = d.toISOString().slice(0,7);
+                    const month = d.toISOString().slice(0,7); // YYYY-MM
                     mSelect.innerHTML += `<option value="${month}">${month}</option>`;
                     d.setMonth(d.getMonth() - 1);
                 }
@@ -905,9 +909,11 @@
             let filtered = window.AppState.workoutsHistory.filter(w => w.dateStr.startsWith(month));
             if(unitId !== 'ALL') filtered = filtered.filter(w => w.unitId === unitId);
 
+            // Group by member
             const counts = {};
             filtered.forEach(w => { counts[w.memberId] = (counts[w.memberId] || 0) + 1; });
 
+            // Sort members by count
             const sortedMembers = Object.keys(counts).map(mId => {
                 const mem = window.AppState.members.find(m => m.id === mId);
                 const unit = mem ? window.AppState.units.find(u => u.id === mem.unitId) : null;
@@ -954,7 +960,7 @@
             setTimeout(() => document.getElementById('print-report-area').classList.remove('active-print'), 1000);
         };
 
-        // --- IMPRESSÃO DA FICHA (COM IMC CORRIGIDO) ---
+        // --- IMPRESSÃO DA FICHA (SPREADSHEET STYLE) ---
         window.saveAndPrint = async () => {
             const saved = await saveToCloud();
             if(!saved) return;
@@ -963,23 +969,8 @@
             const isPEF = window.AppState.activeMember.role === 'PEF';
             const healthSourceDict = isPEF ? healthPEF : healthTE;
             
-            // Lógica de cálculo do IMC corrigida para a impressão
-            let imcStr = "-"; 
-            const w = parseFloat(d.stuWeight); 
-            const h = parseFloat(d.stuHeight);
-            
-            if (w > 0 && h > 0) {
-                const imc = (w / (h * h)).toFixed(1);
-                let cls = "";
-                if (imc < 18.5) cls = "Abaixo do peso";
-                else if (imc < 25) cls = "Peso normal";
-                else if (imc < 30) cls = "Sobrepeso";
-                else if (imc < 35) cls = "Obesidade Grau I";
-                else if (imc < 40) cls = "Obesidade Grau II";
-                else cls = "Obesidade Grau III";
-                
-                imcStr = `${imc} (${cls})`;
-            }
+            let imcStr = "-"; const w = parseFloat(d.stuWeight); const h = parseFloat(d.stuHeight);
+            if(w>0 && h>0) imcStr = (w / (h * h)).toFixed(1);
 
             const objRec = objectiveData[d.stuObjective] || "";
             const profLabel = isPEF ? 'Profissional de Educação Física' : 'Treinador Esportivo';
