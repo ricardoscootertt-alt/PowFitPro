@@ -68,13 +68,11 @@
 </head>
 <body>
 
-    <!-- LOADING OVERLAY -->
     <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-90 z-[100] flex flex-col items-center justify-center text-white hidden">
         <i class="fas fa-circle-notch fa-spin text-4xl text-primary mb-4"></i>
         <p id="loading-text" class="text-lg font-medium">Sincronizando com a Nuvem...</p>
     </div>
 
-    <!-- SCREEN 1: LOGIN -->
     <div id="screen-login" class="screen active min-h-screen flex items-center justify-center p-4">
         <div class="card p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
             <i class="fas fa-dumbbell text-5xl text-primary mb-4"></i>
@@ -89,7 +87,6 @@
         </div>
     </div>
 
-    <!-- SCREEN 2: DASHBOARD (FRANQUIAS) -->
     <div id="screen-dashboard" class="screen min-h-screen pb-20">
         <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
             <div class="flex justify-between items-center mb-8 border-b border-opacity-20 pb-4" style="border-color: var(--border-color)">
@@ -108,7 +105,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- REDES -->
                 <div class="card rounded-xl p-4 shadow-sm flex flex-col h-[70vh]">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="font-bold text-lg">1. Redes</h2>
@@ -117,7 +113,6 @@
                     <div id="list-networks" class="flex-1 overflow-y-auto space-y-2"></div>
                 </div>
 
-                <!-- UNIDADES -->
                 <div class="card rounded-xl p-4 shadow-sm flex flex-col h-[70vh]">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="font-bold text-lg">2. Unidades</h2>
@@ -127,10 +122,9 @@
                     <div id="list-units" class="flex-1 overflow-y-auto space-y-2 hidden"></div>
                 </div>
 
-                <!-- MEMBROS (EQUIPE) -->
                 <div class="card rounded-xl p-4 shadow-sm flex flex-col h-[70vh]">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="font-bold text-lg">3. Membros</h2>
+                        <h2 class="font-bold text-lg">3. Memembros</h2>
                         <button onclick="openMemberModal()" id="btn-add-member" class="text-primary hover:text-white transition hidden"><i class="fas fa-user-plus text-xl"></i></button>
                     </div>
                     <p id="msg-select-unit" class="text-xs opacity-50 italic text-center mt-10">Selecione uma Unidade primeiro.</p>
@@ -140,10 +134,8 @@
         </div>
     </div>
 
-    <!-- SCREEN 3: EDITOR (PRANCHETA) -->
     <div id="screen-editor" class="screen min-h-screen pb-20">
         <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <!-- Header Editor -->
             <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 bg-black bg-opacity-20 p-4 rounded-xl border" style="border-color: var(--border-color)">
                 <div class="flex items-center gap-3">
                     <button onclick="backToDashboard()" class="text-gray-400 hover:text-white text-xl mr-2"><i class="fas fa-arrow-left"></i></button>
@@ -163,7 +155,6 @@
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                <!-- Coluna Esquerda: Dados do Aluno -->
                 <div class="xl:col-span-3 space-y-4">
                     <div class="card rounded-xl p-4 shadow-sm">
                         <div class="flex justify-between items-center mb-3 border-b border-opacity-20 pb-2" style="border-color: var(--border-color)">
@@ -211,7 +202,6 @@
                     </div>
                 </div>
 
-                <!-- Coluna Direita: Treinos -->
                 <div class="xl:col-span-9 space-y-4">
                     <div class="flex justify-between items-center bg-opacity-10 p-3 rounded-xl card border-dashed border-2">
                         <h2 class="text-lg font-bold"><i class="fas fa-dumbbell text-primary"></i> Montagem</h2>
@@ -223,8 +213,6 @@
         </div>
     </div>
 
-    <!-- MODAIS -->
-    <!-- Modal Cadastro Membro -->
     <div id="modal-member" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center hidden">
         <div class="card p-6 rounded-xl w-full max-w-md">
             <h2 class="text-xl font-bold mb-4">Adicionar Membro</h2>
@@ -247,7 +235,6 @@
         </div>
     </div>
 
-    <!-- Modal Adicionar Exercício -->
     <div id="exercise-modal" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-2 hidden">
         <div class="card w-full max-w-5xl rounded-xl shadow-2xl flex flex-col h-[90vh]">
             <div class="p-3 border-b flex justify-between items-center" style="border-color: var(--border-color)">
@@ -267,7 +254,6 @@
         </div>
     </div>
 
-    <!-- Modal Criar Exercício Customizado -->
     <div id="custom-exercise-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[60] flex items-center justify-center hidden">
         <div class="card p-6 rounded-xl w-full max-w-sm">
             <h2 class="text-lg font-bold mb-4">Novo Exercício</h2>
@@ -282,7 +268,6 @@
         </div>
     </div>
 
-    <!-- Modal Histórico Nuvem -->
     <div id="history-modal" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-2 hidden">
         <div class="card w-full max-w-4xl rounded-xl shadow-2xl flex flex-col max-h-[90vh]">
             <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
@@ -297,7 +282,6 @@
         </div>
     </div>
 
-    <!-- Modal Relatório -->
     <div id="report-modal" class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4 hidden">
         <div class="card w-full max-w-3xl rounded-xl shadow-2xl flex flex-col max-h-[90vh]">
             <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color)">
@@ -316,21 +300,16 @@
         </div>
     </div>
 
-    <!-- ÁREA DE IMPRESSÃO FICHA -->
     <div id="print-area"></div>
     
-    <!-- ÁREA DE IMPRESSÃO RELATÓRIO -->
     <div id="print-report-area"></div>
 
-    <!-- SCRIPTS FIREBASE & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signInAnonymously, signInWithCustomToken, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, deleteDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- CONFIGURAÇÃO FIREBASE ---
-        // A regra do ambiente diz para usar a config provida, mas o usuário forneceu a dele.
-        // Vamos tentar usar a do ambiente (Canvas) primeiro, se não existir, usa a do usuário.
         let firebaseConfig = {
             apiKey: "AIzaSyD-iuERHA_x1f69smJXh7b8wTLO1zTadIU",
             authDomain: "powfitpro-d8577.firebaseapp.com",
@@ -361,13 +340,12 @@
             activeCategory: "🔥 PEITO"
         };
 
-        // Regra restrita de caminhos Firebase:
         const getBasePath = () => `artifacts/${appId}/users/${window.AppState.userId}`;
 
         // --- DADOS ESTÁTICOS ---
         const healthPEF = { "🟢 Saudável": "Manter treinos regulares 3–5x por semana, combinando musculação e cardio. Foco em evolução e constância.", "⚪ Sedentário": "Iniciar com treinos leves 2–3x por semana. Priorizar adaptação, técnica e evitar excesso de carga.", "🟡 Sobrepeso": "Treinar 3–5x por semana com foco em gasto calórico. Combinar musculação e cardio moderado.", "🔴 Obesidade": "Iniciar com exercícios de baixo impacto. Evolução gradual, priorizando saúde e segurança.", "⚖️ Baixo peso": "Foco em musculação para ganho de massa. Treinos moderados com alimentação adequada.", "🍬 Diabetes": "Treinos regulares moderados. Monitorar glicemia e evitar treinos em jejum.", "❤️ Hipertensão": "Treinos moderados, evitar prender a respiração. Priorizar controle da intensidade.", "🔵 Hipotensão": "Evitar mudanças bruscas. Manter hidratação e intensidade leve a moderada.", "💔 Problemas cardíacos": "Treinos leves com liberação médica. Monitorar frequência cardíaca.", "🦴 Problemas articulares": "Evitar impacto. Priorizar exercícios controlados e máquinas.", "🫁 Problemas respiratórios": "Treinos leves a moderados com progressão gradual. Atenção à respiração.", "⚠️ Lesões": "Adaptar exercícios. Evitar dor e focar na recuperação.", "🤰 Gestante": "Treinos leves a moderados, sem impacto ou risco. Foco em mobilidade e bem-estar.", "🤱 Lactante": "Treinar normalmente com atenção à hidratação e energia.", "👴 Idoso": "Foco em força, equilíbrio e mobilidade. Intensidade moderada com segurança." };
         const healthTE = { "🟢 Saudável": "Manter treinos regulares de 3–5x por semana, combinando musculação e atividades cardiovasculares. A constância e boa alimentação contribuem para resultados.", "⚪ Sedentário": "Início gradual, treinos leves, foco na adaptação. Prioridade é desenvolver constância e execução correta.", "🟡 Sobrepeso": "A musculação associada ao cardio contribui para condicionamento. Progressão deve respeitar individualidade.", "🔴 Obesidade": "Iniciar com menor impacto e progressão gradual. Segurança, mobilidade e constância são prioridades.", "⚖️ Baixo peso": "Musculação auxilia no ganho de massa. Priorizar evolução progressiva e recuperação muscular.", "🍬 Diabetes": "Acompanhamento médico regular. Em casos de mal-estar ou alteração de glicemia, interromper e buscar orientação.", "❤️ Hipertensão": "Acompanhamento médico. Evitar prender a respiração (Manobra de Valsalva) e controlar a intensidade.", "🔵 Hipotensão": "Evitar mudanças bruscas de posição. Manter boa hidratação e respeitar intensidade adequada.", "💔 Problemas cardíacos": "Prática apenas com liberação e acompanhamento médico. Respeitar limites e controlar intensidade.", "🦴 Problemas articulares": "Menor impacto e maior controle de movimento são indicados. Acompanhamento ajuda na segurança.", "🫁 Problemas respiratórios": "Progressão gradual respeitando a capacidade. Interromper em caso de falta de ar excessiva.", "⚠️ Lesões": "Adaptação respeitando limitação e evitando dor. Seguir orientação profissional antes da prática.", "🤰 Gestante": "Liberação médica. Foco na segurança, mobilidade e bem-estar, evitando impacto e risco.", "🤱 Lactante": "Atividade normal, respeitando recuperação, hidratação e alimentação.", "👴 Idoso": "Musculação contribui para força e autonomia. Respeitar limitações com intensidade moderada e segurança." };
-        const objectiveData = { "Emagrecimento": "Foco em déficit calórico com treinos mistos de força (manter massa magra) e aeróbicos (maior gasto).", "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.", "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.", "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.", "Resistência": "Séries mais longas, cadência controlada e aprimoramento da capacidade muscular.", "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.", "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.", "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar." };
+        const objectiveData = { "Emagrecimento": "Foco em déficit calórico com treinos mistos de força (manter massa magra) e aeróbicos (maior gasto).", "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.", "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.", "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.", "Resistência": "Séries mais longas, cadência controlada e aprimarameno da capacidade muscular.", "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.", "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.", "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar." };
         const baseCategories = {
             "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
             "🦍 COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Curvada na Polia", "Remada Cavalinho (T-Bar)", "Remada Unilateral", "Remada no Cross", "Serrote", "Facepull (puxada de cima para baixo)"],
@@ -390,11 +368,9 @@
         window.handleGoogleLogin = async () => {
             showLoading("Iniciando Login...");
             try {
-                // Tenta autenticação nativa do ambiente (Prioridade para Canvas)
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
-                    // Fallback para Google Auth real se estiver fora do canvas e permitir popup
                     try {
                         const provider = new GoogleAuthProvider();
                         await signInWithPopup(auth, provider);
@@ -424,7 +400,6 @@
                 window.AppState.userId = null;
                 showScreen('screen-login');
                 hideLoading();
-                // Requirement Rule 3: Must auto-auth in sandboxes
                 if(window.location.hostname.includes('googleusercontent') || window.location.hostname.includes('sandbox')) {
                     handleGoogleLogin();
                 }
@@ -440,30 +415,25 @@
 
             const basePath = getBasePath();
             
-            // Networks
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/networks`), snap => {
                 window.AppState.networks = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 renderNetworks();
             }, e => console.error("Net error", e)));
 
-            // Units
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/units`), snap => {
                 window.AppState.units = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 renderUnits(); updateFilters();
             }, e => console.error("Unit error", e)));
 
-            // Members
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/members`), snap => {
                 window.AppState.members = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 renderMembers();
             }, e => console.error("Mem error", e)));
 
-            // Workouts History
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/workouts`), snap => {
                 window.AppState.workoutsHistory = snap.docs.map(d => ({id: d.id, ...d.data()}));
             }, e => console.error("Wkt error", e)));
 
-            // Custom Exercises
             unsubscribers.push(onSnapshot(collection(db, `${basePath}/custom_exercises`), snap => {
                 window.AppState.customExercises = snap.docs.map(d => ({id: d.id, ...d.data()}));
             }, e => console.error("CEx error", e)));
@@ -568,7 +538,6 @@
             `).join('');
         };
 
-
         // --- EDITOR (PRANCHETA) LOGIC ---
         window.enterEditor = (memberId) => {
             window.AppState.activeMember = window.AppState.members.find(m => m.id === memberId);
@@ -576,7 +545,6 @@
             
             document.getElementById('editor-active-member-info').innerText = `Profissional: ${window.AppState.activeMember.name} (${window.AppState.activeMember.role})`;
             
-            // Setup Health Options based on Role
             const dict = window.AppState.activeMember.role === 'PEF' ? healthPEF : healthTE;
             document.getElementById('health-container').innerHTML = Object.keys(dict).map(opt => `
                 <label class="flex items-start space-x-2 cursor-pointer p-1 rounded hover:bg-black hover:bg-opacity-10 border border-transparent hover:border-gray-500 hover:border-opacity-20">
@@ -584,7 +552,6 @@
                     <span class="font-medium">${opt}</span>
                 </label>`).join('');
 
-            // Reset form
             document.getElementById('stu-name').value = '';
             document.getElementById('stu-age').value = '';
             document.getElementById('stu-weight').value = '';
@@ -592,28 +559,36 @@
             document.getElementById('stu-recs').value = '';
             window.AppState.currentFichaId = null;
             window.AppState.workouts = [];
-            window.addWorkout(); // Add default Monday
+            window.addWorkout();
             window.calculateIMC();
             showScreen('screen-editor');
         };
 
-        window.backToDashboard = () => {
-            if(confirm("Sair sem salvar?")) showScreen('screen-dashboard');
-        };
+        window.backToDashboard = () => { if(confirm("Sair sem salvar?")) showScreen('screen-dashboard'); };
 
+        // === CORREÇÃO DA LÓGICA DE CÁLCULO E CLASSIFICAÇÃO DE IMC ===
         window.calculateIMC = () => {
             const w = parseFloat(document.getElementById('stu-weight').value);
             const h = parseFloat(document.getElementById('stu-height').value);
             const display = document.getElementById('imc-display');
             if (w > 0 && h > 0) {
                 const imc = (w / (h * h)).toFixed(1);
-                display.innerHTML = `<span class="bg-primary text-white px-2 py-0.5 rounded font-bold">IMC: ${imc}</span>`;
+                let cls = "";
+                
+                // Aplicando a regra exata solicitada:
+                if (imc < 18.5) cls = "Abaixo do peso";
+                else if (imc <= 24.9) cls = "Peso normal";
+                else if (imc <= 29.9) cls = "Sobrepeso";
+                else if (imc <= 34.9) cls = "Obesidade Grau I";
+                else if (imc <= 39.9) cls = "Obesidade Grau II";
+                else cls = "Obesidade Grau III";
+                
+                display.innerHTML = `<span class="bg-primary text-white px-2 py-0.5 rounded font-bold">IMC: ${imc} (${cls})</span>`;
             } else display.innerHTML = '';
         };
 
         window.changeTheme = () => document.body.setAttribute('data-theme', document.getElementById('stu-gender').value);
 
-        // Workouts Management
         window.addWorkout = () => {
             const count = window.AppState.workouts.length;
             const title = count < 7 ? `TREINO ${daysOfWeek[count]}` : `NOVO TREINO ${count+1}`;
@@ -637,7 +612,6 @@
         };
         window.updateWorkoutTitle = (id, val) => { const w = window.AppState.workouts.find(x => x.id === id); if(w) w.title = val; };
 
-        // Exercise Management
         window.moveExercise = (wId, idx, dir) => {
             const w = window.AppState.workouts.find(x => x.id === wId);
             if(dir==='up' && idx>0) [w.exercises[idx], w.exercises[idx-1]] = [w.exercises[idx-1], w.exercises[idx]];
@@ -687,7 +661,6 @@
             }).join('');
         };
 
-        // --- EXERCISE MODAL & DB ---
         window.openModal = (wId) => { window.AppState.activeModalWorkoutId = wId; document.getElementById('exercise-modal').classList.remove('hidden'); renderModalCategories(); renderModalExercises(); };
         window.closeModal = () => document.getElementById('exercise-modal').classList.add('hidden');
         window.setModalCategory = (cat) => { window.AppState.activeCategory = cat; renderModalCategories(); renderModalExercises(); };
@@ -728,7 +701,6 @@
             }
         };
 
-        // Custom Exercises Logic
         window.openCustomExerciseModal = () => {
             document.getElementById('custom-ex-cat').innerHTML = Object.keys(baseCategories).map(c => `<option>${c}</option>`).join('');
             document.getElementById('custom-ex-cat').value = window.AppState.activeCategory;
@@ -743,7 +715,7 @@
             if(name && window.AppState.userId) {
                 await addDoc(collection(db, `${getBasePath()}/custom_exercises`), { category: cat, name: name });
                 closeCustomExerciseModal();
-                setModalCategory(cat); // Refresh
+                setModalCategory(cat); 
             }
         };
 
@@ -753,12 +725,11 @@
                 const target = window.AppState.customExercises.find(c => c.name === name && c.category === window.AppState.activeCategory);
                 if(target) {
                     await deleteDoc(doc(db, `${getBasePath()}/custom_exercises`, target.id));
-                    renderModalExercises(); // Realtime will handle the array update, but we force render to be snappy
+                    renderModalExercises(); 
                 }
             }
         };
 
-        // --- SALVAR & HISTÓRICO (NUVEM) ---
         const getWorkoutPayload = () => {
             return {
                 memberId: window.AppState.activeMember.id,
@@ -807,7 +778,7 @@
 
         window.renderHistoryList = () => {
             const unitFilter = document.getElementById('hist-filter-unit').value;
-            let list = window.AppState.workoutsHistory.sort((a,b) => b.timestamp - a.timestamp); // Mais novos primeiro
+            let list = window.AppState.workoutsHistory.sort((a,b) => b.timestamp - a.timestamp); 
             if(unitFilter !== 'ALL') list = list.filter(w => w.unitId === unitFilter);
 
             const container = document.getElementById('history-list');
@@ -818,7 +789,6 @@
                 const mem = window.AppState.members.find(m => m.id === w.memberId);
                 const memName = mem ? mem.name : 'Desconhecido';
                 
-                // Validade check
                 let valDays = 30;
                 if(w.stuValidity) valDays = parseInt(w.stuValidity.replace(/\D/g, '')) || 30;
                 const expirationDate = w.timestamp + (valDays * 24 * 60 * 60 * 1000);
@@ -843,12 +813,10 @@
             const w = window.AppState.workoutsHistory.find(x => x.id === id);
             if(!w) return;
             
-            // Tenta restaurar o profissional que criou
             const creator = window.AppState.members.find(m => m.id === w.memberId);
             if(creator) window.AppState.activeMember = creator;
             document.getElementById('editor-active-member-info').innerText = `Profissional: ${window.AppState.activeMember.name} (${window.AppState.activeMember.role})`;
             
-            // Popula os campos
             window.AppState.currentFichaId = w.id;
             document.getElementById('stu-name').value = w.studentName || '';
             document.getElementById('stu-age').value = w.stuAge || '';
@@ -863,7 +831,6 @@
 
             changeTheme(); calculateIMC();
 
-            // Refaz health checkboxes based on current role
             const dict = window.AppState.activeMember.role === 'PEF' ? healthPEF : healthTE;
             document.getElementById('health-container').innerHTML = Object.keys(dict).map(opt => `
                 <label class="flex items-start space-x-2 cursor-pointer p-1 rounded hover:bg-black hover:bg-opacity-10">
@@ -883,7 +850,6 @@
             }
         };
 
-        // --- RELATÓRIO DE PRODUTIVIDADE ---
         window.updateFilters = () => {
             const uSelect = document.getElementById('report-unit');
             if(uSelect) uSelect.innerHTML = `<option value="ALL">Todas as Unidades</option>` + window.AppState.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
@@ -892,7 +858,7 @@
             if(mSelect && mSelect.options.length === 0) {
                 const d = new Date();
                 for(let i=0; i<6; i++) {
-                    const month = d.toISOString().slice(0,7); // YYYY-MM
+                    const month = d.toISOString().slice(0,7); 
                     mSelect.innerHTML += `<option value="${month}">${month}</option>`;
                     d.setMonth(d.getMonth() - 1);
                 }
@@ -909,11 +875,9 @@
             let filtered = window.AppState.workoutsHistory.filter(w => w.dateStr.startsWith(month));
             if(unitId !== 'ALL') filtered = filtered.filter(w => w.unitId === unitId);
 
-            // Group by member
             const counts = {};
             filtered.forEach(w => { counts[w.memberId] = (counts[w.memberId] || 0) + 1; });
 
-            // Sort members by count
             const sortedMembers = Object.keys(counts).map(mId => {
                 const mem = window.AppState.members.find(m => m.id === mId);
                 const unit = mem ? window.AppState.units.find(u => u.id === mem.unitId) : null;
@@ -960,7 +924,7 @@
             setTimeout(() => document.getElementById('print-report-area').classList.remove('active-print'), 1000);
         };
 
-        // --- IMPRESSÃO DA FICHA (SPREADSHEET STYLE) ---
+        // === CORREÇÃO DA IMPRESSÃO DA FICHA (SPREADSHEET STYLE) ===
         window.saveAndPrint = async () => {
             const saved = await saveToCloud();
             if(!saved) return;
@@ -969,8 +933,23 @@
             const isPEF = window.AppState.activeMember.role === 'PEF';
             const healthSourceDict = isPEF ? healthPEF : healthTE;
             
-            let imcStr = "-"; const w = parseFloat(d.stuWeight); const h = parseFloat(d.stuHeight);
-            if(w>0 && h>0) imcStr = (w / (h * h)).toFixed(1);
+            // Calculo Dinâmico para colocar em tela/impressão
+            let imcStr = "-"; 
+            const w = parseFloat(d.stuWeight); 
+            const h = parseFloat(d.stuHeight);
+            if(w > 0 && h > 0) {
+                const imcVal = (w / (h * h)).toFixed(1);
+                let cls = "";
+                if (imcVal < 18.5) cls = "Abaixo do peso";
+                else if (imcVal <= 24.9) cls = "Peso normal";
+                else if (imcVal <= 29.9) cls = "Sobrepeso";
+                else if (imcVal <= 34.9) cls = "Obesidade Grau I";
+                else if (imcVal <= 39.9) cls = "Obesidade Grau II";
+                else cls = "Obesidade Grau III";
+                
+                // Variável pronta para preencher o grid de impressão
+                imcStr = `${imcVal} (${cls})`;
+            }
 
             const objRec = objectiveData[d.stuObjective] || "";
             const profLabel = isPEF ? 'Profissional de Educação Física' : 'Treinador Esportivo';
