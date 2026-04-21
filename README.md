@@ -579,7 +579,7 @@
             document.getElementById('stu-recs').value = '';
             window.AppState.currentFichaId = null;
             window.AppState.workouts = [];
-            window.addWorkout(); 
+            window.addWorkout();
             window.calculateIMC();
             showScreen('screen-editor');
         };
@@ -588,31 +588,22 @@
             if(confirm("Sair sem salvar?")) showScreen('screen-dashboard');
         };
 
-        // --- CÁLCULO AUTOMÁTICO DE IMC ATUALIZADO ---
+        // --- CÁLCULO DE IMC COM CLASSIFICAÇÃO ATUALIZADA ---
         window.calculateIMC = () => {
             const w = parseFloat(document.getElementById('stu-weight').value);
             const h = parseFloat(document.getElementById('stu-height').value);
             const display = document.getElementById('imc-display');
             if (w > 0 && h > 0) {
-                const imcVal = w / (h * h);
-                const imc = imcVal.toFixed(1);
+                const imc = (w / (h * h)).toFixed(1);
+                let classif = "";
+                if (imc < 18.5) classif = "Abaixo do peso";
+                else if (imc < 25) classif = "Peso normal";
+                else if (imc < 30) classif = "Sobrepeso";
+                else if (imc < 35) classif = "Obesidade Grau I";
+                else if (imc < 40) classif = "Obesidade Grau II";
+                else classif = "Obesidade Grau III";
                 
-                let cls = "";
-                if (imcVal < 18.5) {
-                    cls = "Abaixo do peso";
-                } else if (imcVal < 25) { // 18.5 a 24.9
-                    cls = "Peso normal";
-                } else if (imcVal < 30) { // 25 a 29.9
-                    cls = "Sobrepeso";
-                } else if (imcVal < 35) { // 30 a 34.9
-                    cls = "Obesidade Grau I";
-                } else if (imcVal < 40) { // 35 a 39.9
-                    cls = "Obesidade Grau II";
-                } else { // >= 40
-                    cls = "Obesidade Grau III";
-                }
-                
-                display.innerHTML = `<span class="bg-primary text-white px-2 py-0.5 rounded font-bold text-[10px]">IMC: ${imc} (${cls})</span>`;
+                display.innerHTML = `<span class="bg-primary bg-opacity-20 text-primary px-2 py-0.5 rounded font-bold text-[10px] border border-primary border-opacity-30">IMC: ${imc} (${classif})</span>`;
             } else {
                 display.innerHTML = '';
             }
@@ -750,7 +741,7 @@
             if(name && window.AppState.userId) {
                 await addDoc(collection(db, `${getBasePath()}/custom_exercises`), { category: cat, name: name });
                 closeCustomExerciseModal();
-                setModalCategory(cat); 
+                setModalCategory(cat); // Refresh
             }
         };
 
@@ -895,7 +886,7 @@
             if(mSelect && mSelect.options.length === 0) {
                 const d = new Date();
                 for(let i=0; i<6; i++) {
-                    const month = d.toISOString().slice(0,7); 
+                    const month = d.toISOString().slice(0,7);
                     mSelect.innerHTML += `<option value="${month}">${month}</option>`;
                     d.setMonth(d.getMonth() - 1);
                 }
@@ -961,7 +952,7 @@
             setTimeout(() => document.getElementById('print-report-area').classList.remove('active-print'), 1000);
         };
 
-        // --- IMPRESSÃO DA FICHA E CLASSIFICAÇÃO DE IMC NA FOLHA ---
+        // --- IMPRESSÃO DA FICHA COM CÁLCULO E CLASSIFICAÇÃO DE IMC CORRIGIDOS ---
         window.saveAndPrint = async () => {
             const saved = await saveToCloud();
             if(!saved) return;
@@ -974,24 +965,17 @@
             const w = parseFloat(d.stuWeight); 
             const h = parseFloat(d.stuHeight);
             
-            if(w > 0 && h > 0) {
-                const imcVal = w / (h * h);
-                const imc = imcVal.toFixed(1);
-                let cls = "";
-                if (imcVal < 18.5) {
-                    cls = "Abaixo do peso";
-                } else if (imcVal < 25) {
-                    cls = "Peso normal";
-                } else if (imcVal < 30) {
-                    cls = "Sobrepeso";
-                } else if (imcVal < 35) {
-                    cls = "Obesidade Grau I";
-                } else if (imcVal < 40) {
-                    cls = "Obesidade Grau II";
-                } else {
-                    cls = "Obesidade Grau III";
-                }
-                imcStr = `${imc} (${cls})`;
+            // Corrige o IMC para ser impresso com classificação correta no PDF
+            if (w > 0 && h > 0) {
+                const imcVal = (w / (h * h)).toFixed(1);
+                let classif = "";
+                if (imcVal < 18.5) classif = "Abaixo do peso";
+                else if (imcVal < 25) classif = "Peso normal";
+                else if (imcVal < 30) classif = "Sobrepeso";
+                else if (imcVal < 35) classif = "Obesidade Grau I";
+                else if (imcVal < 40) classif = "Obesidade Grau II";
+                else classif = "Obesidade Grau III";
+                imcStr = `${imcVal} (${classif})`;
             }
 
             const objRec = objectiveData[d.stuObjective] || "";
@@ -1047,3 +1031,4 @@
     </script>
 </body>
 </html>
+
