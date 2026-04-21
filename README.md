@@ -952,7 +952,7 @@
         function getExercisesForGroup(group) {
             if(!group) return [];
             const standard = EXERCISES_DB[group] || [];
-            const custom = state.customExercises.filter(c => c.group === group).map(c => `[⭐] ${c.name}`);
+            const custom = state.customExercises.filter(c => c.group === group).map(c => `${c.name}`);
             return [...standard, ...custom];
         }
 
@@ -1282,7 +1282,7 @@
                             <tbody>
                 `;
                 tab.rows.forEach(r => {
-                    const exName = r.exercise.replace('[⭐] ', ''); // Clean custom star for print
+                    const exName = r.exercise; // Clean custom star for print
                     html += `
                         <tr>
                             <td><strong style="font-size:12px;">${exName}</strong> <br><span style="font-size:9px; color:#6b7280; text-transform:uppercase;">${r.group}</span></td>
