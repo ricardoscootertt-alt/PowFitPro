@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -44,7 +43,7 @@
         /* ========================================== */
         @media print {
             body { background: white !important; color: black !important; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-            #app-container, .modal, .no-print, nav { display: none !important; }
+            #app-container, #login-screen, #profile-setup, .modal, .no-print, nav { display: none !important; }
             
             #print-area, #report-print-area { display: block !important; padding: 10mm 15mm; font-size: 10px; }
             @page { size: A4; margin: 0; }
@@ -58,15 +57,15 @@
             .print-grid div { font-size: 10px; }
             
             .print-guidelines { border: 1px solid #000; padding: 8px; margin-bottom: 15px; font-size: 9px; }
-            .print-guidelines h4 { margin: 0 0 4px 0; font-size: 10px; text-transform: uppercase; background: #eee; padding: 3px; -webkit-print-color-adjust: exact; }
+            .print-guidelines h4 { margin: 0 0 4px 0; font-size: 10px; text-transform: uppercase; background: #eee; padding: 3px; -webkit-print-color-adjust: exact; color-adjust: exact; }
             .print-guidelines ul { margin: 0; padding-left: 15px; }
             .print-guidelines li { margin-bottom: 2px; }
 
             .print-workout { margin-bottom: 15px; page-break-inside: avoid; }
-            .print-workout h3 { background: #e0e0e0; border: 1px solid #000; border-bottom: none; padding: 4px 8px; margin: 0; font-size: 11px; text-transform: uppercase; -webkit-print-color-adjust: exact; }
+            .print-workout h3 { background: #e0e0e0; border: 1px solid #000; border-bottom: none; padding: 4px 8px; margin: 0; font-size: 11px; text-transform: uppercase; -webkit-print-color-adjust: exact; color-adjust: exact; }
             table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 0; }
             th, td { border: 1px solid #000; padding: 5px; text-align: left; font-size: 9.5px; vertical-align: middle; }
-            th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; text-align: center; -webkit-print-color-adjust: exact; }
+            th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; text-align: center; -webkit-print-color-adjust: exact; color-adjust: exact; }
             td.text-center { text-align: center; }
             
             .print-footer-section { margin-top: 15px; border: 1px solid #000; padding: 8px; font-size: 9px; page-break-inside: avoid; }
@@ -76,7 +75,7 @@
             .report-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
             .report-title { font-size: 18px; font-weight: bold; text-transform: uppercase; }
             .report-unit-section { margin-bottom: 20px; }
-            .report-unit-title { background: #333; color: white; padding: 5px; font-size: 12px; font-weight: bold; -webkit-print-color-adjust: exact; }
+            .report-unit-title { background: #333; color: white; padding: 5px; font-size: 12px; font-weight: bold; -webkit-print-color-adjust: exact; color-adjust: exact; }
             .report-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
             .report-table th, .report-table td { border: 1px solid #000; padding: 6px; text-align: left; font-size: 10px; }
         }
@@ -99,14 +98,14 @@
                 Entrar com Google
             </button>
             <div id="login-loader" class="hidden mt-4 flex justify-center"><div class="loader"></div></div>
-            <p class="text-[10px] opacity-50 mt-6">Seus dados são salvos com segurança na nuvem.</p>
+            <p class="text-[10px] opacity-50 mt-6">Dados protegidos na nuvem Google (Firebase).</p>
         </div>
     </div>
 
     <!-- PROFILE SETUP MODAL -->
     <div id="profile-setup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-90 z-[90] backdrop-blur-sm hidden">
         <div class="card p-6 rounded-2xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <h2 class="text-xl font-bold mb-1">Completar Cadastro</h2>
+            <h2 class="text-xl font-bold mb-1">Completar Cadastro na Rede</h2>
             <p class="text-xs opacity-70 mb-4">Selecione sua unidade e configure seu perfil profissional.</p>
             
             <div class="space-y-4">
@@ -123,7 +122,7 @@
                     <select id="reg-unit" class="input-field w-full rounded-lg px-3 py-2 text-sm">
                         <!-- Povoado via JS -->
                     </select>
-                    <p class="text-[10px] opacity-50 mt-1">Se sua unidade não existir, peça ao gestor para criá-la no Dashboard Administrativo.</p>
+                    <p class="text-[10px] opacity-50 mt-1">Se sua unidade não existir, crie no Dashboard da Rede após logar ou peça a um gestor.</p>
                 </div>
                 <div>
                     <label class="block text-xs font-medium mb-1">Estado (UF)</label>
@@ -156,15 +155,15 @@
                         <i class="fas fa-dumbbell text-2xl text-primary"></i>
                         <div>
                             <span class="font-bold text-lg hidden sm:block leading-none">PowFit Pro</span>
-                            <div id="active-member-display" class="text-[10px] text-primary font-medium mt-1">Carregando perfil...</div>
+                            <div id="active-member-display" class="text-[10px] text-primary font-medium mt-1">Carregando...</div>
                         </div>
                     </div>
                     <div class="flex items-center gap-1 sm:gap-2 overflow-x-auto whitespace-nowrap">
                         <button onclick="switchTab('builder')" id="tab-builder" class="px-3 py-2 text-sm font-medium rounded-md bg-black bg-opacity-20 text-white transition"><i class="fas fa-clipboard-list sm:mr-1"></i> <span class="hidden sm:inline">Montar Ficha</span></button>
-                        <button onclick="switchTab('history')" id="tab-history" class="px-3 py-2 text-sm font-medium rounded-md opacity-70 hover:opacity-100 transition"><i class="fas fa-clock sm:mr-1"></i> <span class="hidden sm:inline">Histórico</span></button>
+                        <button onclick="switchTab('history')" id="tab-history" class="px-3 py-2 text-sm font-medium rounded-md opacity-70 hover:opacity-100 transition"><i class="fas fa-clock sm:mr-1"></i> <span class="hidden sm:inline">Nuvem (Histórico)</span></button>
                         <button onclick="switchTab('database')" id="tab-database" class="px-3 py-2 text-sm font-medium rounded-md opacity-70 hover:opacity-100 transition"><i class="fas fa-database sm:mr-1"></i> <span class="hidden sm:inline">Exercícios</span></button>
-                        <button onclick="switchTab('dashboard')" id="tab-dashboard" class="px-3 py-2 text-sm font-medium rounded-md opacity-70 hover:opacity-100 transition"><i class="fas fa-network-wired sm:mr-1"></i> <span class="hidden sm:inline">Gestão de Rede</span></button>
-                        <button onclick="logout()" class="px-3 py-2 text-sm font-medium rounded-md text-red-400 hover:text-red-300 ml-2"><i class="fas fa-sign-out-alt"></i></button>
+                        <button onclick="switchTab('admin')" id="tab-admin" class="px-3 py-2 text-sm font-medium rounded-md opacity-70 hover:opacity-100 transition"><i class="fas fa-network-wired sm:mr-1"></i> <span class="hidden sm:inline">Gestão de Rede</span></button>
+                        <button onclick="logout()" class="px-3 py-2 text-sm font-medium rounded-md text-red-400 hover:text-red-300 ml-2" title="Sair"><i class="fas fa-sign-out-alt"></i></button>
                     </div>
                 </div>
             </div>
@@ -177,10 +176,10 @@
             <!-- ============================================== -->
             <div id="view-builder" class="space-y-6">
                 
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-black bg-opacity-10 p-4 rounded-xl border border-[var(--border-color)] gap-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-black bg-opacity-10 p-4 rounded-xl border border-[var(--border-color)] gap-4 shadow-sm">
                     <div>
                         <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-clipboard-list text-primary"></i> Montagem de Treino</h2>
-                        <p class="text-xs opacity-70 mt-1">Crie a ficha manualmente. Nenhum treino é gerado automaticamente.</p>
+                        <p class="text-xs opacity-70 mt-1">Crie a ficha manualmente. A impressão salvará a cópia na sua rede.</p>
                     </div>
                     <button onclick="saveAndPrint()" id="btn-save-print" class="btn-primary px-6 py-2.5 rounded-lg text-sm font-bold shadow-lg flex items-center justify-center gap-2 w-full sm:w-auto transition hover:scale-105">
                         <i class="fas fa-save"></i> <i class="fas fa-print"></i> Salvar & Imprimir
@@ -212,7 +211,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-[10px] font-medium mb-1 uppercase opacity-70">Altura (m)</label>
-                                        <input type="number" id="stu-height" step="0.01" oninput="calcIMC()" class="input-field w-full rounded px-2 py-2 text-sm" placeholder="Ex: 1.75">
+                                        <input type="number" id="stu-height" step="0.01" oninput="calcIMC()" class="input-field w-full rounded px-2 py-2 text-sm" placeholder="Opcional">
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-2">
@@ -259,7 +258,7 @@
                         <!-- Saúde -->
                         <div class="card rounded-xl p-4 shadow-sm">
                             <h2 class="font-bold mb-1"><i class="fas fa-notes-medical text-primary"></i> Saúde</h2>
-                            <p class="text-[9px] opacity-60 mb-2 leading-tight">Múltipla escolha. As diretrizes da impressão serão ajustadas automaticamente ao seu perfil (PEF ou TE).</p>
+                            <p class="text-[9px] opacity-60 mb-2 leading-tight">Múltipla escolha. As diretrizes da impressão serão ajustadas automaticamente ao seu perfil de atuação.</p>
                             <div id="health-container" class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px]"></div>
                         </div>
 
@@ -274,10 +273,10 @@
                     <div class="xl:col-span-8 space-y-4">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 rounded-xl card border-dashed border-2 bg-black bg-opacity-5 gap-4">
                             <div>
-                                <h2 class="font-bold text-lg"><i class="fas fa-layer-group text-primary"></i> Dias de Treinamento</h2>
-                                <p class="text-[10px] opacity-70">Adicione dias da semana e construa a sequência.</p>
+                                <h2 class="font-bold text-lg"><i class="fas fa-layer-group text-primary"></i> Sequência de Treinos</h2>
+                                <p class="text-[10px] opacity-70">Adicione os dias (Segunda, Terça, etc) e insira os exercícios manualmente.</p>
                             </div>
-                            <button onclick="addWorkoutDay()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow flex-1 sm:flex-none w-full sm:w-auto"><i class="fas fa-plus"></i> Novo Dia</button>
+                            <button onclick="addWorkoutDay()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow flex-1 sm:flex-none w-full sm:w-auto"><i class="fas fa-plus"></i> Adicionar Dia</button>
                         </div>
                         <div id="workouts-container" class="space-y-5"></div>
                     </div>
@@ -290,8 +289,8 @@
             <div id="view-history" class="hidden space-y-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-black bg-opacity-10 p-4 rounded-xl border border-[var(--border-color)] gap-4">
                     <div>
-                        <h2 class="text-xl font-bold"><i class="fas fa-history text-primary"></i> Fichas Salvas (Nuvem)</h2>
-                        <p class="text-xs opacity-70">Acesse, edite ou exclua fichas prescritas pela sua conta.</p>
+                        <h2 class="text-xl font-bold"><i class="fas fa-cloud text-primary"></i> Fichas Salvas (Nuvem)</h2>
+                        <p class="text-xs opacity-70">Acesse, edite ou exclua as fichas prescritas pela sua Unidade.</p>
                     </div>
                     <button onclick="loadCloudData()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm font-bold transition"><i class="fas fa-sync-alt"></i> Atualizar Nuvem</button>
                 </div>
@@ -305,8 +304,8 @@
             <!-- ============================================== -->
             <div id="view-database" class="hidden space-y-6">
                 <div class="card p-5 rounded-xl">
-                    <h2 class="font-bold text-xl mb-2"><i class="fas fa-database text-primary"></i> Banco de Exercícios</h2>
-                    <p class="text-sm opacity-70 mb-6">Consulte os exercícios nativos e cadastre novos exercícios customizados. Eles ficarão salvos na nuvem e aparecerão para você nas próximas sessões.</p>
+                    <h2 class="font-bold text-xl mb-2"><i class="fas fa-database text-primary"></i> Meu Banco de Exercícios</h2>
+                    <p class="text-sm opacity-70 mb-6">Consulte os exercícios nativos e cadastre novos personalizados. Seus exercícios ficam salvos na sua conta (nuvem) para todas as sessões futuras.</p>
                     
                     <div class="flex flex-col md:flex-row gap-4 mb-6 items-end border-b border-opacity-20 pb-6" style="border-color: var(--border-color)">
                         <div class="w-full md:w-1/3">
@@ -318,7 +317,7 @@
                         <div class="w-full md:w-2/3">
                             <label class="block text-xs font-medium mb-1">Cadastrar Exercício Customizado</label>
                             <div class="flex gap-2">
-                                <input type="text" id="db-new-exercise" class="input-field flex-1 rounded-lg px-3 py-2 text-sm" placeholder="Ex: Supino Articulado Convergente">
+                                <input type="text" id="db-new-exercise" class="input-field flex-1 rounded-lg px-3 py-2 text-sm" placeholder="Ex: Tríceps Testa no Cross">
                                 <button onclick="addCustomExercise()" class="btn-primary px-6 py-2 rounded-lg shadow font-bold transition hover:bg-primary-hover"><i class="fas fa-plus"></i> Salvar</button>
                             </div>
                         </div>
@@ -336,21 +335,21 @@
             <div id="view-admin" class="hidden space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Relatório -->
-                    <div class="card rounded-xl p-5 md:col-span-1 h-fit">
-                        <h2 class="font-bold text-lg mb-2"><i class="fas fa-chart-line text-primary"></i> Relatório de Produtividade</h2>
-                        <p class="text-xs opacity-70 mb-4">Gere um documento imprimível contabilizando as fichas criadas pela equipe no mês selecionado.</p>
+                    <div class="card rounded-xl p-5 md:col-span-1 h-fit shadow-sm">
+                        <h2 class="font-bold text-lg mb-2"><i class="fas fa-chart-line text-primary"></i> Relatório Mensal</h2>
+                        <p class="text-xs opacity-70 mb-4">Gere um documento imprimível contabilizando as fichas criadas pela equipe de cada franquia no mês selecionado.</p>
                         <div class="flex flex-col gap-3">
                             <input type="month" id="report-month" class="input-field rounded px-3 py-2 text-sm w-full">
-                            <button onclick="generateReport()" class="btn-primary w-full py-2.5 rounded font-bold shadow"><i class="fas fa-print"></i> Imprimir Relatório</button>
+                            <button onclick="generateReport()" class="btn-primary w-full py-2.5 rounded font-bold shadow hover:bg-primary-hover transition"><i class="fas fa-print"></i> Imprimir Relatório</button>
                         </div>
                     </div>
                     
-                    <!-- Unidades -->
-                    <div class="card rounded-xl p-5 md:col-span-2">
+                    <!-- Unidades e Equipe -->
+                    <div class="card rounded-xl p-5 md:col-span-2 shadow-sm">
                         <div class="flex justify-between items-center mb-4">
                             <div>
-                                <h2 class="font-bold text-lg"><i class="fas fa-store text-primary"></i> Gestão de Unidades</h2>
-                                <p class="text-xs opacity-70">Cadastre as franquias/unidades da rede PowFit.</p>
+                                <h2 class="font-bold text-lg"><i class="fas fa-store text-primary"></i> Unidades da Rede</h2>
+                                <p class="text-xs opacity-70">Cadastre as franquias da rede PowFit.</p>
                             </div>
                             <button onclick="promptAddUnit()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-xs font-bold transition"><i class="fas fa-plus"></i> Nova Unidade</button>
                         </div>
@@ -376,7 +375,6 @@
         </div>
     </div>
 
-
     <!-- ========================================== -->
     <!-- ÁREA DE IMPRESSÃO (Oculta na tela)         -->
     <!-- ========================================== -->
@@ -391,7 +389,7 @@
         import { getAuth, signInWithPopup, signInWithCustomToken, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, collection, addDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // Firebase Configuração - Requisitos da aplicação
+        // Firebase Configuração - Fallback e Variável do Ambiente
         const providedConfig = {
             apiKey: "AIzaSyBIPqTYYkG5vHr57CndPCmxUeACncNAobM",
             authDomain: "powfitpro-582df.firebaseapp.com",
@@ -408,7 +406,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Caminhos seguros para o Firestore conforme as regras exigidas
+        // Caminhos seguros para o Firestore conforme as regras exigidas no prompt de sistema
         const getCol = (col) => typeof __app_id !== 'undefined' ? collection(db, 'artifacts', rootAppId, 'public', 'data', col) : collection(db, col);
         const getDocRef = (col, id) => typeof __app_id !== 'undefined' ? doc(db, 'artifacts', rootAppId, 'public', 'data', col, id) : doc(db, col, id);
 
@@ -461,23 +459,23 @@
         };
 
         const DEFAULT_CATEGORIES = {
-            "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
-            "🦍 COSTAS": ["Puxada Alta", "Puxada Unilateral", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada na Polia", "Remada Unilateral", "Remada Cavalinho (T-Bar)", "Remada no Cross", "Serrote", "Facepull (puxada de cima para baixo)", "Encolhimento (Trapézio)"],
-            "🦵 PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento com Barra", "Agachamento no Smith", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Abdução no Cross (Glúteo Médio + Mínimo)", "Coice", "Cachorrinho", "Caranguejo", "Cadeira Extensora", "Adução", "Abdução", "Cadeira Abdutora Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha em Pé (Máquina)", "Panturrilha Livre", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
-            "💪 BRAÇOS": ["(Bíceps) Rosca Direta", "(Bíceps) Rosca Alternada", "(Bíceps) Rosca 21", "(Bíceps) Rosca Scott Barra W", "(Bíceps) Rosca Scott Unilateral", "(Bíceps) Rosca Scott com Halteres", "(Bíceps) Rosca Martelo", "(Bíceps) Rosca Cross", "(Bíceps) Rosca Concentrada", "(Bíceps) Rosca Inversa", "(Bíceps) Rosca 45°", "(Tríceps) Triceps Pulley Unilateral", "(Tríceps) Tríceps Pulley Barra", "(Tríceps) Tríceps Pulley Corda", "(Tríceps) Tríceps Pulley Pegada Inversa", "(Tríceps) Tríceps Francês na Corda", "(Tríceps) Tríceps Francês com Halter", "(Tríceps) Tríceps Francês Unilateral", "(Tríceps) Tríceps Cruzado Polia Dupla", "(Tríceps) Tríceps Coice Unilateral", "(Tríceps) Tríceps Arremesso", "(Tríceps) Tríceps Testa", "(Tríceps) Mergulho no Banco"],
-            "🪨 OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral na Polia", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta"],
+            "🔥 PEITO": ["Supino Reto", "Supino Inclinado", "Supino com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
+            "🦍 COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Cavalinho (T-Bar)", "Serrote", "Facepull (puxada de cima para baixo)"],
+            "🦵 PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento no Smith", "Agachamento com passada lateral", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Coice", "Cachorrinho", "Cadeira Extensora", "Adução", "Abdução", "Abdução Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha Livre", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
+            "💪 BRAÇOS": ["(Bíceps) Rosca Direta", "(Bíceps) Rosca Alternada", "(Bíceps) Rosca 21", "(Bíceps) Rosca Scott Barra W", "(Bíceps) Rosca Scott Unilateral", "(Bíceps) Rosca Scott com Halteres", "(Bíceps) Rosca Martelo", "(Bíceps) Rosca Cross", "(Bíceps) Rosca Inversa", "(Bíceps) Rosca 45°", "(Tríceps) Triceps Pulley Unilateral", "(Tríceps) Tríceps Pulley Barra", "(Tríceps) Tríceps Pulley Corda", "(Tríceps) Tríceps Pulley Pegada Inversa", "(Tríceps) Tríceps Francês na Corda", "(Tríceps) Tríceps Francês com Halter", "(Tríceps) Tríceps Francês Unilateral", "(Tríceps) Tríceps Cruzado Polia Dupla", "(Tríceps) Tríceps Coice Unilateral", "(Tríceps) Tríceps Arremesso", "(Tríceps) Tríceps Testa", "(Tríceps) Mergulho no Banco"],
+            "🪨 OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral Unilateral Cross", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta", "Encolhimento (Trapézio)"],
             "🧠 ABDÔMEN": ["Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", "Isometria na parede", "Abdominal isometrico"],
             "🫀 CARDIO": ["Bicicleta 10 Minutos", "Bicicleta 15 Minutos", "Bicicleta 20 Minutos", "Esteira 10 Minutos", "Esteira 15 Minutos", "Esteira 20 Minutos", "Pular Corda"]
         };
         const TECHNIQUES = ["Nenhuma", "Drop set", "Bi-set", "Tri-set", "Série gigante", "Rest-pause", "FST-7", "Pré-exaustão", "Pós-exaustão", "Negativa", "Isometria", "Parciais", "Pirâmide"];
-        const DAYS = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SÁBADO", "DOMINGO"];
+        const DAYS = ["Treino Segunda", "Treino Terça", "Treino Quarta", "Treino Quinta", "Treino Sexta", "Treino Sábado", "Treino Domingo"];
 
         // --- ESTADO GLOBAL DA APLICAÇÃO ---
         window.APP_STATE = {
             user: null,
             profile: null,
             
-            // Dados em Memória da Nuvem
+            // Dados em Memória da Nuvem (Firestore)
             units: [],
             members: [],
             customExercises: [],
@@ -492,7 +490,7 @@
 
         // --- AUTH E BOOTSTRAP ---
         
-        // Chamada imperativa e obrigatória do auth flow ANTES de carregar dados
+        // Chamada imperativa e obrigatória do auth flow ANTES de carregar dados (Canvas rule)
         const initAuth = async () => {
             if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                 await signInWithCustomToken(auth, __initial_auth_token);
@@ -526,9 +524,9 @@
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('app-container').classList.remove('hidden');
                 
-                // Carrega coleções primárias
+                // Carrega coleções primárias do Firebase (Sem orderBy ou where por instrução do Canvas)
                 await window.loadCloudData();
-                checkProfile(); // Verifica se precisa completar cadastro
+                checkProfile(); // Verifica se o usuário logado tem perfil completo na rede
 
             } else {
                 document.getElementById('login-screen').classList.remove('hidden');
@@ -547,7 +545,7 @@
                 const mSnap = await getDocs(getCol('members'));
                 window.APP_STATE.members = mSnap.docs.map(d => ({id: d.id, ...d.data()}));
                 
-                // Fetch Custom Exercises (Exercícios da Nuvem)
+                // Fetch Custom Exercises (Exercícios Customizados da Nuvem)
                 const eSnap = await getDocs(getCol('custom_exercises'));
                 window.APP_STATE.customExercises = eSnap.docs.map(d => ({id: d.id, ...d.data()}));
                 
@@ -559,7 +557,7 @@
                 document.getElementById('db-category-select').innerHTML = Object.keys(DEFAULT_CATEGORIES).map(c=>`<option value="${c}">${c}</option>`).join('');
                 populateUnitsDropdown();
 
-                // Re-renderizar telas se já estiverem ativas
+                // Re-renderizar telas caso o usuário já esteja logado e deu 'refresh'
                 if(!document.getElementById('view-history').classList.contains('hidden')) renderHistory();
                 if(!document.getElementById('view-admin').classList.contains('hidden')) renderAdmin();
                 if(!document.getElementById('view-database').classList.contains('hidden')) window.renderDBExercises();
@@ -576,11 +574,12 @@
                 document.getElementById('profile-setup').classList.add('hidden');
                 
                 const unitName = window.APP_STATE.units.find(u => u.id === profile.unitId)?.name || 'Unidade Desconhecida';
-                const tag = `<span class="bg-primary text-white px-2 py-0.5 rounded text-[10px] ml-2">Membro Ativo: ${profile.name} (${unitName})</span>`;
+                const catLabel = profile.category === 'PEF' ? 'Prof. Ed. Física' : 'Treinador Esportivo';
+                const tag = `<span class="bg-primary text-white px-2 py-0.5 rounded text-[10px] ml-2">👤 ${profile.name} (${catLabel}) - 🏢 ${unitName}</span>`;
                 document.getElementById('active-member-display').innerHTML = tag;
                 
                 initBuilder();
-                window.switchTab('builder'); // Entra no construtor por padrão após login
+                window.switchTab('builder'); // Entra no construtor por padrão
             } else {
                 document.getElementById('profile-setup').classList.remove('hidden');
                 document.getElementById('app-container').classList.add('hidden');
@@ -692,7 +691,7 @@
 
         window.addWorkoutDay = () => {
             const num = window.APP_STATE.workouts.length;
-            const title = num < 7 ? `TREINO ${DAYS[num]}` : `NOVO TREINO ${num + 1}`;
+            const title = num < DAYS.length ? DAYS[num] : `NOVO TREINO ${num + 1}`;
             window.APP_STATE.workouts.push({ id: generateId(), title: title, exercises: [] });
             window.renderBuilderWorkouts();
         };
@@ -821,8 +820,7 @@
         function renderHistory() {
             const list = document.getElementById('history-list');
             
-            // Filtra fichas apenas da Unidade do Membro (para manter a rede organizada) ou da rede inteira se preferir. 
-            // Seguindo o prompt: "As fichas são gravadas na conta da equipe". Vou mostrar todas as fichas da Unidade do usuário logado.
+            // Puxa as fichas da Unidade do Membro Logado
             const userUnitId = window.APP_STATE.profile.unitId;
             const unitFichas = window.APP_STATE.fichas.filter(f => f.unitId === userUnitId);
             
@@ -832,7 +830,6 @@
             const sorted = [...unitFichas].sort((a,b) => b.createdAt - a.createdAt);
 
             list.innerHTML = sorted.map(f => {
-                // Checa validade
                 const createdTime = f.createdAt;
                 const validMs = parseInt(f.stuValidity) * 24 * 60 * 60 * 1000;
                 const isExpired = (createdTime + validMs) < Date.now();
@@ -842,7 +839,7 @@
                 const memName = window.APP_STATE.members.find(m => m.id === f.memberId)?.name || 'Profissional Desconhecido';
 
                 return `
-                <div class="card p-4 rounded-xl flex flex-col gap-3 border border-[var(--border-color)]">
+                <div class="card p-4 rounded-xl flex flex-col gap-3 border border-[var(--border-color)] shadow-sm">
                     <div class="flex justify-between items-start">
                         <div>
                             <div class="font-bold text-sm">${f.stuName} ${expBadge}</div>
@@ -851,7 +848,7 @@
                         </div>
                     </div>
                     <div class="flex gap-2 mt-1">
-                        <button onclick="loadFicha('${f.id}')" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg text-xs font-bold transition shadow"><i class="fas fa-edit"></i> Editar / Re-imprimir</button>
+                        <button onclick="loadFicha('${f.id}')" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg text-xs font-bold transition shadow"><i class="fas fa-edit"></i> Editar / Imprimir</button>
                         <button onclick="deleteFicha('${f.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-xs transition shadow"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>`;
@@ -885,7 +882,7 @@
         };
 
         window.deleteFicha = async (id) => {
-            if(confirm("Excluir permanentemente da nuvem?")) {
+            if(confirm("Excluir permanentemente da nuvem? O histórico desta ficha não constará mais nos relatórios da franquia.")) {
                 try {
                     await deleteDoc(getDocRef('fichas', id));
                     window.APP_STATE.fichas = window.APP_STATE.fichas.filter(x => x.id !== id);
@@ -963,12 +960,14 @@
             let html = `
                 <div class="print-header">
                     <h1 class="print-title">Planilha de Treinamento - ${d.stuObjective}</h1>
-                    <div class="prof-info">Prescrição feita por Personal Trainer: ${prof.name}</div>
-                    ${isPEF ? `<div class="unit-info">CREF: ${prof.cref} - Estado: ${prof.uf} | Franquia: ${unit}</div>` : `<div class="unit-info">Estado: ${prof.uf} | Franquia: ${unit}</div>`}
+                    <div class="prof-info">Prescrição feita por: ${prof.name} (${isPEF ? 'Personal Trainer / PEF' : 'Treinador Esportivo'})</div>
+                    <div class="prof-info" style="font-weight:normal; margin-top:2px;">
+                        ${isPEF ? `CREF: ${prof.cref} - Estado: ${prof.uf}` : `Estado: ${prof.uf}`} | Unidade: ${unit}
+                    </div>
                 </div>
 
                 <div class="print-grid">
-                    <div><strong>Aluno:</strong> ${d.stuName}</div>
+                    <div><strong>Aluno(a):</strong> ${d.stuName}</div>
                     <div><strong>Idade:</strong> ${d.stuAge || '-'} anos</div>
                     <div><strong>Gênero:</strong> ${d.stuGender}</div>
                     
@@ -983,7 +982,7 @@
             `;
 
             if (objRecommendation || d.health.length > 0) {
-                html += `<div class="print-guidelines"><h4>Diretrizes Automáticas do Perfil e Saúde</h4><ul>`;
+                html += `<div class="print-guidelines"><h4>Diretrizes Automáticas de Orientação</h4><ul>`;
                 if(objRecommendation) html += `<li><strong>Objetivo (${d.stuObjective}):</strong> ${objRecommendation}</li>`;
                 d.health.forEach(k => {
                     if(healthSourceDict[k]) html += `<li><strong>Saúde (${k.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}]/gu, '').trim()}):</strong> ${healthSourceDict[k]}</li>`;
@@ -1010,12 +1009,12 @@
             });
 
             html += `<div class="print-footer-section">`;
-            if(d.stuRecs.trim()) html += `<strong>Recomendações Livres do Profissional:</strong><p style="white-space: pre-wrap; margin: 3px 0 10px 0;">${d.stuRecs}</p>`;
-            html += `<div class="legal-text">${isPEF ? legalTextPEF : legalTextTE}</div><div style="text-align:center; margin-top:10px; font-size:8px; font-weight:bold; opacity:0.8;">Gerado na Nuvem via PowFit Pro - ${new Date(d.createdAt).toLocaleString('pt-BR')}</div></div>`;
+            if(d.stuRecs.trim()) html += `<strong>Recomendações Manuais do Profissional:</strong><p style="white-space: pre-wrap; margin: 3px 0 10px 0;">${d.stuRecs}</p>`;
+            html += `<div class="legal-text">${isPEF ? legalTextPEF : legalTextTE}</div><div style="text-align:center; margin-top:10px; font-size:8px; font-weight:bold; opacity:0.8;">Gerado na Nuvem via PowFit Pro - Data: ${new Date(d.createdAt).toLocaleString('pt-BR')}</div></div>`;
 
             printArea.innerHTML = html;
             
-            setTimeout(() => window.print(), 300);
+            setTimeout(() => window.print(), 400);
         }
 
         // ==========================================
@@ -1026,13 +1025,14 @@
             const list = document.getElementById('db-exercise-list');
             
             let html = '';
-            // Nativos
+            // Nativos (Não podem ser apagados)
             DEFAULT_CATEGORIES[cat].forEach(name => {
                 html += `<div class="card p-3 rounded-xl text-xs font-medium flex justify-between items-center opacity-70 border border-[var(--border-color)] shadow-sm">
                     <span>${name}</span> <i class="fas fa-lock text-[9px]" title="Nativo do Sistema"></i>
                 </div>`;
             });
-            // Customizados da Nuvem do usuário logado
+            
+            // Customizados salvos na nuvem pelo usuário logado
             const profId = window.APP_STATE.user.uid;
             window.APP_STATE.customExercises.filter(e => e.category === cat && e.memberId === profId).forEach(e => {
                 html += `<div class="card p-3 rounded-xl text-xs font-medium border-primary border flex justify-between items-center shadow-md bg-black bg-opacity-20">
@@ -1088,7 +1088,7 @@
                 const docRef = await addDoc(getCol('units'), { name: name.trim() });
                 window.APP_STATE.units.push({ id: docRef.id, name: name.trim() });
                 renderAdmin();
-                populateUnitsDropdown(); // Updates profile setup dropdown if open
+                populateUnitsDropdown(); // Update selection for those without profile
             }
         };
 
@@ -1113,6 +1113,7 @@
                 let unitTotal = 0;
 
                 membersInUnit.forEach(member => {
+                    // Contabiliza fichas feitas por este membro na nuvem neste mês
                     const fichasDoMembro = window.APP_STATE.fichas.filter(f => {
                         if (f.memberId !== member.id) return false;
                         const fDate = new Date(f.createdAt);
@@ -1143,7 +1144,7 @@
 
             document.getElementById('report-print-area').innerHTML = html;
             
-            // Lógica de impressão específica para o relatório para não sobrepor o layout
+            // Troca a visibilidade para impressão do relatório
             const appC = document.getElementById('app-container');
             const printA = document.getElementById('print-area');
             const repA = document.getElementById('report-print-area');
