@@ -92,18 +92,30 @@
     <div id="app-ui" class="hidden flex flex-col md:flex-row min-h-screen">
         <!-- Sidebar -->
         <aside class="panel w-full md:w-64 border-r md:min-h-screen flex flex-col shrink-0">
-            <div class="p-4 border-b border-color">
-                <h1 class="text-3xl font-black italic tracking-tighter text-accent">POWFIT PRO</h1>
-                <p id="user-email-display" class="text-xs text-muted mt-1 truncate"></p>
+            <div class="p-4 border-b border-color flex justify-between items-center md:block">
+                <div>
+                    <h1 class="text-3xl font-black italic tracking-tighter text-accent">POWFIT PRO</h1>
+                    <p id="user-email-display" class="text-xs text-muted mt-1 truncate max-w-[150px] md:max-w-full"></p>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-muted hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
             </div>
-            <nav class="flex-1 p-4 flex flex-col gap-2">
+            
+            <nav id="mobile-menu" class="hidden md:flex flex-1 p-4 flex-col gap-2">
                 <button onclick="switchView('builder')" class="text-left px-4 py-3 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 font-medium transition-colors flex items-center gap-2" id="nav-builder">🏋️ Montar Treino</button>
                 <button onclick="switchView('history')" class="text-left px-4 py-3 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 font-medium transition-colors flex items-center gap-2" id="nav-history">📂 Histórico e Edição</button>
                 <button onclick="switchView('dashboard')" class="text-left px-4 py-3 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 font-medium transition-colors flex items-center gap-2" id="nav-dashboard">🏢 Gestão da Rede</button>
                 <button onclick="switchView('reports')" class="text-left px-4 py-3 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 font-medium transition-colors flex items-center gap-2" id="nav-reports">📊 Produtividade</button>
+                <div class="mt-auto pt-4 border-t border-color md:block hidden">
+                    <button id="btn-logout-desktop" class="text-sm text-red-500 hover:text-red-400 font-bold w-full text-left">🚪 Sair do Sistema</button>
+                </div>
             </nav>
-            <div class="p-4 border-t border-color">
-                <button id="btn-logout" class="text-sm text-red-500 hover:text-red-400 font-bold w-full text-left">🚪 Sair do Sistema</button>
+            
+            <!-- Mobile Logout (visible only when menu is open on mobile) -->
+            <div id="mobile-logout" class="hidden p-4 border-t border-color md:hidden">
+                <button id="btn-logout-mobile" class="text-sm text-red-500 hover:text-red-400 font-bold w-full text-left">🚪 Sair do Sistema</button>
             </div>
         </aside>
 
@@ -122,10 +134,10 @@
                         <h2 class="text-3xl font-bold mb-1" id="builder-title">Nova Ficha de Treino</h2>
                         <p class="text-muted text-sm">Prancheta digital profissional. Você no controle.</p>
                     </div>
-                    <div class="flex gap-2">
+                    <div class="flex flex-wrap gap-2">
                         <button onclick="clearBuilder()" class="px-4 py-2 rounded font-bold border border-color hover:bg-black/10 text-sm">🧹 Limpar</button>
                         <button onclick="saveRoutine(false)" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded font-bold text-sm shadow">💾 Apenas Salvar</button>
-                        <button onclick="saveRoutine(true)" class="btn-primary px-6 py-2 rounded font-bold shadow-lg flex items-center gap-2 text-base">🖨️ Salvar e Imprimir</button>
+                        <button onclick="saveRoutine(true)" class="btn-primary px-6 py-2 rounded font-bold shadow-lg flex items-center gap-2 text-base w-full sm:w-auto justify-center">🖨️ Salvar e Imprimir</button>
                     </div>
                 </div>
 
@@ -474,16 +486,17 @@
             routines: [],
             workoutTabs: [{ id: 'A', name: 'Treino A', rows: [] }],
             activeTabId: 'A',
-            editingRoutineId: null // Se preenchido, estamos editando uma ficha existente
+            editingRoutineId: null, // Se preenchido, estamos editando uma ficha existente
+            editingRoutineCreatedAt: null // Salva a data original de criação para não corromper no Firebase
         };
 
         // --- BANCO DE DADOS FIXO ---
         const EXERCISES_DB = {
             "PEITO": ["Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
-            "COSTAS": ["Puxada Alta Pronada", "Puxada Alta Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Cavalinho (T-Bar)", "Serrote", "Facepull (puxada de cima para baixo)"],
+            "COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Cavalinho (T-Bar)", "Serrote", "Facepull (puxada de cima para baixo)"],
             "PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento no Smith", "Agachamento com passada lateral", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Coice", "Cachorrinho", "Cadeira Extensora", "Adução", "Abdução", "Abdução Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha Livre", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
             "BRAÇOS (BÍCEPS)": ["Rosca Direta", "Rosca Alternada", "Rosca 21", "Rosca Scott Barra W", "Rosca Scott Unilateral", "Rosca Scott com Halteres", "Rosca Martelo", "Rosca Cross", "Rosca Inversa", "Rosca 45°"],
-            "BRAÇOS (TRÍCEPS)": ["Triceps Pulley Unilateral", "Tríceps Pulley Pegada Pronada", "Tríceps Pulley Corda", "Tríceps Pulley Pegada Supinada", "Tríceps Francês na Corda", "Tríceps Francês com Halter", "Tríceps Francês Unilateral", "Tríceps Cruzado Polia Dupla", "Tríceps Coice Unilateral", "Tríceps Arremesso", "Tríceps Testa", "Mergulho no Banco"],
+            "BRAÇOS (TRÍCEPS)": ["Triceps Pulley Unilateral", "Tríceps Pulley Barra", "Tríceps Pulley Corda", "Tríceps Pulley Pegada Inversa", "Tríceps Francês na Corda", "Tríceps Francês com Halter", "Tríceps Francês Unilateral", "Tríceps Cruzado Polia Dupla", "Tríceps Coice Unilateral", "Tríceps Arremesso", "Tríceps Testa", "Mergulho no Banco"],
             "OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral Unilateral Cross", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta", "Encolhimento (Trapézio)"],
             "ABDÔMEN": ["Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", "Isometria na parede"],
             "CARDIO": ["Bicicleta 10 Minutos", "Bicicleta 15 Minutos", "Bicicleta 20 Minutos", "Esteira 10 Minutos", "Esteira 15 Minutos", "Esteira 20 Minutos", "Pular Corda"]
@@ -551,6 +564,14 @@
             setTimeout(() => { el.classList.add('hidden'); }, 3000);
         }
 
+        // Menu Mobile Toggle
+        window.toggleMobileMenu = function() {
+            const menu = document.getElementById('mobile-menu');
+            const logout = document.getElementById('mobile-logout');
+            menu.classList.toggle('hidden');
+            logout.classList.toggle('hidden');
+        }
+
         // --- AUTH LOGIC (MANDATORY RULE 3) ---
         document.getElementById('btn-login').addEventListener('click', async () => {
             const errEl = document.getElementById('login-error');
@@ -569,7 +590,9 @@
             }
         });
 
-        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+        const handleLogout = () => signOut(auth);
+        document.getElementById('btn-logout-desktop').addEventListener('click', handleLogout);
+        document.getElementById('btn-logout-mobile').addEventListener('click', handleLogout);
 
         onAuthStateChanged(auth, user => {
             currentUser = user;
@@ -651,6 +674,10 @@
             
             document.getElementById(`view-${view}`).classList.remove('hidden');
             document.getElementById(`nav-${view}`).classList.add('text-accent', 'bg-black/10', 'dark:bg-white/10');
+
+            // Fechar menu mobile ao clicar
+            document.getElementById('mobile-menu').classList.add('hidden');
+            document.getElementById('mobile-logout').classList.add('hidden');
 
             if(view === 'builder') {
                 renderTabs();
@@ -816,6 +843,7 @@
         // --- CONSTRUTOR DE FICHA (BUILDER) ---
         window.clearBuilder = function() {
             state.editingRoutineId = null;
+            state.editingRoutineCreatedAt = null; // Zera a data de criação guardada em memória
             document.getElementById('builder-title').innerText = "Nova Ficha de Treino";
             
             document.getElementById('client-name').value = '';
@@ -952,7 +980,7 @@
         function getExercisesForGroup(group) {
             if(!group) return [];
             const standard = EXERCISES_DB[group] || [];
-            const custom = state.customExercises.filter(c => c.group === group).map(c => `${c.name}`);
+            const custom = state.customExercises.filter(c => c.group === group).map(c => `[⭐] ${c.name}`);
             return [...standard, ...custom];
         }
 
@@ -1062,10 +1090,14 @@
             const healthCbs = document.querySelectorAll('.health-cb:checked');
             const healthStatuses = Array.from(healthCbs).map(cb => cb.value);
 
-            // Calcular Data de Expiração
+            // Calcular Datas
             const now = new Date();
             const expDate = new Date(now);
             expDate.setDate(expDate.getDate() + valDays);
+
+            // Correção Crítica do Firebase (Não permite undefined)
+            // Mantém a data de criação original caso esteja editando, senão cria uma nova.
+            const createdDate = state.editingRoutineId ? state.editingRoutineCreatedAt : now.toISOString();
 
             const routineData = {
                 memberId,
@@ -1082,7 +1114,7 @@
                 validityDays: valDays,
                 obs: document.getElementById('routine-obs').value,
                 tabs: state.workoutTabs,
-                createdAt: state.editingRoutineId ? undefined : now.toISOString(), // manter criação original se for edição
+                createdAt: createdDate,
                 updatedAt: now.toISOString(),
                 expirationDate: expDate.toISOString()
             };
@@ -1097,10 +1129,9 @@
                 }
                 
                 if(shouldPrint) {
-                    generatePrintView(routineData, member, unit, state.editingRoutineId ? routineData.createdAt : now.toISOString());
+                    generatePrintView(routineData, member, unit, routineData.createdAt);
                     window.print();
                 } else {
-                    // Após salvar sem imprimir, redireciona pro histórico pra ver que salvou
                     switchView('history');
                 }
             } catch(e) {
@@ -1165,6 +1196,8 @@
             if(!r) return;
 
             state.editingRoutineId = id;
+            state.editingRoutineCreatedAt = r.createdAt || new Date().toISOString(); // Guarda a data original na memória
+
             document.getElementById('builder-title').innerText = "Editando Ficha: " + r.clientName;
 
             // Popular UI Builder
@@ -1282,7 +1315,7 @@
                             <tbody>
                 `;
                 tab.rows.forEach(r => {
-                    const exName = r.exercise; // Clean custom star for print
+                    const exName = r.exercise.replace('[⭐] ', ''); // Clean custom star for print
                     html += `
                         <tr>
                             <td><strong style="font-size:12px;">${exName}</strong> <br><span style="font-size:9px; color:#6b7280; text-transform:uppercase;">${r.group}</span></td>
