@@ -49,6 +49,15 @@
         .text-accent { color: var(--accent); }
         .border-accent { border-color: var(--accent); }
 
+        /* Correção Forçada para Tabela do Histórico */
+        .history-row {
+            background-color: transparent !important;
+            color: var(--text-main) !important;
+        }
+        .history-row:hover {
+            background-color: rgba(0,0,0, 0.1) !important;
+        }
+
         /* Estilos de Impressão */
         @media print {
             body { background: white; color: black; font-size: 11px; }
@@ -280,9 +289,9 @@
                         </select>
                     </div>
                     
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto bg-[var(--panel-bg)] rounded">
                         <table class="w-full text-sm text-left">
-                            <thead class="border-b border-color">
+                            <thead class="border-b border-color bg-black/10 dark:bg-white/10">
                                 <tr>
                                     <th class="p-3">Aluno</th>
                                     <th class="p-3">Treinador</th>
@@ -292,7 +301,7 @@
                                     <th class="p-3 text-right">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="history-list">
+                            <tbody id="history-list" class="divide-y divide-[var(--border-color)]">
                                 <!-- Gerado via JS -->
                             </tbody>
                         </table>
@@ -428,8 +437,8 @@
                 <p class="text-xs font-bold mb-2">Adicionar Novo:</p>
                 <select id="custom-ex-group" class="input-field w-full p-2.5 rounded border text-sm">
                     <option value="PEITO">Peito</option><option value="COSTAS">Costas</option>
-                    <option value="PERNAS">Pernas</option><option value="BRAÇOS (BÍCEPS)">Braços (Bíceps)</option>
-                    <option value="BRAÇOS (TRÍCEPS)">Braços (Tríceps)</option><option value="OMBROS">Ombros</option>
+                    <option value="PERNAS">Pernas</option><option value="BRAÇOS (BÍCEPS)">Braços (BÍCEPS)</option>
+                    <option value="BRAÇOS (TRÍCEPS)">Braços (TRÍCEPS)</option><option value="OMBROS">Ombros</option>
                     <option value="ABDÔMEN">Abdômen</option><option value="CARDIO">Cardio</option>
                 </select>
                 <input type="text" id="custom-ex-name" class="input-field w-full p-2.5 rounded border text-sm" placeholder="Nome do Exercício">
@@ -486,8 +495,8 @@
             routines: [],
             workoutTabs: [{ id: 'A', name: 'Treino A', rows: [] }],
             activeTabId: 'A',
-            editingRoutineId: null, // Se preenchido, estamos editando uma ficha existente
-            editingRoutineCreatedAt: null // Salva a data original de criação para não corromper no Firebase
+            editingRoutineId: null, 
+            editingRoutineCreatedAt: null 
         };
 
         // --- BANCO DE DADOS FIXO ---
@@ -1000,13 +1009,13 @@
                 <table class="w-full text-sm min-w-[900px] border border-color rounded-lg overflow-hidden block sm:table">
                     <thead class="text-left bg-black/10 dark:bg-white/10 border-b border-color">
                         <tr>
-                            <th class="p-3 w-40">Grupo Muscular</th>
-                            <th class="p-3">Exercício</th>
-                            <th class="p-3 w-20 text-center">Séries</th>
-                            <th class="p-3 w-24 text-center">Reps</th>
-                            <th class="p-3 w-36">Técnica</th>
-                            <th class="p-3 w-48">Observações</th>
-                            <th class="p-3 w-12 text-center">❌</th>
+                            <th class="p-3 w-40 text-main">Grupo Muscular</th>
+                            <th class="p-3 text-main">Exercício</th>
+                            <th class="p-3 w-20 text-center text-main">Séries</th>
+                            <th class="p-3 w-24 text-center text-main">Reps</th>
+                            <th class="p-3 w-36 text-main">Técnica</th>
+                            <th class="p-3 w-48 text-main">Observações</th>
+                            <th class="p-3 w-12 text-center text-main">❌</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1031,7 +1040,7 @@
                                 ${TECHNIQUES.map(t => `<option value="${t}" ${row.tech===t?'selected':''}>${t}</option>`).join('')}
                             </select>
                         </td>
-                        <td class="p-2"><input type="text" placeholder="Descanso, cadência..." class="input-field w-full p-2 rounded text-xs" value="${row.obs}" onchange="updateRow(${i}, 'obs', this.value)"></td>
+                        <td class="p-2"><input type="text" placeholder="Descanso..." class="input-field w-full p-2 rounded text-xs" value="${row.obs}" onchange="updateRow(${i}, 'obs', this.value)"></td>
                         <td class="p-2 text-center"><button onclick="removeExerciseRow(${i})" class="text-red-500 hover:bg-red-500 hover:text-white rounded w-8 h-8 flex items-center justify-center transition-colors">🗑️</button></td>
                     </tr>
                 `;
@@ -1157,10 +1166,11 @@
             });
 
             if(filtered.length === 0) {
-                list.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-muted">Nenhuma ficha encontrada no histórico.</td></tr>`;
+                list.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-muted" style="color:var(--text-muted);">Nenhuma ficha encontrada no histórico.</td></tr>`;
                 return;
             }
 
+            // Uso da classe forçada history-row e estilos in-line de segurança (Evitar bug do navegador)
             list.innerHTML = filtered.map(r => {
                 const isExpired = new Date(r.expirationDate) < now;
                 const m = state.members.find(mem => mem.id === r.memberId);
@@ -1171,20 +1181,20 @@
                 const dateStr = dObj.toLocaleDateString('pt-BR');
 
                 return `
-                    <tr class="border-b border-color hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                        <td class="p-3 font-bold">${r.clientName}</td>
-                        <td class="p-3 text-xs">${trainerName}</td>
-                        <td class="p-3 text-xs">${dateStr}</td>
-                        <td class="p-3 text-xs">${r.validityDays} dias</td>
+                    <tr class="history-row border-b border-color transition-colors" style="background-color: transparent;">
+                        <td class="p-3 font-bold" style="color: var(--text-main);">${r.clientName}</td>
+                        <td class="p-3 text-xs" style="color: var(--text-muted);">${trainerName}</td>
+                        <td class="p-3 text-xs" style="color: var(--text-muted);">${dateStr}</td>
+                        <td class="p-3 text-xs" style="color: var(--text-muted);">${r.validityDays} dias</td>
                         <td class="p-3">
-                            <span class="px-2 py-1 rounded text-xs font-bold text-white ${isExpired ? 'bg-red-500' : 'bg-green-500'}">
+                            <span class="px-2 py-1 rounded text-xs font-bold text-white shadow-sm ${isExpired ? 'bg-red-500' : 'bg-green-500'}">
                                 ${isExpired ? '🔴 Expirada' : '🟢 Ativa'}
                             </span>
                         </td>
                         <td class="p-3 text-right space-x-2">
-                            <button onclick="editRoutine('${r.id}')" class="text-blue-500 hover:text-blue-400 font-bold text-sm bg-blue-500/10 px-2 py-1 rounded">✏️ Editar</button>
-                            <button onclick="printRoutineFromHistory('${r.id}')" class="text-gray-500 hover:text-gray-400 font-bold text-sm bg-gray-500/10 px-2 py-1 rounded">🖨️</button>
-                            <button onclick="deleteDocItem('routines', '${r.id}')" class="text-red-500 hover:text-red-400 font-bold text-sm bg-red-500/10 px-2 py-1 rounded">🗑️</button>
+                            <button onclick="editRoutine('${r.id}')" class="text-blue-500 hover:text-blue-400 font-bold text-sm bg-blue-500/10 px-2 py-1 rounded transition-colors">✏️ Editar</button>
+                            <button onclick="printRoutineFromHistory('${r.id}')" class="text-gray-500 hover:text-gray-400 font-bold text-sm bg-gray-500/10 px-2 py-1 rounded transition-colors">🖨️</button>
+                            <button onclick="deleteDocItem('routines', '${r.id}')" class="text-red-500 hover:text-red-400 font-bold text-sm bg-red-500/10 px-2 py-1 rounded transition-colors">🗑️</button>
                         </td>
                     </tr>
                 `;
@@ -1292,6 +1302,10 @@
                 <div style="background: #f9fafb; padding: 10px; margin-top: 15px; border: 1px solid #d1d5db; border-radius: 4px;">
                     <p style="margin:0 0 5px 0;"><strong>Objetivo Principal (${data.objective}):</strong> ${objText}</p>
                     ${healthTexts ? `<ul style="margin:5px 0 0 0; padding-left: 20px; font-size: 10px;">${healthTexts}</ul>` : ''}
+                    
+                    <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; font-size: 10px; color: #111827;">
+                        <strong>⚠️ AVISO PADRÃO:</strong> As recomendações do Estado de Saúde de Cada Associado são definidas pelo PEF Profissional de Educação Física Luiz André (CREF 008094 - G/RN).
+                    </div>
                 </div>
             `;
 
