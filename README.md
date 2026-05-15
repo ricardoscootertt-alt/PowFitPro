@@ -84,6 +84,7 @@
 </head>
 <body class="min-h-screen">
 
+    <!-- LOGIN UI -->
     <div id="login-ui" class="flex items-center justify-center min-h-screen flex-col p-4">
         <div class="panel p-8 rounded-2xl shadow-2xl max-w-md w-full text-center border">
             <h1 class="text-5xl font-black italic mb-2 tracking-tighter text-accent">POWFIT PRO</h1>
@@ -96,13 +97,16 @@
         </div>
     </div>
 
+    <!-- MAIN APP UI -->
     <div id="app-ui" class="hidden flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar -->
         <aside class="panel w-full md:w-64 border-r md:min-h-screen flex flex-col shrink-0">
             <div class="p-4 border-b border-color flex justify-between items-center md:block">
                 <div>
                     <h1 class="text-3xl font-black italic tracking-tighter text-accent">POWFIT PRO</h1>
                     <p id="user-email-display" class="text-xs text-muted mt-1 truncate max-w-[150px] md:max-w-full"></p>
                 </div>
+                <!-- Mobile Menu Button -->
                 <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-muted hover:text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
@@ -118,17 +122,21 @@
                 </div>
             </nav>
             
+            <!-- Mobile Logout (visible only when menu is open on mobile) -->
             <div id="mobile-logout" class="hidden p-4 border-t border-color md:hidden">
                 <button id="btn-logout-mobile" class="text-sm text-red-500 hover:text-red-400 font-bold w-full text-left">🚪 Sair do Sistema</button>
             </div>
         </aside>
 
+        <!-- Main Content -->
         <main class="flex-1 p-4 md:p-8 overflow-y-auto h-screen relative">
             
+            <!-- ALERTS -->
             <div id="system-alert" class="hidden absolute top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50 font-bold transition-opacity">
                 Mensagem
             </div>
 
+            <!-- VIEW: BUILDER (MONTAGEM) -->
             <div id="view-builder" class="hidden space-y-6 max-w-6xl mx-auto">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-color pb-4">
                     <div>
@@ -142,6 +150,7 @@
                     </div>
                 </div>
 
+                <!-- Responsável -->
                 <div class="panel p-5 rounded-xl border border-accent border-l-4 shadow-sm">
                     <h3 class="font-bold mb-3 text-sm tracking-wide uppercase text-accent">1. Profissional Responsável</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -156,8 +165,9 @@
                     </div>
                 </div>
 
+                <!-- Dados do Aluno -->
                 <div class="panel p-5 rounded-xl border shadow-sm">
-                    <h3 class="font-bold mb-3 text-sm tracking-wide uppercase text-accent">2. Dados do Associado</h3>
+                    <h3 class="font-bold mb-3 text-sm tracking-wide uppercase text-accent">2. Dados do Aluno</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-4">
                         <div class="md:col-span-2">
                             <label class="block text-xs font-bold mb-1">Nome Completo</label>
@@ -211,12 +221,15 @@
                     </div>
                 </div>
 
+                <!-- Estado de Saúde -->
                 <div class="panel p-5 rounded-xl border shadow-sm">
                     <h3 class="font-bold mb-3 text-sm tracking-wide uppercase text-accent">3. Estado de Saúde (Múltipla Seleção)</h3>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 text-sm" id="health-status-container">
-                        </div>
+                        <!-- Gerado via JS -->
+                    </div>
                 </div>
 
+                <!-- Montagem do Treino -->
                 <div class="panel p-5 rounded-xl border shadow-sm">
                     <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
                         <h3 class="font-bold text-sm tracking-wide uppercase text-accent">4. Montagem da Ficha</h3>
@@ -231,16 +244,20 @@
                         </div>
                     </div>
 
+                    <!-- Tabs Header -->
                     <div class="flex gap-1 border-b border-color mb-4 overflow-x-auto pb-1" id="tabs-header">
-                        </div>
+                        <!-- Gerado via JS -->
+                    </div>
                     
                     <div class="mb-4 flex flex-wrap gap-3 items-center">
                         <button onclick="addTab()" class="text-sm font-bold text-white bg-accent px-3 py-1 rounded hover:bg-accent-hover shadow">+ Nova Aba</button>
                         <button onclick="removeCurrentTab()" class="text-sm font-bold text-red-500 hover:text-red-400">🗑️ Remover Aba Atual</button>
                     </div>
 
+                    <!-- Tabs Content -->
                     <div id="tabs-content" class="overflow-x-auto pb-4">
-                        </div>
+                        <!-- Tabela ativa gerada via JS -->
+                    </div>
                     
                     <div class="mt-2 flex flex-wrap gap-3">
                         <button onclick="addExerciseRow()" class="btn-primary px-4 py-2 rounded font-bold text-sm shadow">+ Adicionar Exercício na Tabela</button>
@@ -248,21 +265,23 @@
                     </div>
                 </div>
 
+                <!-- Recomendações -->
                 <div class="panel p-5 rounded-xl border shadow-sm">
                     <h3 class="font-bold mb-3 text-sm tracking-wide uppercase text-accent">5. Recomendações Profissionais Livres</h3>
                     <textarea id="routine-obs" class="input-field w-full p-3 rounded border h-24 text-sm" placeholder="Escreva observações sobre hidratação, cadência, descanso, foco mental..."></textarea>
                 </div>
             </div>
 
+            <!-- VIEW: HISTÓRICO -->
             <div id="view-history" class="hidden space-y-6 max-w-6xl mx-auto">
                 <div class="border-b border-color pb-4">
                     <h2 class="text-3xl font-bold mb-1">Histórico de Fichas</h2>
-                    <p class="text-muted text-sm">Acesse, edite ou exclua treinos criados. Fichas na nuvem.</p>
+                    <p class="text-muted text-sm">Acesse, copie, edite ou exclua treinos criados. Fichas na nuvem.</p>
                 </div>
 
                 <div class="panel p-5 rounded-xl border shadow-sm">
                     <div class="flex flex-col sm:flex-row gap-4 mb-6">
-                        <input type="text" id="filter-history-name" class="input-field flex-1 p-2.5 rounded border text-sm" placeholder="Buscar por nome do associado..." oninput="renderHistory()">
+                        <input type="text" id="filter-history-name" class="input-field flex-1 p-2.5 rounded border text-sm" placeholder="Buscar por nome do aluno..." oninput="renderHistory()">
                         <select id="filter-history-status" class="input-field p-2.5 rounded border text-sm w-full sm:w-48" onchange="renderHistory()">
                             <option value="">Todos os status</option>
                             <option value="active">🟢 Ativas</option>
@@ -274,7 +293,7 @@
                         <table class="w-full text-sm text-left">
                             <thead class="border-b border-color bg-black/10 dark:bg-white/10">
                                 <tr>
-                                    <th class="p-3">Associado</th>
+                                    <th class="p-3">Aluno</th>
                                     <th class="p-3">Treinador</th>
                                     <th class="p-3">Criada em</th>
                                     <th class="p-3">Validade</th>
@@ -283,12 +302,14 @@
                                 </tr>
                             </thead>
                             <tbody id="history-list" class="divide-y divide-[var(--border-color)]">
-                                </tbody>
+                                <!-- Gerado via JS -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
+            <!-- VIEW: DASHBOARD (REDE) -->
             <div id="view-dashboard" class="hidden space-y-6 max-w-6xl mx-auto">
                 <div class="border-b border-color pb-4">
                     <h2 class="text-3xl font-bold mb-1">Gestão da Rede e Equipe</h2>
@@ -296,6 +317,7 @@
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Unidades -->
                     <div class="panel p-6 rounded-xl border shadow-sm">
                         <h3 class="text-xl font-bold mb-4 flex justify-between items-center text-accent">
                             Unidades (Franquias)
@@ -304,6 +326,7 @@
                         <div id="units-list" class="space-y-2 max-h-80 overflow-y-auto pr-2"></div>
                     </div>
 
+                    <!-- Membros -->
                     <div class="panel p-6 rounded-xl border shadow-sm">
                         <h3 class="text-xl font-bold mb-4 flex justify-between items-center text-accent">
                             Equipe Técnica
@@ -317,6 +340,7 @@
                 </div>
             </div>
 
+            <!-- VIEW: RELATORIOS -->
             <div id="view-reports" class="hidden space-y-6 max-w-6xl mx-auto">
                 <div class="border-b border-color pb-4">
                     <h2 class="text-3xl font-bold mb-1">Relatório de Produtividade</h2>
@@ -348,6 +372,9 @@
         </main>
     </div>
 
+    <!-- MODAIS -->
+
+    <!-- Modal: Adicionar Unidade -->
     <div id="modal-unit" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div class="panel p-6 rounded-2xl border max-w-sm w-full shadow-2xl">
             <h3 class="text-xl font-bold mb-4 text-accent">Nova Unidade</h3>
@@ -359,6 +386,7 @@
         </div>
     </div>
 
+    <!-- Modal: Adicionar Membro -->
     <div id="modal-member" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div class="panel p-6 rounded-2xl border max-w-md w-full shadow-2xl">
             <h3 class="text-xl font-bold mb-4 text-accent">Cadastrar Treinador</h3>
@@ -400,6 +428,7 @@
         </div>
     </div>
 
+    <!-- Modal: Exercícios Customizados -->
     <div id="modal-custom-ex" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div class="panel p-6 rounded-2xl border max-w-md w-full shadow-2xl flex flex-col max-h-[90vh]">
             <h3 class="text-xl font-bold mb-4 text-accent">Exercícios Customizados</h3>
@@ -418,7 +447,8 @@
 
             <p class="text-xs font-bold mb-2">Seus Exercícios Salvos:</p>
             <div id="custom-ex-list" class="flex-1 overflow-y-auto space-y-2 min-h-[100px] border border-color rounded-lg p-2">
-                </div>
+                <!-- Gerado via JS -->
+            </div>
 
             <div class="flex justify-end gap-3 mt-4">
                 <button onclick="toggleModal('modal-custom-ex')" class="px-6 py-2 rounded border border-color font-bold hover:bg-black/10 dark:hover:bg-white/10">Fechar</button>
@@ -426,8 +456,10 @@
         </div>
     </div>
 
+    <!-- PRINT CONTAINER (Escondido na tela, visível na impressão) -->
     <div id="print-ui"></div>
 
+    <!-- SCRIPT DA APLICAÇÃO -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithCustomToken, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -469,12 +501,12 @@
 
         // --- BANCO DE DADOS FIXO ---
         const EXERCISES_DB = {
-            "PEITO": ["Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", "Crucifixo no Cross", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Peck Fly", "Crucifixo Unilateral no Cross", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
-            "COSTAS": ["Puxada Alta", "Puxada Alta Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Cavalinho (T-Bar)", "Serrote", "Facepull (puxada de cima para baixo)"],
+            "PEITO": ["Supino Reto", "Supino Inclinado", "Supino Inclinado com Halteres", "Supino Fechado com Halteres", "Cross Over", "Cross Over Alto", "Cross Over Baixo", "Crucifixo Reto", "Crucifixo Inclinado com Halteres", "Crucifixo na Máquina", "Peck Fly", "Peck Fly Unilateral", "Pullover", "Flexão de Braço", "Flexão com Pés Elevados", "Flexão Explosiva"],
+            "COSTAS": ["Puxada Alta", "Puxada de Frente Supinada", "Pulldown", "Remada Aberta", "Remada Baixa", "Remada Curvada", "Remada Curvada Supinada", "Remada Cavalinho (T-Bar)", "Serrote", "Facepull (puxada de cima para baixo)"],
             "PERNAS": ["Agachamento Livre", "Agachamento Taça", "Agachamento no Smith", "Agachamento com passada lateral", "Squat", "Hack Machine", "Leg 45°", "Leg 90°", "Agachamento Sumô", "Agachamento Sissy (Livre)", "Afundo", "Recuo", "Avanço", "Passada", "Búlgaro", "Step-up", "Levantamento Terra", "Levantamento Terra Romeno", "Terra Sumô", "Stiff", "Bom Dia", "Mesa Flexora", "Cadeira Flexora", "Elevação Pélvica no Banco", "Elevação Pélvica no Chão", "Elevação Pélvica Unilateral no Chão", "Extensão de Quadril (Glúteo Máximo)", "Extensão Cruzada (Glúteo Médio)", "Coice", "Cachorrinho", "Cadeira Extensora", "Adução", "Abdução", "Abdução Inclinada", "Flexão Nórdica", "Flexão Nórdica Invertida", "Panturrilha Livre", "Panturrilha no Leg Press", "Panturrilha Banco", "Panturrilha Squat", "Panturrilha Unilateral"],
             "BRAÇOS (BÍCEPS)": ["Rosca Direta", "Rosca Alternada", "Rosca 21", "Rosca Scott Barra W", "Rosca Scott Unilateral", "Rosca Scott com Halteres", "Rosca Martelo", "Rosca Cross", "Rosca Inversa", "Rosca 45°"],
             "BRAÇOS (TRÍCEPS)": ["Triceps Pulley Unilateral", "Tríceps Pulley Barra", "Tríceps Pulley Corda", "Tríceps Pulley Pegada Inversa", "Tríceps Francês na Corda", "Tríceps Francês com Halter", "Tríceps Francês Unilateral", "Tríceps Cruzado Polia Dupla", "Tríceps Coice Unilateral", "Tríceps Arremesso", "Tríceps Testa", "Mergulho no Banco"],
-            "OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral Unilateral Cross", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Remada Alta", "Encolhimento (Trapézio)"],
+            "OMBROS": ["Elevação Frontal", "Elevação Frontal no Cross", "Elevação Lateral", "Elevação Lateral Unilateral Cross", "Elevação Lateral Sentado", "Desenvolvimento com Halteres", "Desenvolvimento com Barra", "Arnold Press", "Elevação Borboleta", "Crucifixo Inverso Sentado com Halteres", "Crucifixo Inverso na Polia", "Crucifixo Inverso Unilateral na Polia", "Facepull (puxada reta)", "Remada Alta", "Encolhimento (Trapézio)"],
             "ABDÔMEN": ["Infra com Elevação de Perna", "Abdominal Supra", "Abdominal Remador", "Abdominal Bicicleta", "Abdominal Twister com Peso", "Prancha", "Prancha Lateral", "Trituração de Cabos em Pé", "Isometria na parede"],
             "CARDIO": ["Bicicleta 10 Minutos", "Bicicleta 15 Minutos", "Bicicleta 20 Minutos", "Esteira 10 Minutos", "Esteira 15 Minutos", "Esteira 20 Minutos", "Pular Corda"]
         };
@@ -487,7 +519,7 @@
             "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.",
             "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.",
             "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.",
-            "Resistência": "Séries mais longas, cadência controlada e aprim কাশীamento da capacidade muscular.",
+            "Resistência": "Séries mais longas, cadência controlada e aprimhomento da capacidade muscular.",
             "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.",
             "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.",
             "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar."
@@ -517,7 +549,7 @@
             "🟡 Sobrepeso": "A prática regular de musculação associada ao cardio pode contribuir para melhora do condicionamento físico e composição corporal. A progressão deve respeitar a individualidade e o nível de adaptação.",
             "🔴 Obesidade": "É recomendado iniciar com exercícios de menor impacto e progressão gradual. A segurança, mobilidade e constância são prioridades durante o processo.",
             "⚖️ Baixo peso": "A musculação pode auxiliar no ganho de massa muscular quando associada a alimentação adequada e descanso. O treino deve priorizar evolução progressiva e recuperação muscular.",
-            "🍬 Diabetes": "Pessoas com diabetes devem manter acompanhamento médico regular antes e durante a prática de exercícios. A musculação pode auxiliar na rotina de atividade física quando liberada por profissional de saúde. Em casos de tontura, mal-estar ou alteração de glicemia, o treino deve ser interrompido e o associado deve procurar orientação médica.",
+            "🍬 Diabetes": "Pessoas com diabetes devem manter acompanhamento médico regular antes e durante a prática de exercícios. A musculação pode auxiliar na rotina de atividade física quando liberada por profissional de saúde. Em casos de tontura, mal-estar ou alteração de glicemia, o treino deve ser interrompido e o aluno deve procurar orientação médica.",
             "❤️ Hipertensão": "Pessoas com hipertensão devem manter acompanhamento médico regular e respeitar as orientações profissionais. Durante o treino, é importante evitar prender a respiração e controlar a intensidade dos exercícios.",
             "🔵 Hipotensão": "Pessoas com hipotensão devem evitar mudanças bruscas de posição durante o treino. Manter boa hidratação e respeitar a intensidade adequada ajuda a reduzir episódios de mal-estar.",
             "💔 Problemas cardíacos": "A prática de exercícios deve ocorrer apenas com liberação e acompanhamento médico. O treino deve respeitar limites individuais, com controle de intensidade e atenção aos sinais do corpo.",
@@ -820,7 +852,7 @@
         // --- CONSTRUTOR DE FICHA (BUILDER) ---
         window.clearBuilder = function() {
             state.editingRoutineId = null;
-            state.editingRoutineCreatedAt = null; // Zera a data de criação guardada em memória
+            state.editingRoutineCreatedAt = null; 
             document.getElementById('builder-title').innerText = "Nova Ficha de Treino";
             
             document.getElementById('client-name').value = '';
@@ -957,7 +989,7 @@
         function getExercisesForGroup(group) {
             if(!group) return [];
             const standard = EXERCISES_DB[group] || [];
-            const custom = state.customExercises.filter(c => c.group === group).map(c => `${c.name}`);
+            const custom = state.customExercises.filter(c => c.group === group).map(c => `[⭐] ${c.name}`);
             return [...standard, ...custom];
         }
 
@@ -1054,7 +1086,7 @@
             if(!memberId) return showAlert("Selecione seu Perfil de Treinador (Passo 1).", true);
             
             const clientName = document.getElementById('client-name').value.trim();
-            if(!clientName) return showAlert("Nome do associado é obrigatório.", true);
+            if(!clientName) return showAlert("Nome do aluno é obrigatório.", true);
 
             const member = state.members.find(m => m.id === memberId);
             const unit = state.units.find(u => u.id === member.unitId);
@@ -1072,8 +1104,7 @@
             const expDate = new Date(now);
             expDate.setDate(expDate.getDate() + valDays);
 
-            // Correção Crítica do Firebase (Não permite undefined)
-            // Mantém a data de criação original caso esteja editando, senão cria uma nova.
+            // Se for edição, mantém a data original, senão é criada uma nova.
             const createdDate = state.editingRoutineId ? state.editingRoutineCreatedAt : now.toISOString();
 
             const routineData = {
@@ -1159,10 +1190,11 @@
                                 ${isExpired ? '🔴 Expirada' : '🟢 Ativa'}
                             </span>
                         </td>
-                        <td class="p-3 text-right space-x-2">
-                            <button onclick="editRoutine('${r.id}')" class="text-blue-500 hover:text-blue-400 font-bold text-sm bg-blue-500/10 px-2 py-1 rounded transition-colors">✏️ Editar</button>
-                            <button onclick="printRoutineFromHistory('${r.id}')" class="text-gray-500 hover:text-gray-400 font-bold text-sm bg-gray-500/10 px-2 py-1 rounded transition-colors">🖨️</button>
-                            <button onclick="deleteDocItem('routines', '${r.id}')" class="text-red-500 hover:text-red-400 font-bold text-sm bg-red-500/10 px-2 py-1 rounded transition-colors">🗑️</button>
+                        <td class="p-3 text-right space-x-1 whitespace-nowrap">
+                            <button onclick="copyRoutine('${r.id}')" class="text-purple-500 hover:text-purple-400 font-bold text-sm bg-purple-500/10 px-2 py-1 rounded transition-colors" title="Duplicar / Copiar Ficha">📄 Copiar</button>
+                            <button onclick="editRoutine('${r.id}')" class="text-blue-500 hover:text-blue-400 font-bold text-sm bg-blue-500/10 px-2 py-1 rounded transition-colors" title="Editar Ficha Original">✏️ Editar</button>
+                            <button onclick="printRoutineFromHistory('${r.id}')" class="text-gray-500 hover:text-gray-400 font-bold text-sm bg-gray-500/10 px-2 py-1 rounded transition-colors" title="Imprimir Diretamente">🖨️</button>
+                            <button onclick="deleteDocItem('routines', '${r.id}')" class="text-red-500 hover:text-red-400 font-bold text-sm bg-red-500/10 px-2 py-1 rounded transition-colors" title="Excluir Ficha">🗑️</button>
                         </td>
                     </tr>
                 `;
@@ -1174,11 +1206,39 @@
             if(!r) return;
 
             state.editingRoutineId = id;
-            state.editingRoutineCreatedAt = r.createdAt || new Date().toISOString(); // Guarda a data original na memória
+            state.editingRoutineCreatedAt = r.createdAt || new Date().toISOString();
 
             document.getElementById('builder-title').innerText = "Editando Ficha: " + r.clientName;
 
             // Popular UI Builder
+            populateBuilderWithRoutineData(r);
+
+            switchView('builder');
+            showAlert("Ficha carregada para edição.");
+        }
+
+        window.copyRoutine = function(id) {
+            const r = state.routines.find(x => x.id === id);
+            if(!r) return;
+
+            // CRUCIAL: Limpamos o ID de edição para que o sistema crie um NOVO registro ao salvar
+            state.editingRoutineId = null;
+            state.editingRoutineCreatedAt = null;
+
+            document.getElementById('builder-title').innerText = "Nova Ficha (Cópia de " + r.clientName + ")";
+
+            // Popular UI Builder
+            populateBuilderWithRoutineData(r);
+
+            // Adiciona a marcação de Cópia no nome para o usuário saber que não está sobrescrevendo
+            document.getElementById('client-name').value = r.clientName + " (Cópia)";
+
+            switchView('builder');
+            showAlert("Ficha copiada! Você pode alterar e salvar como um novo registro.", false);
+        }
+
+        // Função auxiliar para evitar repetição de código no Edit e no Copy
+        function populateBuilderWithRoutineData(r) {
             document.getElementById('builder-unit').value = r.unitId;
             updateBuilderMembers();
             document.getElementById('builder-member').value = r.memberId;
@@ -1192,7 +1252,6 @@
             document.getElementById('client-freq').value = r.frequency;
             document.getElementById('client-obj').value = r.objective;
             
-            // Health
             document.querySelectorAll('.health-cb').forEach(cb => {
                 cb.checked = (r.healthStatuses || []).includes(cb.value);
             });
@@ -1200,15 +1259,12 @@
             document.getElementById('routine-validity').value = r.validityDays;
             document.getElementById('routine-obs').value = r.obs;
 
-            // Tabs
-            state.workoutTabs = JSON.parse(JSON.stringify(r.tabs)); // clone
+            state.workoutTabs = JSON.parse(JSON.stringify(r.tabs)); // Clone total para não afetar referência original
             if(state.workoutTabs.length > 0) state.activeTabId = state.workoutTabs[0].id;
             else state.activeTabId = null;
 
             calculateBMI();
             toggleTheme();
-            switchView('builder');
-            showAlert("Ficha carregada para edição.");
         }
 
         window.printRoutineFromHistory = function(id) {
@@ -1229,7 +1285,7 @@
             const expDate = new Date(data.expirationDate || new Date().toISOString());
             const validStr = expDate.toLocaleDateString('pt-BR');
 
-            // Header BLINDADO
+            // Header
             let html = `
                 <div class="header-banner">
                     <h1 style="color:white; margin:0; font-style: italic; font-size: 24px; letter-spacing:-1px;">POWFIT PRO</h1>
@@ -1238,21 +1294,17 @@
                 
                 <div style="display:flex; justify-content:space-between; margin-top:15px; border-bottom: 2px solid #111827; padding-bottom:10px;">
                     <div style="width: 48%;">
-                        <h3 style="margin:0 0 5px 0; font-size: 13px; text-transform:uppercase;">Dados do Associado</h3>
-                        <p style="margin:2px 0;"><strong>Nome:</strong> ${data.clientName}</p>
+                        <h3 style="margin:0 0 5px 0; font-size: 13px; text-transform:uppercase;">Dados do Aluno</h3>
+                        <p style="margin:2px 0;"><strong>Nome:</strong> ${data.clientName.replace(' (Cópia)', '')}</p>
                         <p style="margin:2px 0;"><strong>Idade:</strong> ${data.clientAge || '-'} | <strong>Peso:</strong> ${data.clientWeight || '-'}kg | <strong>Altura:</strong> ${data.clientHeight || '-'}m</p>
                         <p style="margin:2px 0;"><strong>Nível:</strong> ${data.level} | <strong>Frequência:</strong> ${data.frequency}</p>
                     </div>
                     <div style="width: 48%;">
-                        <div style="margin-bottom: 8px;">
-                            <h3 style="margin:0 0 2px 0; font-size: 11px; text-transform:uppercase; color: #374151;">Direção Técnica e Esportiva</h3>
-                            <p style="margin:0; font-size: 12px;"><strong>Treinador Esportivo:</strong> ${member.name} (Lei 14.597/2023)</p>
-                            <p style="margin:0; font-size: 11px;"><strong>Unidade:</strong> ${unit.name} - ${member.uf}</p>
-                        </div>
-                        <div>
-                            <h3 style="margin:0 0 2px 0; font-size: 11px; text-transform:uppercase; color: #374151;">Responsabilidade Clínica e de Saúde</h3>
-                            <p style="margin:0; font-size: 12px;"><strong>Profissional:</strong> Luiz André (CREF 008094-G/RN)</p>
-                        </div>
+                        <h3 style="margin:0 0 5px 0; font-size: 13px; text-transform:uppercase;">Responsável Técnico</h3>
+                        <p style="margin:2px 0;"><strong>Profissional:</strong> ${member.name}</p>
+                        <p style="margin:2px 0;"><strong>Atuação:</strong> ${member.category === 'PEF' ? 'Profissional de Educação Física' : 'Treinador Esportivo'}</p>
+                        ${member.cref ? `<p style="margin:2px 0;"><strong>CREF:</strong> ${member.cref}</p>` : ''}
+                        <p style="margin:2px 0;"><strong>Unidade:</strong> ${unit.name} - ${member.uf}</p>
                     </div>
                 </div>
                 
@@ -1276,7 +1328,7 @@
                     ${healthTexts ? `<ul style="margin:5px 0 0 0; padding-left: 20px; font-size: 10px;">${healthTexts}</ul>` : ''}
                     
                     <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; font-size: 10px; color: #111827;">
-                        <strong>⚠️ AVISO PADRÃO:</strong> As recomendações do Estado de Saúde de Cada Associado são definidas pelo PEF Profissional de Educação Física Luiz André (CREF 008094-G/RN).
+                        <strong>⚠️ AVISO PADRÃO:</strong> As recomendações do Estado de Saúde de Cada Associado são definidas pelo PEF Profissional de Educação Física Luiz André (CREF 008094 - G/RN).
                     </div>
                 </div>
             `;
@@ -1301,7 +1353,7 @@
                             <tbody>
                 `;
                 tab.rows.forEach(r => {
-                    const exName = r.exercise; // Clean custom star for print
+                    const exName = r.exercise.replace('[⭐] ', ''); // Clean custom star for print
                     html += `
                         <tr>
                             <td><strong style="font-size:12px;">${exName}</strong> <br><span style="font-size:9px; color:#6b7280; text-transform:uppercase;">${r.group}</span></td>
