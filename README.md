@@ -58,19 +58,24 @@
             background-color: rgba(0,0,0, 0.1) !important;
         }
 
-        /* Estilos de Impressão */
+        /* Estilos de Impressão (Fiel ao PDF solicitado) */
         @media print {
-            body { background: white; color: black; font-size: 11px; }
+            body { background: white; color: black; font-size: 11px; font-family: Arial, sans-serif; }
             #app-ui, #login-ui { display: none !important; }
             #print-ui { display: block !important; }
             .print-page-break { page-break-before: always; }
             .avoid-break { page-break-inside: avoid; }
             table { width: 100%; border-collapse: collapse; margin-bottom: 0.5rem; }
-            th, td { border: 1px solid #d1d5db; padding: 4px; text-align: left; }
-            th { background-color: #f3f4f6; -webkit-print-color-adjust: exact; color: #111827; }
+            th, td { border: 1px solid #d1d5db; padding: 5px; text-align: left; }
+            th { background-color: #f3f4f6; -webkit-print-color-adjust: exact; color: #111827; font-weight: bold; }
             h1, h2, h3 { color: #111827; margin-bottom: 0.25rem; }
-            .header-banner { background-color: #111827; color: white; padding: 8px; text-align: center; -webkit-print-color-adjust: exact; }
+            .header-banner { background-color: #111827; color: white; padding: 10px; text-align: center; -webkit-print-color-adjust: exact; margin-bottom: 15px;}
             .legal-footer { font-size: 9px; color: #4b5563; margin-top: 15px; border-top: 1px solid #d1d5db; padding-top: 5px; text-align: justify; }
+            
+            /* Ajustes para a grade superior na impressão */
+            .print-header-grid { display: flex; justify-content: space-between; border-bottom: 2px solid #111827; padding-bottom: 10px; margin-bottom: 15px; }
+            .print-col-left { width: 50%; padding-right: 15px; }
+            .print-col-right { width: 48%; }
         }
         
         #print-ui { display: none; }
@@ -122,7 +127,7 @@
                 </div>
             </nav>
             
-            <!-- Mobile Logout (visible only when menu is open on mobile) -->
+            <!-- Mobile Logout -->
             <div id="mobile-logout" class="hidden p-4 border-t border-color md:hidden">
                 <button id="btn-logout-mobile" class="text-sm text-red-500 hover:text-red-400 font-bold w-full text-left">🚪 Sair do Sistema</button>
             </div>
@@ -519,7 +524,7 @@
             "Hipertrofia": "Prioridade na progressão de carga e volume adequado. Essencial superávit calórico e descanso.",
             "Definição": "Manutenção de massa muscular enquanto reduz o percentual de gordura. Atenção estrita à dieta.",
             "Condicionamento": "Treinos com menor tempo de intervalo, circuitos e alta integração cardiopulmonar.",
-            "Resistência": "Séries mais longas, cadência controlada e aprimhomento da capacidade muscular.",
+            "Resistência": "Séries mais longas, cadência controlada e aprimoramento da capacidade muscular.",
             "Força": "Cargas altas, baixas repetições e intervalos de descanso maiores.",
             "Reabilitação": "Treino focado em fortalecimento específico, mobilidade e controle motor. Respeitar limites.",
             "Saúde geral": "Equilíbrio entre força, cardio e flexibilidade. O principal objetivo é a constância e bem-estar."
@@ -1210,7 +1215,6 @@
 
             document.getElementById('builder-title').innerText = "Editando Ficha: " + r.clientName;
 
-            // Popular UI Builder
             populateBuilderWithRoutineData(r);
 
             switchView('builder');
@@ -1227,17 +1231,13 @@
 
             document.getElementById('builder-title').innerText = "Nova Ficha (Cópia de " + r.clientName + ")";
 
-            // Popular UI Builder
             populateBuilderWithRoutineData(r);
-
-            // Adiciona a marcação de Cópia no nome para o usuário saber que não está sobrescrevendo
             document.getElementById('client-name').value = r.clientName + " (Cópia)";
 
             switchView('builder');
             showAlert("Ficha copiada! Você pode alterar e salvar como um novo registro.", false);
         }
 
-        // Função auxiliar para evitar repetição de código no Edit e no Copy
         function populateBuilderWithRoutineData(r) {
             document.getElementById('builder-unit').value = r.unitId;
             updateBuilderMembers();
@@ -1259,7 +1259,7 @@
             document.getElementById('routine-validity').value = r.validityDays;
             document.getElementById('routine-obs').value = r.obs;
 
-            state.workoutTabs = JSON.parse(JSON.stringify(r.tabs)); // Clone total para não afetar referência original
+            state.workoutTabs = JSON.parse(JSON.stringify(r.tabs)); // Clone total
             if(state.workoutTabs.length > 0) state.activeTabId = state.workoutTabs[0].id;
             else state.activeTabId = null;
 
@@ -1285,32 +1285,46 @@
             const expDate = new Date(data.expirationDate || new Date().toISOString());
             const validStr = expDate.toLocaleDateString('pt-BR');
 
-            // Header
+            // --- LÓGICA DE EXIBIÇÃO DO PROFISSIONAL CONFORME PDF FORNECIDO ---
+            let responsavelHtml = '';
+            if (member.category === 'TE') {
+                responsavelHtml = `
+                    <h3 style="margin:0 0 4px 0; font-size: 12px; text-transform:uppercase; color: #111827;">DIREÇÃO TÉCNICA E ESPORTIVA</h3>
+                    <p style="margin:2px 0; font-size: 11px;"><strong>Treinador Esportivo:</strong> ${member.name} (Lei 14.597/2023)</p>
+                    <p style="margin:2px 0; font-size: 11px;"><strong>Unidade:</strong> ${unit.name} - ${member.uf}</p>
+                    <br>
+                    <h3 style="margin:6px 0 4px 0; font-size: 12px; text-transform:uppercase; color: #111827;">RESPONSABILIDADE CLÍNICA E DE SAÚDE</h3>
+                    <p style="margin:2px 0; font-size: 11px;"><strong>Profissional:</strong> Luiz André (CREF 008094-G/RN)</p>
+                `;
+            } else {
+                // Se for PEF
+                responsavelHtml = `
+                    <h3 style="margin:0 0 4px 0; font-size: 12px; text-transform:uppercase; color: #111827;">DIREÇÃO TÉCNICA E RESPONSABILIDADE CLÍNICA</h3>
+                    <p style="margin:2px 0; font-size: 11px;"><strong>Profissional de Educação Física:</strong> ${member.name}</p>
+                    <p style="margin:2px 0; font-size: 11px;"><strong>CREF:</strong> ${member.cref || 'Não informado'}</p>
+                    <p style="margin:2px 0; font-size: 11px;"><strong>Unidade:</strong> ${unit.name} - ${member.uf}</p>
+                `;
+            }
+
+            // Header Top
             let html = `
                 <div class="header-banner">
-                    <h1 style="color:white; margin:0; font-style: italic; font-size: 24px; letter-spacing:-1px;">POWFIT PRO</h1>
-                    <p style="margin:2px 0 0 0; font-size:12px; letter-spacing: 1px;">PROGRAMA DE TREINAMENTO PERSONALIZADO</p>
+                    <h1 style="color:white; margin:0; font-style: italic; font-size: 24px; letter-spacing:-1px;">PowFitPro</h1>
                 </div>
                 
-                <div style="display:flex; justify-content:space-between; margin-top:15px; border-bottom: 2px solid #111827; padding-bottom:10px;">
-                    <div style="width: 48%;">
-                        <h3 style="margin:0 0 5px 0; font-size: 13px; text-transform:uppercase;">Dados do Aluno</h3>
-                        <p style="margin:2px 0;"><strong>Nome:</strong> ${data.clientName.replace(' (Cópia)', '')}</p>
-                        <p style="margin:2px 0;"><strong>Idade:</strong> ${data.clientAge || '-'} | <strong>Peso:</strong> ${data.clientWeight || '-'}kg | <strong>Altura:</strong> ${data.clientHeight || '-'}m</p>
-                        <p style="margin:2px 0;"><strong>Nível:</strong> ${data.level} | <strong>Frequência:</strong> ${data.frequency}</p>
+                <div class="print-header-grid">
+                    <div class="print-col-left">
+                        <h3 style="margin:0 0 5px 0; font-size: 12px; text-transform:uppercase; color: #111827;">DADOS DO ASSOCIADO</h3>
+                        <p style="margin:2px 0; font-size: 11px;"><strong>Nome:</strong> ${data.clientName.replace(' (Cópia)', '')}</p>
+                        
+                        <h3 style="margin:12px 0 5px 0; font-size: 12px; text-transform:uppercase; color: #111827;">PROGRAMA DE TREINAMENTO PERSONALIZADO</h3>
+                        <p style="margin:2px 0; font-size: 11px;"><strong>Idade:</strong> ${data.clientAge || '-'} | <strong>Peso:</strong> ${data.clientWeight || '-'}kg | <strong>Altura:</strong> ${data.clientHeight || '-'}m</p>
+                        <p style="margin:2px 0; font-size: 11px;"><strong>Nível:</strong> ${data.level} | <strong>Frequência:</strong> ${data.frequency}</p>
+                        <p style="margin:12px 0 0 0; font-size: 11px;"><strong>Data de Emissão:</strong> ${dateStr} &nbsp;&nbsp;&nbsp; <strong>Vencimento da Ficha:</strong> ${validStr} (${data.validityDays} dias)</p>
                     </div>
-                    <div style="width: 48%;">
-                        <h3 style="margin:0 0 5px 0; font-size: 13px; text-transform:uppercase;">Responsável Técnico</h3>
-                        <p style="margin:2px 0;"><strong>Profissional:</strong> ${member.name}</p>
-                        <p style="margin:2px 0;"><strong>Atuação:</strong> ${member.category === 'PEF' ? 'Profissional de Educação Física' : 'Treinador Esportivo'}</p>
-                        ${member.cref ? `<p style="margin:2px 0;"><strong>CREF:</strong> ${member.cref}</p>` : ''}
-                        <p style="margin:2px 0;"><strong>Unidade:</strong> ${unit.name} - ${member.uf}</p>
+                    <div class="print-col-right">
+                        ${responsavelHtml}
                     </div>
-                </div>
-                
-                <div style="margin-top: 10px; display:flex; gap:15px; font-size: 10px;">
-                    <p style="margin:0;"><strong>Data de Emissão:</strong> ${dateStr}</p>
-                    <p style="margin:0; background: #e5e7eb; padding: 2px 5px; border-radius:3px;"><strong>Vencimento da Ficha:</strong> ${validStr} (${data.validityDays} dias)</p>
                 </div>
             `;
 
@@ -1319,16 +1333,16 @@
             let healthTexts = '';
             (data.healthStatuses || []).forEach(hs => {
                 const dict = member.category === 'PEF' ? TEXTS_HEALTH_PEF : TEXTS_HEALTH_TE;
-                if(dict[hs]) healthTexts += `<li style="margin-bottom:2px;"><strong>${hs}:</strong> ${dict[hs]}</li>`;
+                if(dict[hs]) healthTexts += `<li style="margin-bottom:2px;"><strong>✔ ${hs.replace(/[^\w\s]/gi, '')}:</strong> ${dict[hs]}</li>`;
             });
 
             html += `
-                <div style="background: #f9fafb; padding: 10px; margin-top: 15px; border: 1px solid #d1d5db; border-radius: 4px;">
-                    <p style="margin:0 0 5px 0;"><strong>Objetivo Principal (${data.objective}):</strong> ${objText}</p>
-                    ${healthTexts ? `<ul style="margin:5px 0 0 0; padding-left: 20px; font-size: 10px;">${healthTexts}</ul>` : ''}
+                <div style="background: white; padding: 0 5px; margin-bottom: 20px;">
+                    <p style="margin:0 0 5px 0; font-size: 11px;"><strong>Objetivo Principal (${data.objective}):</strong> ${objText}</p>
+                    ${healthTexts ? `<ul style="margin:5px 0 0 0; padding-left: 15px; font-size: 11px; list-style-type: none;">${healthTexts}</ul>` : ''}
                     
-                    <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; font-size: 10px; color: #111827;">
-                        <strong>⚠️ AVISO PADRÃO:</strong> As recomendações do Estado de Saúde de Cada Associado são definidas pelo PEF Profissional de Educação Física Luiz André (CREF 008094 - G/RN).
+                    <div style="margin-top: 10px; font-size: 11px; color: #111827;">
+                        <strong>AVISO PADRÃO:</strong> As recomendações do Estado de Saúde de Cada Associado são definidas pelo PEF Profissional de Educação Física Luiz André (CREF 008094-G/RN).
                     </div>
                 </div>
             `;
@@ -1338,28 +1352,31 @@
                 if(tab.rows.length === 0) return;
                 
                 html += `
-                    <div class="avoid-break" style="margin-top: 20px;">
-                        <h3 style="background: #111827; color: white; padding: 6px 10px; margin: 0 0 0 0; font-size:12px; border-radius:4px 4px 0 0; -webkit-print-color-adjust: exact;">${tab.name}</h3>
+                    <div class="avoid-break" style="margin-top: 15px;">
+                        <h3 style="color: #111827; padding: 0; margin: 0 0 5px 0; font-size:14px; -webkit-print-color-adjust: exact;">${tab.name}</h3>
                         <table style="margin-top:0;">
                             <thead>
                                 <tr>
-                                    <th style="width: 35%;">Exercício / Máquina</th>
-                                    <th style="width: 10%; text-align:center;">Séries</th>
-                                    <th style="width: 15%; text-align:center;">Reps</th>
-                                    <th style="width: 15%;">Técnica</th>
-                                    <th style="width: 25%;">Observações</th>
+                                    <th style="width: 40%; font-size: 11px;">Exercício / Máquina</th>
+                                    <th style="width: 10%; text-align:center; font-size: 11px;">Séries</th>
+                                    <th style="width: 10%; text-align:center; font-size: 11px;">Reps</th>
+                                    <th style="width: 15%; font-size: 11px;">Técnica</th>
+                                    <th style="width: 25%; font-size: 11px;">Observações</th>
                                 </tr>
                             </thead>
                             <tbody>
                 `;
                 tab.rows.forEach(r => {
-                    const exName = r.exercise.replace('[⭐] ', ''); // Clean custom star for print
+                    const exName = r.exercise.replace('[⭐] ', ''); 
                     html += `
                         <tr>
-                            <td><strong style="font-size:12px;">${exName}</strong> <br><span style="font-size:9px; color:#6b7280; text-transform:uppercase;">${r.group}</span></td>
-                            <td style="text-align:center; font-weight:bold; font-size:14px;">${r.sets}</td>
-                            <td style="text-align:center; font-weight:bold; font-size:14px;">${r.reps}</td>
-                            <td style="font-size:10px;">${r.tech !== 'Nenhuma' ? r.tech : '-'}</td>
+                            <td>
+                                <strong style="font-size:12px;">${exName}</strong> <br>
+                                <span style="font-size:9px; color:#6b7280; text-transform:uppercase; margin-top:2px; display:inline-block;">${r.group}</span>
+                            </td>
+                            <td style="text-align:center; font-weight:bold; font-size:13px;">${r.sets}</td>
+                            <td style="text-align:center; font-weight:bold; font-size:13px;">${r.reps}</td>
+                            <td style="font-size:10px;">${r.tech !== 'Nenhuma' ? r.tech : ''}</td>
                             <td style="font-size:10px;">${r.obs}</td>
                         </tr>
                     `;
@@ -1371,7 +1388,7 @@
             if(data.obs) {
                 html += `
                     <div class="avoid-break" style="margin-top: 15px;">
-                        <h3 style="margin: 0 0 5px 0; font-size: 12px; text-transform:uppercase;">Recomendações Profissionais Adicionais</h3>
+                        <h3 style="margin: 0 0 5px 0; font-size: 12px; text-transform:uppercase;">Recomendações Adicionais</h3>
                         <p style="white-space: pre-wrap; font-size: 11px; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; background:#f9fafb;">${data.obs}</p>
                     </div>
                 `;
