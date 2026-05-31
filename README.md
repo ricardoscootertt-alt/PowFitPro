@@ -89,7 +89,6 @@
 </head>
 <body class="min-h-screen">
 
-    <!-- LOGIN UI -->
     <div id="login-ui" class="flex items-center justify-center min-h-screen flex-col p-4">
         <div class="panel p-8 rounded-2xl shadow-2xl max-w-md w-full text-center border">
             <h1 class="text-5xl font-black italic mb-2 tracking-tighter text-accent">POWFIT PRO</h1>
@@ -102,16 +101,13 @@
         </div>
     </div>
 
-    <!-- MAIN APP UI -->
     <div id="app-ui" class="hidden flex flex-col md:flex-row min-h-screen">
-        <!-- Sidebar -->
         <aside class="panel w-full md:w-64 border-r md:min-h-screen flex flex-col shrink-0">
             <div class="p-4 border-b border-color flex justify-between items-center md:block">
                 <div>
                     <h1 class="text-3xl font-black italic tracking-tighter text-accent">POWFIT PRO</h1>
                     <p id="user-email-display" class="text-xs text-muted mt-1 truncate max-w-[150px] md:max-w-full"></p>
                 </div>
-                <!-- Mobile Menu Button -->
                 <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-muted hover:text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
@@ -127,21 +123,17 @@
                 </div>
             </nav>
             
-            <!-- Mobile Logout -->
             <div id="mobile-logout" class="hidden p-4 border-t border-color md:hidden">
                 <button id="btn-logout-mobile" class="text-sm text-red-500 hover:text-red-400 font-bold w-full text-left">🚪 Sair do Sistema</button>
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="flex-1 p-4 md:p-8 overflow-y-auto h-screen relative">
             
-            <!-- ALERTS -->
             <div id="system-alert" class="hidden absolute top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50 font-bold transition-opacity">
                 Mensagem
             </div>
 
-            <!-- VIEW: BUILDER (MONTAGEM) -->
             <div id="view-builder" class="hidden space-y-6 max-w-6xl mx-auto">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-color pb-4">
                     <div>
@@ -155,7 +147,6 @@
                     </div>
                 </div>
 
-                <!-- Responsável -->
                 <div class="panel p-5 rounded-xl border border-accent border-l-4 shadow-sm">
                     <h3 class="font-bold mb-3 text-sm tracking-wide uppercase text-accent">1. Profissional Responsável</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -170,7 +161,6 @@
                     </div>
                 </div>
 
-                <!-- Dados do Aluno -->
                 <div class="panel p-5 rounded-xl border shadow-sm">
                     <h3 class="font-bold mb-3 text-sm tracking-wide uppercase text-accent">2. Dados do Aluno</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-4">
@@ -226,15 +216,12 @@
                     </div>
                 </div>
 
-                <!-- Estado de Saúde -->
                 <div class="panel p-5 rounded-xl border shadow-sm">
                     <h3 class="font-bold mb-3 text-sm tracking-wide uppercase text-accent">3. Estado de Saúde (Múltipla Seleção)</h3>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 text-sm" id="health-status-container">
-                        <!-- Gerado via JS -->
-                    </div>
+                        </div>
                 </div>
 
-                <!-- Montagem do Treino -->
                 <div class="panel p-5 rounded-xl border shadow-sm">
                     <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
                         <h3 class="font-bold text-sm tracking-wide uppercase text-accent">4. Montagem da Ficha</h3>
@@ -249,20 +236,16 @@
                         </div>
                     </div>
 
-                    <!-- Tabs Header -->
                     <div class="flex gap-1 border-b border-color mb-4 overflow-x-auto pb-1" id="tabs-header">
-                        <!-- Gerado via JS -->
-                    </div>
+                        </div>
                     
                     <div class="mb-4 flex flex-wrap gap-3 items-center">
                         <button onclick="addTab()" class="text-sm font-bold text-white bg-accent px-3 py-1 rounded hover:bg-accent-hover shadow">+ Nova Aba</button>
                         <button onclick="removeCurrentTab()" class="text-sm font-bold text-red-500 hover:text-red-400">🗑️ Remover Aba Atual</button>
                     </div>
 
-                    <!-- Tabs Content -->
                     <div id="tabs-content" class="overflow-x-auto pb-4">
-                        <!-- Tabela ativa gerada via JS -->
-                    </div>
+                        </div>
                     
                     <div class="mt-2 flex flex-wrap gap-3">
                         <button onclick="addExerciseRow()" class="btn-primary px-4 py-2 rounded font-bold text-sm shadow">+ Adicionar Exercício na Tabela</button>
@@ -270,14 +253,12 @@
                     </div>
                 </div>
 
-                <!-- Recomendações -->
                 <div class="panel p-5 rounded-xl border shadow-sm">
                     <h3 class="font-bold mb-3 text-sm tracking-wide uppercase text-accent">5. Recomendações Profissionais Livres</h3>
                     <textarea id="routine-obs" class="input-field w-full p-3 rounded border h-24 text-sm" placeholder="Escreva observações sobre hidratação, cadência, descanso, foco mental..."></textarea>
                 </div>
             </div>
 
-            <!-- VIEW: HISTÓRICO -->
             <div id="view-history" class="hidden space-y-6 max-w-6xl mx-auto">
                 <div class="border-b border-color pb-4">
                     <h2 class="text-3xl font-bold mb-1">Histórico de Fichas</h2>
@@ -307,14 +288,12 @@
                                 </tr>
                             </thead>
                             <tbody id="history-list" class="divide-y divide-[var(--border-color)]">
-                                <!-- Gerado via JS -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- VIEW: DASHBOARD (REDE) -->
             <div id="view-dashboard" class="hidden space-y-6 max-w-6xl mx-auto">
                 <div class="border-b border-color pb-4">
                     <h2 class="text-3xl font-bold mb-1">Gestão da Rede e Equipe</h2>
@@ -322,7 +301,6 @@
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Unidades -->
                     <div class="panel p-6 rounded-xl border shadow-sm">
                         <h3 class="text-xl font-bold mb-4 flex justify-between items-center text-accent">
                             Unidades (Franquias)
@@ -331,7 +309,6 @@
                         <div id="units-list" class="space-y-2 max-h-80 overflow-y-auto pr-2"></div>
                     </div>
 
-                    <!-- Membros -->
                     <div class="panel p-6 rounded-xl border shadow-sm">
                         <h3 class="text-xl font-bold mb-4 flex justify-between items-center text-accent">
                             Equipe Técnica
@@ -345,7 +322,6 @@
                 </div>
             </div>
 
-            <!-- VIEW: RELATORIOS -->
             <div id="view-reports" class="hidden space-y-6 max-w-6xl mx-auto">
                 <div class="border-b border-color pb-4">
                     <h2 class="text-3xl font-bold mb-1">Relatório de Produtividade</h2>
@@ -377,9 +353,6 @@
         </main>
     </div>
 
-    <!-- MODAIS -->
-
-    <!-- Modal: Adicionar Unidade -->
     <div id="modal-unit" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div class="panel p-6 rounded-2xl border max-w-sm w-full shadow-2xl">
             <h3 class="text-xl font-bold mb-4 text-accent">Nova Unidade</h3>
@@ -391,7 +364,6 @@
         </div>
     </div>
 
-    <!-- Modal: Adicionar Membro -->
     <div id="modal-member" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div class="panel p-6 rounded-2xl border max-w-md w-full shadow-2xl">
             <h3 class="text-xl font-bold mb-4 text-accent">Cadastrar Treinador</h3>
@@ -433,7 +405,6 @@
         </div>
     </div>
 
-    <!-- Modal: Exercícios Customizados -->
     <div id="modal-custom-ex" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div class="panel p-6 rounded-2xl border max-w-md w-full shadow-2xl flex flex-col max-h-[90vh]">
             <h3 class="text-xl font-bold mb-4 text-accent">Exercícios Customizados</h3>
@@ -452,8 +423,7 @@
 
             <p class="text-xs font-bold mb-2">Seus Exercícios Salvos:</p>
             <div id="custom-ex-list" class="flex-1 overflow-y-auto space-y-2 min-h-[100px] border border-color rounded-lg p-2">
-                <!-- Gerado via JS -->
-            </div>
+                </div>
 
             <div class="flex justify-end gap-3 mt-4">
                 <button onclick="toggleModal('modal-custom-ex')" class="px-6 py-2 rounded border border-color font-bold hover:bg-black/10 dark:hover:bg-white/10">Fechar</button>
@@ -461,10 +431,8 @@
         </div>
     </div>
 
-    <!-- PRINT CONTAINER (Escondido na tela, visível na impressão) -->
     <div id="print-ui"></div>
 
-    <!-- SCRIPT DA APLICAÇÃO -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithCustomToken, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -548,26 +516,27 @@
             "👴 Idoso": "Foco em força, equilíbrio e mobilidade. Intensidade moderada com segurança."
         };
 
+        // NOVA TRADUÇÃO BIOMECÂNICA E DESPORTIVA (ESCONDE AS DOENÇAS)
         const TEXTS_HEALTH_TE = {
-            "🟢 Saudável": "Manter treinos regulares de 3–5x por semana, combinando musculação e atividades cardiovasculares. A constância, descanso adequado e boa alimentação contribuem para melhores resultados.",
-            "⚪ Sedentário": "O início deve ser gradual, com treinos leves e foco na adaptação do corpo. A prioridade é desenvolver constância, aprender a execução correta e evitar excesso de carga.",
-            "🟡 Sobrepeso": "A prática regular de musculação associada ao cardio pode contribuir para melhora do condicionamento físico e composição corporal. A progressão deve respeitar a individualidade e o nível de adaptação.",
-            "🔴 Obesidade": "É recomendado iniciar com exercícios de menor impacto e progressão gradual. A segurança, mobilidade e constância são prioridades durante o processo.",
-            "⚖️ Baixo peso": "A musculação pode auxiliar no ganho de massa muscular quando associada a alimentação adequada e descanso. O treino deve priorizar evolução progressiva e recuperação muscular.",
-            "🍬 Diabetes": "Pessoas com diabetes devem manter acompanhamento médico regular antes e durante a prática de exercícios. A musculação pode auxiliar na rotina de atividade física quando liberada por profissional de saúde. Em casos de tontura, mal-estar ou alteração de glicemia, o treino deve ser interrompido e o aluno deve procurar orientação médica.",
-            "❤️ Hipertensão": "Pessoas com hipertensão devem manter acompanhamento médico regular e respeitar as orientações profissionais. Durante o treino, é importante evitar prender a respiração e controlar a intensidade dos exercícios.",
-            "🔵 Hipotensão": "Pessoas com hipotensão devem evitar mudanças bruscas de posição durante o treino. Manter boa hidratação e respeitar a intensidade adequada ajuda a reduzir episódios de mal-estar.",
-            "💔 Problemas cardíacos": "A prática de exercícios deve ocorrer apenas com liberação e acompanhamento médico. O treino deve respeitar limites individuais, com controle de intensidade e atenção aos sinais do corpo.",
-            "🦴 Problemas articulares": "Exercícios com menor impacto e maior controle de movimento costumam ser mais indicados. O acompanhamento profissional e a adaptação dos exercícios ajudam na segurança durante o treino.",
-            "🫁 Problemas respiratórios": "A progressão do treino deve ser gradual e respeitar a capacidade respiratória individual. Em caso de falta de ar excessiva ou desconforto, o exercício deve ser interrompido.",
-            "⚠️ Lesões": "A adaptação dos exercícios deve respeitar a limitação existente e evitar dor durante a execução. Em situações de lesão, é importante seguir orientação profissional adequada antes da prática.",
-            "🤰 Gestante": "A prática de exercícios deve ocorrer com liberação médica e acompanhamento adequado. O foco deve ser segurança, mobilidade e bem-estar, evitando impacto excessivo e situações de risco.",
-            "🤱 Lactante": "A atividade física pode ser mantida normalmente, respeitando a recuperação individual e mantendo boa hidratação e alimentação adequada.",
-            "👴 Idoso": "A musculação pode contribuir para força, equilíbrio, mobilidade e autonomia. O treino deve respeitar limitações individuais, com intensidade moderada e foco na segurança."
+            "🟢 Saudável": "Matriz prescritiva liberada para execução de alto rendimento. Prioridade na execução biomecânica, tempo sob tensão e falha muscular.",
+            "⚪ Sedentário": "Fase de Adaptação Biomecânica. Foco no aprendizado motor, técnica de execução pura e cadência antes da inserção de sobrecarga máxima.",
+            "🟡 Sobrepeso": "Foco Primário em Recomposição Corporal e Otimização Metabólica. Matriz prescritiva ajustada com maior densidade de volume para acelerar a oxidação lipídica.",
+            "🔴 Obesidade": "Foco Primário em Recomposição Corporal e Otimização Metabólica. Matriz prescritiva ajustada com maior densidade de volume para acelerar a oxidação lipídica.",
+            "⚖️ Baixo peso": "Foco em Hipertrofia Estrutural. Prioridade em exercícios base e progressão de carga sistêmica.",
+            "🍬 Diabetes": "Atenção ao Controle de Glicogênio. Recomendado gerenciamento rigoroso de energia intra-treino. Matriz prescritiva ajustada para evitar depleção severa.",
+            "❤️ Hipertensão": "Modulação de Picos de Tensão. Matriz prescritiva com cadência controlada e ajustes nos tempos de descanso para evitar sobrecarga de pressão intratorácica (Manobra de Valsalva).",
+            "🔵 Hipotensão": "Controle de Retorno Venoso. Intervalos dimensionados para evitar variações bruscas de alavanca e estabilizar o fluxo sistêmico.",
+            "💔 Problemas cardíacos": "Modulação de Esforço Cardiovascular. Controle estrito de intensidade e densidade intra-série.",
+            "🦴 Problemas articulares": "Restrição Biomecânica Identificada. Protocolo ajustado com foco em adequação de alavancas e limitação de amplitude extrema para preservar a integridade estrutural.",
+            "🫁 Problemas respiratórios": "Cadência e Oxigenação. Matriz ajustada para sincronização da fase concêntrica/excêntrica sem bloqueio respiratório prolongado.",
+            "⚠️ Lesões": "Restrição Biomecânica Identificada. Protocolo ajustado com foco em adequação de alavancas e limitação de amplitude extrema para preservar a integridade estrutural.",
+            "🤰 Gestante": "Modulação Estrutural de Base. Protocolo estabilizado com foco em isometria segura e sem compressão abdominal.",
+            "🤱 Lactante": "Matriz prescritiva liberada. Ajuste de hidratação intra-treino recomendado para compensação metabólica.",
+            "👴 Idoso": "Reforço Estrutural e Autonomia. Foco em estabilidade, fortalecimento de base e controle motor."
         };
 
         const LEGAL_PEF = "⚠️ OBSERVAÇÃO LEGAL – PROFISSIONAL DE EDUCAÇÃO FÍSICA<br>Conforme a Lei nº 9.696/1998, Art. 1º, o exercício das atividades de Educação Física e a designação de Profissional de Educação Física são prerrogativas dos profissionais regularmente registrados no CREF. O Art. 3º da mesma lei estabelece que compete ao profissional de Educação Física coordenar, planejar, programar, supervisionar, organizar, avaliar e executar treinamentos especializados nas áreas de atividades físicas e do desporto.";
-        const LEGAL_TE = "⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO<br>Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil, com atuação de caráter técnico e esportivo voltada à preparação, supervisão, orientação e acompanhamento de treinos físicos e esportivos. A atuação possui finalidade orientativa e não substitui avaliação médica, diagnóstico clínico, prescrição medicamentosa ou acompanhamento de profissionais da saúde. Em casos de doenças, lesões, gestação, limitações físicas, uso de medicações ou qualquer condição específica de saúde, recomenda-se avaliação prévia por profissional habilitado antes do início ou continuidade da prática de exercícios. O treinamento proposto respeita os limites individuais, priorizando segurança, execução correta e evolução progressiva, dentro da atuação técnica e esportiva permitida por lei. As recomendações desta ficha possuem caráter informativo e orientativo, voltadas ao treinamento esportivo e prática de musculação.";
+        const LEGAL_TE = "⚠️ OBSERVAÇÃO LEGAL – TREINADOR ESPORTIVO<br>Conforme a Lei nº 14.597/2023 (Lei Geral do Esporte), Art. 75, a profissão de treinador esportivo é reconhecida e regulada no Brasil, com atuação de caráter técnico e esportivo voltada à preparação, supervisão, orientação e acompanhamento de treinos físicos e esportivos. O treinamento proposto respeita os limites individuais, priorizando segurança, execução correta e evolução progressiva, dentro da atuação técnica e esportiva permitida por lei. As recomendações desta ficha possuem caráter informativo e orientativo, voltadas ao treinamento esportivo e prática de musculação.";
 
         // --- SISTEMA DE ALERTA ---
         function showAlert(msg, isError = false) {
@@ -625,7 +594,7 @@
             }
         });
 
-        // --- FIREBASE DATABASE LOGIC (MANDATORY RULE 1) ---
+        // --- FIREBASE DATABASE LOGIC ---
         const getPath = (collName) => collection(db, 'artifacts', appId, 'users', currentUser.uid, collName);
         const getDocPath = (collName, docId) => doc(db, 'artifacts', appId, 'users', currentUser.uid, collName, docId);
 
@@ -657,7 +626,6 @@
             // Listen Routines (History)
             unsubscribes.push(onSnapshot(getPath('routines'), snap => {
                 state.routines = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                // Sort by newest first
                 state.routines.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
                 renderHistory();
             }, e => console.error("Error Routines:", e)));
@@ -689,7 +657,6 @@
             document.getElementById(`view-${view}`).classList.remove('hidden');
             document.getElementById(`nav-${view}`).classList.add('text-accent', 'bg-black/10', 'dark:bg-white/10');
 
-            // Fechar menu mobile ao clicar
             document.getElementById('mobile-menu').classList.add('hidden');
             document.getElementById('mobile-logout').classList.add('hidden');
 
@@ -783,7 +750,7 @@
 
         // --- RELATÓRIOS ---
         window.generateReport = function() {
-            const monthStr = document.getElementById('report-month').value; // YYYY-MM
+            const monthStr = document.getElementById('report-month').value; 
             const unitFilter = document.getElementById('report-unit').value;
             
             let filteredRoutines = state.routines;
@@ -945,7 +912,6 @@
         window.removeCurrentTab = function() {
             if(state.workoutTabs.length <= 1) return showAlert("Deve haver pelo menos um treino.", true);
             state.workoutTabs = state.workoutTabs.filter(t => t.id !== state.activeTabId);
-            // Renomear sequencialmente
             state.workoutTabs.forEach((t, i) => {
                 t.id = String.fromCharCode(65 + i);
                 t.name = `Treino ${t.id}`;
@@ -1097,19 +1063,16 @@
             const unit = state.units.find(u => u.id === member.unitId);
             const valDays = parseInt(document.getElementById('routine-validity').value);
 
-            // Validar Tabs Vazias
             const hasEmptyTabs = state.workoutTabs.some(t => t.rows.length === 0);
             if(hasEmptyTabs && !confirm("Há abas de treino sem nenhum exercício. Deseja salvar mesmo assim?")) return;
 
             const healthCbs = document.querySelectorAll('.health-cb:checked');
             const healthStatuses = Array.from(healthCbs).map(cb => cb.value);
 
-            // Calcular Datas
             const now = new Date();
             const expDate = new Date(now);
             expDate.setDate(expDate.getDate() + valDays);
 
-            // Se for edição, mantém a data original, senão é criada uma nova.
             const createdDate = state.editingRoutineId ? state.editingRoutineCreatedAt : now.toISOString();
 
             const routineData = {
@@ -1174,13 +1137,11 @@
                 return;
             }
 
-            // Uso da classe forçada history-row e estilos in-line de segurança (Evitar bug do navegador)
             list.innerHTML = filtered.map(r => {
                 const isExpired = new Date(r.expirationDate) < now;
                 const m = state.members.find(mem => mem.id === r.memberId);
                 const trainerName = m ? m.name : 'Desconhecido';
                 
-                // Formatar Data Br
                 const dObj = new Date(r.createdAt || r.updatedAt);
                 const dateStr = dObj.toLocaleDateString('pt-BR');
 
@@ -1225,7 +1186,6 @@
             const r = state.routines.find(x => x.id === id);
             if(!r) return;
 
-            // CRUCIAL: Limpamos o ID de edição para que o sistema crie um NOVO registro ao salvar
             state.editingRoutineId = null;
             state.editingRoutineCreatedAt = null;
 
@@ -1259,7 +1219,7 @@
             document.getElementById('routine-validity').value = r.validityDays;
             document.getElementById('routine-obs').value = r.obs;
 
-            state.workoutTabs = JSON.parse(JSON.stringify(r.tabs)); // Clone total
+            state.workoutTabs = JSON.parse(JSON.stringify(r.tabs));
             if(state.workoutTabs.length > 0) state.activeTabId = state.workoutTabs[0].id;
             else state.activeTabId = null;
 
@@ -1276,6 +1236,7 @@
             window.print();
         }
 
+        // --- SISTEMA DE GERAÇÃO DO PDF (BLINDAGEM JURÍDICA APLICADA) ---
         function generatePrintView(data, member, unit, creationDateISO) {
             const printUi = document.getElementById('print-ui');
             
@@ -1285,7 +1246,7 @@
             const expDate = new Date(data.expirationDate || new Date().toISOString());
             const validStr = expDate.toLocaleDateString('pt-BR');
 
-            // --- LÓGICA DE EXIBIÇÃO DO PROFISSIONAL CONFORME PDF FORNECIDO ---
+            // 1. Correção do Cabeçalho de Auditoria
             let responsavelHtml = '';
             if (member.category === 'TE') {
                 responsavelHtml = `
@@ -1293,8 +1254,8 @@
                     <p style="margin:2px 0; font-size: 11px;"><strong>Treinador Esportivo:</strong> ${member.name} (Lei 14.597/2023)</p>
                     <p style="margin:2px 0; font-size: 11px;"><strong>Unidade:</strong> ${unit.name} - ${member.uf}</p>
                     <br>
-                    <h3 style="margin:6px 0 4px 0; font-size: 12px; text-transform:uppercase; color: #111827;">RESPONSABILIDADE CLÍNICA E DE SAÚDE</h3>
-                    <p style="margin:2px 0; font-size: 11px;"><strong>Profissional:</strong> Luiz André (CREF 008094-G/RN)</p>
+                    <h3 style="margin:6px 0 4px 0; font-size: 12px; text-transform:uppercase; color: #111827;">AUDITORIA METODOLÓGICA E BIOMECÂNICA</h3>
+                    <p style="margin:2px 0; font-size: 11px;"><strong>Consultoria Externa Assíncrona:</strong> Luiz André (CREF 008094-G/RN)</p>
                 `;
             } else {
                 // Se for PEF
@@ -1306,7 +1267,6 @@
                 `;
             }
 
-            // Header Top
             let html = `
                 <div class="header-banner">
                     <h1 style="color:white; margin:0; font-style: italic; font-size: 24px; letter-spacing:-1px;">PowFitPro</h1>
@@ -1328,26 +1288,44 @@
                 </div>
             `;
 
-            // Objetivo & Saúde Textos
             const objText = TEXTS_OBJ[data.objective] || '';
             let healthTexts = '';
+            
+            // 2. Correção da Tradução das Comorbidades
             (data.healthStatuses || []).forEach(hs => {
-                const dict = member.category === 'PEF' ? TEXTS_HEALTH_PEF : TEXTS_HEALTH_TE;
-                if(dict[hs]) healthTexts += `<li style="margin-bottom:2px;"><strong>✔ ${hs.replace(/[^\w\s]/gi, '')}:</strong> ${dict[hs]}</li>`;
+                if(member.category === 'PEF' && TEXTS_HEALTH_PEF[hs]) {
+                    // Mantém nome da doença para PEF
+                    healthTexts += `<li style="margin-bottom:2px;"><strong>✔ ${hs.replace(/[^\w\s\u00C0-\u00FF]/gi, '').trim()}:</strong> ${TEXTS_HEALTH_PEF[hs]}</li>`;
+                } else if (member.category === 'TE' && TEXTS_HEALTH_TE[hs]) {
+                    // Mascara o nome da doença para TE, foca apenas na Biomecânica
+                    healthTexts += `<li style="margin-bottom:2px;"><strong>✔ Status Estrutural (PowFit):</strong> ${TEXTS_HEALTH_TE[hs]}</li>`;
+                }
             });
+
+            // 3. Correção do Aviso Padrão
+            let avisoPadraoHtml = '';
+            if (member.category === 'TE') {
+                avisoPadraoHtml = `
+                    <div style="margin-top: 10px; font-size: 11px; color: #111827;">
+                        <strong>AVISO DE AUDITORIA (SISTEMA POWFIT):</strong> A inteligência algorítmica e as matrizes de treinamento geradas por este sistema são submetidas à auditoria técnica assíncrona por Consultoria Externa (Luiz André - CREF 008094-G/RN), atestando exclusivamente a segurança biomecânica dos padrões de movimento. Este documento não constitui diagnóstico clínico, prescrição médica ou avaliação de saúde. A instrução prática no espaço físico foca estritamente no Desporto de Rendimento (Fisiculturismo e Musculação de Alto Rendimento), sem caráter de condicionamento físico generalista.
+                    </div>
+                `;
+            } else {
+                avisoPadraoHtml = `
+                    <div style="margin-top: 10px; font-size: 11px; color: #111827;">
+                        <strong>AVISO PADRÃO:</strong> As recomendações do Estado de Saúde de Cada Associado são definidas pelo Profissional de Educação Física presencial.
+                    </div>
+                `;
+            }
 
             html += `
                 <div style="background: white; padding: 0 5px; margin-bottom: 20px;">
                     <p style="margin:0 0 5px 0; font-size: 11px;"><strong>Objetivo Principal (${data.objective}):</strong> ${objText}</p>
                     ${healthTexts ? `<ul style="margin:5px 0 0 0; padding-left: 15px; font-size: 11px; list-style-type: none;">${healthTexts}</ul>` : ''}
-                    
-                    <div style="margin-top: 10px; font-size: 11px; color: #111827;">
-                        <strong>AVISO PADRÃO:</strong> As recomendações do Estado de Saúde de Cada Associado são definidas pelo PEF Profissional de Educação Física Luiz André (CREF 008094-G/RN).
-                    </div>
+                    ${avisoPadraoHtml}
                 </div>
             `;
 
-            // Workout Tables
             data.tabs.forEach((tab) => {
                 if(tab.rows.length === 0) return;
                 
@@ -1384,7 +1362,6 @@
                 html += `</tbody></table></div>`;
             });
 
-            // Recomendações Livres
             if(data.obs) {
                 html += `
                     <div class="avoid-break" style="margin-top: 15px;">
@@ -1394,7 +1371,6 @@
                 `;
             }
 
-            // Legal Footer
             const legalText = member.category === 'PEF' ? LEGAL_PEF : LEGAL_TE;
             html += `
                 <div class="legal-footer avoid-break">
